@@ -1738,6 +1738,9 @@
 
         // ============ FILE UPLOAD ============
         function handleFileUpload(file) {
+            console.log('=== File Upload ===');
+            console.log('File:', file.name, file.type, file.size);
+            
             if (!file.type.startsWith('image/') && file.type !== 'application/pdf') {
                 notify('⚠️ Format non supporté. Utilisez une image ou un PDF.');
                 return;
@@ -1753,6 +1756,7 @@
             const reader = new FileReader();
             reader.onload = (e) => {
                 uploadedFileBase64 = e.target.result;
+                console.log('✅ File loaded as base64, length:', uploadedFileBase64.length);
                 
                 // Show preview
                 document.getElementById('uploadZone').style.display = 'none';
@@ -1833,24 +1837,46 @@ Réponds en français, adapté à un enfant de ${currentChild.level}.`;
 
             // Build current message content
             let currentContent = [];
+            let hasImage = false;
             
             // Add image if present
             if (uploadedFileBase64 && uploadedFile && uploadedFile.type.startsWith('image/')) {
-                const base64Data = uploadedFileBase64.split(',')[1];
-                const mediaType = uploadedFile.type;
-                currentContent.push({
-                    type: 'image',
-                    source: {
-                        type: 'base64',
-                        media_type: mediaType,
-                        data: base64Data
+                try {
+                    const base64Data = uploadedFileBase64.split(',')[1];
+                    const mediaType = uploadedFile.type;
+                    
+                    if (base64Data && base64Data.length > 100) {
+                        currentContent.push({
+                            type: 'image',
+                            source: {
+                                type: 'base64',
+                                media_type: mediaType,
+                                data: base64Data
+                            }
+                        });
+                        hasImage = true;
+                        console.log('✅ Image added:', mediaType, 'base64 length:', base64Data.length);
+                    } else {
+                        console.error('❌ Image base64 data is empty or too short');
+                        notify('⚠️ Erreur: Image non chargée correctement');
                     }
+                } catch (imgErr) {
+                    console.error('❌ Error processing image:', imgErr);
+                }
+            } else {
+                console.log('No image to send:', {
+                    hasBase64: !!uploadedFileBase64,
+                    hasFile: !!uploadedFile,
+                    fileType: uploadedFile?.type
                 });
-                console.log('Image added to request:', mediaType, 'size:', base64Data.length);
             }
             
             // Add text
-            const userText = message || 'Analyse cette image de leçon et aide-moi à comprendre.';
+            const userText = message || (hasImage ? 'Analyse cette image de leçon et aide-moi à comprendre.' : '');
+            if (!userText && !hasImage) {
+                loadingEl.remove();
+                return;
+            }
             currentContent.push({ type: 'text', text: userText });
 
             // Build messages array with history
@@ -1868,11 +1894,14 @@ Réponds en français, adapté à un enfant de ${currentChild.level}.`;
             });
 
             try {
-                console.log('Sending to API:', {
-                    hasImage: currentContent.length > 1,
-                    historyLength: recentHistory.length,
-                    totalMessages: messages.length
-                });
+                console.log('=== Sending to API ===');
+                console.log('Has image:', hasImage);
+                console.log('Content items:', currentContent.length);
+                console.log('History length:', recentHistory.length);
+                console.log('Total messages:', messages.length);
+                if (hasImage) {
+                    console.log('Image in content:', currentContent[0]);
+                }
                 
                 const response = await fetch('/api/claude', {
                     method: 'POST',
