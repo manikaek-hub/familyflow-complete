@@ -223,6 +223,35 @@
             font-size: 1.2rem;
         }
         
+        /* EDITABLE FIELDS */
+        .edit-field {
+            margin-bottom: 0.8rem;
+        }
+        
+        .edit-label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--sage);
+            margin-bottom: 0.3rem;
+        }
+        
+        .edit-input {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            border: 2px solid var(--sand);
+            border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            background: var(--cream);
+            transition: all 0.3s;
+        }
+        
+        .edit-input:focus {
+            outline: none;
+            border-color: var(--forest);
+            background: var(--white);
+        }
+        
         /* COMMENT FIELD */
         .comment-section {
             margin-top: 1rem;
@@ -1358,16 +1387,18 @@
                     <div class="card-category">${card.category}</div>
                 </div>
                 <div class="card-body">
-                    <div class="card-detail">
-                        <span class="card-detail-icon">📍</span>
-                        <span>${card.detail}</span>
+                    <div class="edit-field">
+                        <label class="edit-label">✏️ Titre</label>
+                        <input type="text" class="edit-input" id="editTitle" value="${card.title}">
                     </div>
-                    ${card.price ? `
-                    <div class="card-detail">
-                        <span class="card-detail-icon">💰</span>
-                        <span>${card.price}</span>
+                    <div class="edit-field">
+                        <label class="edit-label">📍 Détail / Horaire</label>
+                        <input type="text" class="edit-input" id="editDetail" value="${card.detail}">
                     </div>
-                    ` : ''}
+                    <div class="edit-field">
+                        <label class="edit-label">💰 Prix</label>
+                        <input type="text" class="edit-input" id="editPrice" value="${card.price || ''}" placeholder="Ex: 35€/mois">
+                    </div>
                     
                     <div class="comment-section">
                         <div class="comment-label">💬 Ajouter un commentaire</div>
@@ -1408,7 +1439,7 @@
             let isDragging = false;
 
             const onStart = (e) => {
-                if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'BUTTON') return;
+                if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
                 isDragging = true;
                 startX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
                 card.style.transition = 'none';
@@ -1463,10 +1494,21 @@
 
         function accept() {
             const card = data.cards[currentCardIndex];
+            const editedTitle = document.getElementById('editTitle')?.value || card.title;
+            const editedDetail = document.getElementById('editDetail')?.value || card.detail;
+            const editedPrice = document.getElementById('editPrice')?.value || card.price;
             const comment = document.getElementById('cardComment')?.value || '';
             const freq = document.querySelector('.freq-btn.active')?.dataset.freq || 'weekly';
             
-            const item = { ...card, comment, frequency: freq, addedAt: new Date().toISOString() };
+            const item = { 
+                ...card, 
+                title: editedTitle,
+                detail: editedDetail,
+                price: editedPrice,
+                comment, 
+                frequency: freq, 
+                addedAt: new Date().toISOString() 
+            };
             
             if (card.category === 'Activité') {
                 data.activities.push(item);
