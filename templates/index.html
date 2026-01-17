@@ -1803,13 +1803,23 @@
                         data: base64Data
                     }
                 });
+                // Add text after image
+                const textContent = systemPrompt + '\n\nVoici la demande: ' + (message || 'Analyse cette image de leçon et aide-moi.');
+                content.push({ type: 'text', text: textContent });
+            } else {
+                // Text only
+                const textContent = systemPrompt + '\n\nVoici la demande: ' + message;
+                content = textContent;
             }
-            
-            // Add text
-            const textContent = systemPrompt + '\n\nVoici la demande: ' + (message || 'Analyse cette image de leçon et aide-moi.');
-            content.push({ type: 'text', text: textContent });
 
             try {
+                // Debug: log what we're sending
+                console.log('Sending to API:', {
+                    hasImage: !!(uploadedFileBase64 && uploadedFile),
+                    imageType: uploadedFile?.type,
+                    contentType: Array.isArray(content) ? 'array with image' : 'text only'
+                });
+                
                 const response = await fetch('/api/claude', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
