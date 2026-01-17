@@ -816,6 +816,26 @@
             color: var(--forest);
         }
         
+        .new-chat-btn {
+            width: 100%;
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--terracotta), var(--terracotta-dark));
+            color: var(--white);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .new-chat-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(201, 133, 107, 0.4);
+        }
+        
         /* MODAL */
         .modal-overlay {
             position: fixed;
@@ -1052,6 +1072,7 @@
                             <span>Badges</span>
                             <span class="stat-value" id="statBadges">🌟</span>
                         </div>
+                        <button class="new-chat-btn" id="newChatBtn">🔄 Nouvelle conversation</button>
                     </div>
                 </div>
                 
@@ -1346,6 +1367,24 @@
             });
             
             document.getElementById('removeUpload').addEventListener('click', clearUpload);
+            
+            // New chat button
+            document.getElementById('newChatBtn').addEventListener('click', startNewChat);
+        }
+        
+        function startNewChat() {
+            chatHistory = [];
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = `
+                <div class="welcome-message">
+                    <div class="welcome-icon">📚</div>
+                    <div class="welcome-title">Assistant Devoirs</div>
+                    <p>Collez une leçon ou posez une question pour commencer !</p>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem;">Mode Parent : suggestions de questions<br>Mode Enfant : explications simplifiées</p>
+                </div>
+            `;
+            clearUpload();
+            notify('🔄 Nouvelle conversation');
         }
 
         // ============ VIEWS ============
@@ -1742,6 +1781,8 @@
         }
 
         // ============ CHAT / HOMEWORK ============
+        let chatHistory = []; // Historique des messages pour le contexte
+        
         async function sendMessage() {
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
@@ -1754,7 +1795,7 @@
             const welcome = chatMessages.querySelector('.welcome-message');
             if (welcome) welcome.remove();
 
-            // Add user message
+            // Add user message to display
             let userDisplay = message;
             if (uploadedFile) {
                 userDisplay = (message ? message + '\n' : '') + '📷 ' + uploadedFile.name;
@@ -1769,33 +1810,35 @@
             chatMessages.appendChild(loadingEl);
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // Build prompt
+            // Build system prompt
             let systemPrompt = '';
             if (currentMode === 'parent') {
                 systemPrompt = `Tu es un assistant pédagogique pour parents. L'enfant s'appelle ${currentChild.name} et est en ${currentChild.level}. 
-                Aide le parent à interroger son enfant de manière efficace et ludique.
-                - Suggère des questions pertinentes
-                - Propose des méthodes pédagogiques adaptées
-                - Identifie les points clés à vérifier
-                Réponds en français, de façon claire et pratique.`;
+Aide le parent à interroger son enfant de manière efficace et ludique.
+- Suggère des questions pertinentes basées sur le contenu
+- Propose des méthodes pédagogiques adaptées au niveau
+- Identifie les points clés à vérifier
+Si une image de leçon est fournie, analyse-la en détail et base tes suggestions dessus.
+Réponds en français, de façon claire et pratique.`;
             } else {
                 systemPrompt = `Tu es un assistant sympa qui aide les enfants à comprendre leurs leçons.
-                Tu parles à ${currentChild.name} qui est en ${currentChild.level}.
-                - Explique simplement avec des exemples concrets
-                - Utilise des analogies fun
-                - Encourage et félicite
-                - Pose des petites questions pour vérifier la compréhension
-                Réponds en français, adapté à un enfant de ${currentChild.level}.`;
+Tu parles à ${currentChild.name} qui est en ${currentChild.level}.
+- Explique simplement avec des exemples concrets adaptés à son âge
+- Utilise des analogies fun et des comparaisons du quotidien
+- Encourage et félicite
+- Pose des petites questions pour vérifier la compréhension
+Si une image de leçon est fournie, analyse-la et explique le contenu de manière simple.
+Réponds en français, adapté à un enfant de ${currentChild.level}.`;
             }
 
-            // Build content array for API
-            let content = [];
+            // Build current message content
+            let currentContent = [];
             
             // Add image if present
             if (uploadedFileBase64 && uploadedFile && uploadedFile.type.startsWith('image/')) {
                 const base64Data = uploadedFileBase64.split(',')[1];
                 const mediaType = uploadedFile.type;
-                content.push({
+                currentContent.push({
                     type: 'image',
                     source: {
                         type: 'base64',
@@ -1803,28 +1846,40 @@
                         data: base64Data
                     }
                 });
-                // Add text after image
-                const textContent = systemPrompt + '\n\nVoici la demande: ' + (message || 'Analyse cette image de leçon et aide-moi.');
-                content.push({ type: 'text', text: textContent });
-            } else {
-                // Text only
-                const textContent = systemPrompt + '\n\nVoici la demande: ' + message;
-                content = textContent;
+                console.log('Image added to request:', mediaType, 'size:', base64Data.length);
             }
+            
+            // Add text
+            const userText = message || 'Analyse cette image de leçon et aide-moi à comprendre.';
+            currentContent.push({ type: 'text', text: userText });
+
+            // Build messages array with history
+            let messages = [];
+            
+            // Add conversation history (limit to last 10 exchanges to avoid token limits)
+            const historyLimit = 10;
+            const recentHistory = chatHistory.slice(-historyLimit * 2);
+            messages.push(...recentHistory);
+            
+            // Add current message
+            messages.push({ 
+                role: 'user', 
+                content: currentContent.length === 1 ? currentContent[0].text : currentContent 
+            });
 
             try {
-                // Debug: log what we're sending
                 console.log('Sending to API:', {
-                    hasImage: !!(uploadedFileBase64 && uploadedFile),
-                    imageType: uploadedFile?.type,
-                    contentType: Array.isArray(content) ? 'array with image' : 'text only'
+                    hasImage: currentContent.length > 1,
+                    historyLength: recentHistory.length,
+                    totalMessages: messages.length
                 });
                 
                 const response = await fetch('/api/claude', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        messages: [{ role: 'user', content: content }]
+                        system: systemPrompt,
+                        messages: messages
                     })
                 });
 
@@ -1834,6 +1889,10 @@
                     const result = await response.json();
                     const assistantMessage = result.content[0].text;
                     addMessage(assistantMessage, 'assistant');
+                    
+                    // Save to history (text only for context, not images to save space)
+                    chatHistory.push({ role: 'user', content: userText });
+                    chatHistory.push({ role: 'assistant', content: assistantMessage });
                     
                     // Update stats
                     data.stats.sessions++;
@@ -1845,10 +1904,12 @@
                     clearUpload();
                 } else {
                     const error = await response.json();
-                    addMessage('❌ Erreur: ' + (error.error || 'Connexion impossible'), 'assistant');
+                    console.error('API Error:', error);
+                    addMessage('❌ Erreur: ' + (error.error || error.details || 'Connexion impossible'), 'assistant');
                 }
             } catch (err) {
                 loadingEl.remove();
+                console.error('Fetch error:', err);
                 addMessage('❌ Erreur de connexion. Vérifiez votre connexion internet.', 'assistant');
             }
         }
