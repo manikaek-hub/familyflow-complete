@@ -1087,9 +1087,9 @@
                     </div>
                     
                     <div class="upload-zone" id="uploadZone">
-                        <div class="upload-icon">📸</div>
-                        <div class="upload-text">Glissez une photo de leçon ici ou cliquez pour sélectionner</div>
-                        <input type="file" id="fileInput" accept="image/*,.pdf" style="display: none;">
+                        <div class="upload-icon">📎</div>
+                        <div class="upload-text">Glissez une photo ou un PDF ici, ou cliquez pour sélectionner</div>
+                        <input type="file" id="fileInput" accept="image/*,.pdf,application/pdf" style="display: none;">
                     </div>
                     <div class="upload-preview" id="uploadPreview" style="display: none;">
                         <img id="previewImage" src="" alt="Aperçu">
@@ -1766,12 +1766,17 @@
                 if (file.type.startsWith('image/')) {
                     document.getElementById('previewImage').src = e.target.result;
                     document.getElementById('previewImage').style.display = 'block';
+                } else if (file.type === 'application/pdf') {
+                    // Show PDF icon instead of image
+                    document.getElementById('previewImage').src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23e74c3c" width="100" height="100" rx="10"/><text x="50" y="60" text-anchor="middle" fill="white" font-size="24" font-family="Arial">PDF</text></svg>';
+                    document.getElementById('previewImage').style.display = 'block';
                 } else {
                     document.getElementById('previewImage').style.display = 'none';
                 }
                 
                 document.getElementById('uploadFilename').textContent = file.name;
-                notify('📸 Photo ajoutée !');
+                const fileIcon = file.type === 'application/pdf' ? '📄' : '📸';
+                notify(fileIcon + ' Fichier ajouté !');
             };
             reader.readAsDataURL(file);
         }
@@ -1838,33 +1843,48 @@ Réponds en français, adapté à un enfant de ${currentChild.level}.`;
             // Build current message content
             let currentContent = [];
             let hasImage = false;
+            let hasPdf = false;
             
             // Add image if present
-            if (uploadedFileBase64 && uploadedFile && uploadedFile.type.startsWith('image/')) {
+            if (uploadedFileBase64 && uploadedFile) {
                 try {
                     const base64Data = uploadedFileBase64.split(',')[1];
-                    const mediaType = uploadedFile.type;
                     
                     if (base64Data && base64Data.length > 100) {
-                        currentContent.push({
-                            type: 'image',
-                            source: {
-                                type: 'base64',
-                                media_type: mediaType,
-                                data: base64Data
-                            }
-                        });
-                        hasImage = true;
-                        console.log('✅ Image added:', mediaType, 'base64 length:', base64Data.length);
+                        if (uploadedFile.type.startsWith('image/')) {
+                            // Image format
+                            currentContent.push({
+                                type: 'image',
+                                source: {
+                                    type: 'base64',
+                                    media_type: uploadedFile.type,
+                                    data: base64Data
+                                }
+                            });
+                            hasImage = true;
+                            console.log('✅ Image added:', uploadedFile.type, 'base64 length:', base64Data.length);
+                        } else if (uploadedFile.type === 'application/pdf') {
+                            // PDF format
+                            currentContent.push({
+                                type: 'document',
+                                source: {
+                                    type: 'base64',
+                                    media_type: 'application/pdf',
+                                    data: base64Data
+                                }
+                            });
+                            hasPdf = true;
+                            console.log('✅ PDF added, base64 length:', base64Data.length);
+                        }
                     } else {
-                        console.error('❌ Image base64 data is empty or too short');
-                        notify('⚠️ Erreur: Image non chargée correctement');
+                        console.error('❌ File base64 data is empty or too short');
+                        notify('⚠️ Erreur: Fichier non chargé correctement');
                     }
                 } catch (imgErr) {
-                    console.error('❌ Error processing image:', imgErr);
+                    console.error('❌ Error processing file:', imgErr);
                 }
             } else {
-                console.log('No image to send:', {
+                console.log('No file to send:', {
                     hasBase64: !!uploadedFileBase64,
                     hasFile: !!uploadedFile,
                     fileType: uploadedFile?.type
@@ -1872,8 +1892,9 @@ Réponds en français, adapté à un enfant de ${currentChild.level}.`;
             }
             
             // Add text
-            const userText = message || (hasImage ? 'Analyse cette image de leçon et aide-moi à comprendre.' : '');
-            if (!userText && !hasImage) {
+            const hasFile = hasImage || hasPdf;
+            const userText = message || (hasFile ? 'Analyse ce document et aide-moi à comprendre.' : '');
+            if (!userText && !hasFile) {
                 loadingEl.remove();
                 return;
             }
@@ -1894,13 +1915,15 @@ Réponds en français, adapté à un enfant de ${currentChild.level}.`;
             });
 
             try {
+                const hasFile = hasImage || hasPdf;
                 console.log('=== Sending to API ===');
                 console.log('Has image:', hasImage);
+                console.log('Has PDF:', hasPdf);
                 console.log('Content items:', currentContent.length);
                 console.log('History length:', recentHistory.length);
                 console.log('Total messages:', messages.length);
-                if (hasImage) {
-                    console.log('Image in content:', currentContent[0]);
+                if (hasFile) {
+                    console.log('File in content:', currentContent[0].type, currentContent[0].source?.media_type);
                 }
                 
                 const response = await fetch('/api/claude', {
