@@ -613,6 +613,74 @@
             border-bottom-left-radius: 4px;
         }
         
+        /* UPLOAD ZONE */
+        .upload-zone {
+            border: 3px dashed var(--sand);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 1rem;
+            background: var(--cream);
+        }
+        
+        .upload-zone:hover, .upload-zone.dragover {
+            border-color: var(--forest);
+            background: rgba(95, 113, 97, 0.1);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .upload-text {
+            color: var(--sage);
+            font-size: 0.95rem;
+        }
+        
+        .upload-preview {
+            position: relative;
+            margin: 1rem;
+            padding: 1rem;
+            background: var(--cream);
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .upload-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .remove-upload {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background: #e74c3c;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .remove-upload:hover {
+            transform: scale(1.1);
+        }
+        
+        .upload-filename {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--sage);
+        }
+        
         .chat-input-container {
             display: flex;
             gap: 0.8rem;
@@ -620,6 +688,25 @@
             background: var(--cream);
             border-radius: 15px;
             margin-top: 1rem;
+        }
+        
+        .chat-upload-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            border: 2px solid var(--sand);
+            background: var(--white);
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .chat-upload-btn:hover {
+            border-color: var(--forest);
+            background: var(--cream);
         }
         
         .chat-input {
@@ -949,7 +1036,19 @@
                         </div>
                     </div>
                     
+                    <div class="upload-zone" id="uploadZone">
+                        <div class="upload-icon">📸</div>
+                        <div class="upload-text">Glissez une photo de leçon ici ou cliquez pour sélectionner</div>
+                        <input type="file" id="fileInput" accept="image/*,.pdf" style="display: none;">
+                    </div>
+                    <div class="upload-preview" id="uploadPreview" style="display: none;">
+                        <img id="previewImage" src="" alt="Aperçu">
+                        <button class="remove-upload" id="removeUpload">✕</button>
+                        <div class="upload-filename" id="uploadFilename"></div>
+                    </div>
+                    
                     <div class="chat-input-container">
+                        <button class="chat-upload-btn" id="chatUploadBtn" title="Ajouter une photo">📷</button>
                         <input type="text" class="chat-input" id="chatInput" placeholder="Collez une leçon ou posez une question...">
                         <button class="chat-send" id="chatSend">Envoyer</button>
                     </div>
@@ -1117,6 +1216,8 @@
         let currentMode = 'parent';
         let currentChild = { name: 'Gauthier', level: '4ème', avatar: '👦' };
         let conversationHistory = [];
+        let uploadedFile = null;
+        let uploadedFileBase64 = null;
 
         // ============ INIT ============
         function init() {
@@ -1186,6 +1287,36 @@
             document.getElementById('chatInput').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') sendMessage();
             });
+
+            // Upload zone
+            const uploadZone = document.getElementById('uploadZone');
+            const fileInput = document.getElementById('fileInput');
+            const chatUploadBtn = document.getElementById('chatUploadBtn');
+
+            uploadZone.addEventListener('click', () => fileInput.click());
+            chatUploadBtn.addEventListener('click', () => fileInput.click());
+            
+            uploadZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadZone.classList.add('dragover');
+            });
+            
+            uploadZone.addEventListener('dragleave', () => {
+                uploadZone.classList.remove('dragover');
+            });
+            
+            uploadZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadZone.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) handleFileUpload(files[0]);
+            });
+            
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) handleFileUpload(e.target.files[0]);
+            });
+            
+            document.getElementById('removeUpload').addEventListener('click', clearUpload);
         }
 
         // ============ VIEWS ============
@@ -1524,11 +1655,56 @@
             `;
         }
 
+        // ============ FILE UPLOAD ============
+        function handleFileUpload(file) {
+            if (!file.type.startsWith('image/') && file.type !== 'application/pdf') {
+                notify('⚠️ Format non supporté. Utilisez une image ou un PDF.');
+                return;
+            }
+            
+            if (file.size > 10 * 1024 * 1024) {
+                notify('⚠️ Fichier trop volumineux (max 10 MB)');
+                return;
+            }
+            
+            uploadedFile = file;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                uploadedFileBase64 = e.target.result;
+                
+                // Show preview
+                document.getElementById('uploadZone').style.display = 'none';
+                const preview = document.getElementById('uploadPreview');
+                preview.style.display = 'block';
+                
+                if (file.type.startsWith('image/')) {
+                    document.getElementById('previewImage').src = e.target.result;
+                    document.getElementById('previewImage').style.display = 'block';
+                } else {
+                    document.getElementById('previewImage').style.display = 'none';
+                }
+                
+                document.getElementById('uploadFilename').textContent = file.name;
+                notify('📸 Photo ajoutée !');
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function clearUpload() {
+            uploadedFile = null;
+            uploadedFileBase64 = null;
+            document.getElementById('uploadZone').style.display = 'block';
+            document.getElementById('uploadPreview').style.display = 'none';
+            document.getElementById('fileInput').value = '';
+        }
+
         // ============ CHAT / HOMEWORK ============
         async function sendMessage() {
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
-            if (!message) return;
+            
+            if (!message && !uploadedFile) return;
 
             const chatMessages = document.getElementById('chatMessages');
             
@@ -1537,7 +1713,11 @@
             if (welcome) welcome.remove();
 
             // Add user message
-            addMessage(message, 'user');
+            let userDisplay = message;
+            if (uploadedFile) {
+                userDisplay = (message ? message + '\n' : '') + '📷 ' + uploadedFile.name;
+            }
+            addMessage(userDisplay, 'user');
             input.value = '';
 
             // Show loading
@@ -1566,14 +1746,33 @@
                 Réponds en français, adapté à un enfant de ${currentChild.level}.`;
             }
 
+            // Build content array for API
+            let content = [];
+            
+            // Add image if present
+            if (uploadedFileBase64 && uploadedFile && uploadedFile.type.startsWith('image/')) {
+                const base64Data = uploadedFileBase64.split(',')[1];
+                const mediaType = uploadedFile.type;
+                content.push({
+                    type: 'image',
+                    source: {
+                        type: 'base64',
+                        media_type: mediaType,
+                        data: base64Data
+                    }
+                });
+            }
+            
+            // Add text
+            const textContent = systemPrompt + '\n\nVoici la demande: ' + (message || 'Analyse cette image de leçon et aide-moi.');
+            content.push({ type: 'text', text: textContent });
+
             try {
                 const response = await fetch('/api/claude', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        messages: [
-                            { role: 'user', content: systemPrompt + '\n\nVoici la demande: ' + message }
-                        ]
+                        messages: [{ role: 'user', content: content }]
                     })
                 });
 
@@ -1589,6 +1788,9 @@
                     data.stats.questions++;
                     updateStats();
                     saveData();
+                    
+                    // Clear upload after sending
+                    clearUpload();
                 } else {
                     const error = await response.json();
                     addMessage('❌ Erreur: ' + (error.error || 'Connexion impossible'), 'assistant');
