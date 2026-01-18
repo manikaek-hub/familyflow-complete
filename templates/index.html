@@ -46,6 +46,26 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         }
         
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .back-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            display: none;
+        }
+        
+        .back-btn.visible { display: flex; align-items: center; justify-content: center; }
+        
         .header-title {
             font-family: 'Playfair Display', serif;
             font-size: 1.5rem;
@@ -55,14 +75,14 @@
         }
         
         .header-profile {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: var(--sand);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             cursor: pointer;
             border: 2px solid var(--white);
         }
@@ -85,17 +105,17 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 0.3rem 0.6rem;
+            padding: 0.3rem 0.5rem;
             border: none;
             background: none;
             cursor: pointer;
             color: var(--sage);
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             transition: all 0.3s;
         }
         
         .nav-item.active { color: var(--forest); }
-        .nav-item .nav-icon { font-size: 1.3rem; margin-bottom: 0.15rem; }
+        .nav-item .nav-icon { font-size: 1.2rem; margin-bottom: 0.1rem; }
         
         /* CONTAINER */
         .container { max-width: 600px; margin: 0 auto; padding: 1rem; }
@@ -136,7 +156,6 @@
             transition: all 0.3s;
             background: var(--white);
         }
-        
         .import-zone:hover { border-color: var(--forest); }
         .import-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
         .import-title { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--forest); }
@@ -155,13 +174,7 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         
         /* STATS */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.6rem;
-            margin-bottom: 1rem;
-        }
-        
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem; margin-bottom: 1rem; }
         .stat-card {
             background: var(--white);
             border-radius: 12px;
@@ -169,24 +182,16 @@
             text-align: center;
             box-shadow: 0 3px 10px rgba(0,0,0,0.06);
         }
-        
         .stat-card.income { border-left: 3px solid var(--green); }
         .stat-card.expense { border-left: 3px solid var(--terracotta); }
         .stat-card.balance { border-left: 3px solid var(--blue); }
         .stat-card.savings { border-left: 3px solid var(--purple); }
-        
         .stat-icon { font-size: 1.3rem; }
         .stat-value { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 600; }
         .stat-label { font-size: 0.65rem; color: var(--sage); }
         
         /* CATEGORY */
-        .category-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid var(--cream);
-        }
+        .category-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0; border-bottom: 1px solid var(--cream); }
         .category-item:last-child { border-bottom: none; }
         .category-emoji { font-size: 1.1rem; }
         .category-info { flex: 1; }
@@ -196,16 +201,7 @@
         .category-amount { font-weight: 600; font-size: 0.85rem; }
         
         /* TRANSACTIONS */
-        .transaction-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem;
-            background: var(--cream);
-            border-radius: 10px;
-            margin-bottom: 0.4rem;
-            cursor: pointer;
-        }
+        .transaction-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; background: var(--cream); border-radius: 10px; margin-bottom: 0.4rem; cursor: pointer; }
         .transaction-emoji { font-size: 1rem; }
         .transaction-info { flex: 1; min-width: 0; }
         .transaction-desc { font-size: 0.8rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -215,14 +211,7 @@
         .transaction-amount.expense { color: var(--terracotta); }
         
         /* ALERTS */
-        .alert-card {
-            border-radius: 10px;
-            padding: 0.8rem;
-            margin-bottom: 0.6rem;
-            display: flex;
-            align-items: flex-start;
-            gap: 0.6rem;
-        }
+        .alert-card { border-radius: 10px; padding: 0.8rem; margin-bottom: 0.6rem; display: flex; align-items: flex-start; gap: 0.6rem; }
         .alert-card.warning { background: #FFF3E0; border-left: 3px solid var(--orange); }
         .alert-card.danger { background: #FFEBEE; border-left: 3px solid var(--red); }
         .alert-card.success { background: #E8F5E9; border-left: 3px solid var(--green); }
@@ -232,13 +221,8 @@
         .alert-title { font-weight: 600; font-size: 0.85rem; }
         .alert-text { font-size: 0.75rem; opacity: 0.9; }
         
-        /* BUDGET PLAN */
-        .budget-item {
-            background: var(--cream);
-            border-radius: 10px;
-            padding: 0.7rem;
-            margin-bottom: 0.5rem;
-        }
+        /* BUDGET */
+        .budget-item { background: var(--cream); border-radius: 10px; padding: 0.7rem; margin-bottom: 0.5rem; }
         .budget-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
         .budget-category { display: flex; align-items: center; gap: 0.4rem; font-weight: 500; font-size: 0.85rem; }
         .budget-spent { font-weight: 600; font-size: 0.85rem; }
@@ -253,15 +237,7 @@
         .budget-status.danger { color: var(--red); }
         
         /* SCORE */
-        .score-circle {
-            width: 70px; height: 70px;
-            border-radius: 50%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 0.6rem;
-        }
+        .score-circle { width: 70px; height: 70px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 0.6rem; }
         .score-circle.good { background: linear-gradient(135deg, var(--green), #2ECC71); }
         .score-circle.warning { background: linear-gradient(135deg, var(--orange), #F39C12); }
         .score-circle.bad { background: linear-gradient(135deg, var(--red), #C0392B); }
@@ -269,175 +245,91 @@
         .score-label { font-size: 0.5rem; color: rgba(255,255,255,0.8); }
         
         /* CHAT */
-        .chat-container { display: flex; flex-direction: column; height: calc(100vh - 200px); max-height: 450px; }
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 0.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
+        .chat-container { display: flex; flex-direction: column; height: calc(100vh - 220px); max-height: 400px; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+        .message { max-width: 85%; padding: 0.6rem 0.8rem; border-radius: 12px; font-size: 0.85rem; line-height: 1.4; }
+        .message.user { background: var(--forest); color: var(--white); align-self: flex-end; border-bottom-right-radius: 4px; }
+        .message.assistant { background: var(--cream); align-self: flex-start; border-bottom-left-radius: 4px; }
         
-        .message {
-            max-width: 85%;
-            padding: 0.6rem 0.8rem;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            line-height: 1.4;
-        }
-        .message.user {
-            background: var(--forest);
-            color: var(--white);
-            align-self: flex-end;
-            border-bottom-right-radius: 4px;
-        }
-        .message.assistant {
-            background: var(--cream);
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
-        }
-        
-        .chat-input-container {
-            display: flex;
-            gap: 0.4rem;
-            padding: 0.5rem;
-            background: var(--cream);
-            border-radius: 10px;
-            margin-top: 0.5rem;
-        }
-        .chat-input {
-            flex: 1;
-            padding: 0.5rem;
-            border: none;
-            border-radius: 8px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.85rem;
-        }
+        .chat-input-container { display: flex; gap: 0.4rem; padding: 0.5rem; background: var(--cream); border-radius: 10px; margin-top: 0.5rem; }
+        .chat-input { flex: 1; padding: 0.5rem; border: none; border-radius: 8px; font-family: 'Outfit', sans-serif; font-size: 0.85rem; }
         .chat-input:focus { outline: none; }
-        .chat-send {
-            padding: 0.5rem 0.8rem;
-            border: none;
-            border-radius: 8px;
-            background: linear-gradient(135deg, var(--forest), var(--sage));
-            color: var(--white);
-            font-weight: 500;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
+        .chat-send { padding: 0.5rem 0.8rem; border: none; border-radius: 8px; background: linear-gradient(135deg, var(--forest), var(--sage)); color: var(--white); font-weight: 500; cursor: pointer; font-size: 0.8rem; }
         
-        .suggestion-btn {
-            padding: 0.35rem 0.6rem;
-            border: 2px solid var(--sand);
-            border-radius: 15px;
-            background: var(--white);
-            font-size: 0.7rem;
-            cursor: pointer;
-            margin: 0.2rem;
-        }
+        .suggestion-btn { padding: 0.35rem 0.6rem; border: 2px solid var(--sand); border-radius: 15px; background: var(--white); font-size: 0.7rem; cursor: pointer; margin: 0.2rem; }
         .suggestion-btn:hover { border-color: var(--forest); }
         
         /* HOMEWORK */
-        .homework-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.8rem;
-        }
+        .homework-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; gap: 0.5rem; }
         
         .child-selector {
+            position: relative;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.4rem 0.8rem;
-            background: var(--cream);
-            border-radius: 20px;
+            gap: 0.4rem;
+            padding: 0.5rem 0.8rem;
+            background: var(--white);
+            border-radius: 25px;
             cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex: 1;
+            max-width: 200px;
         }
         .child-selector .avatar { font-size: 1.2rem; }
-        .child-selector .name { font-weight: 500; font-size: 0.85rem; }
-        .child-selector .arrow { font-size: 0.7rem; color: var(--sage); }
+        .child-selector .name { font-weight: 500; font-size: 0.85rem; flex: 1; }
+        .child-selector .arrow { font-size: 0.6rem; color: var(--sage); transition: transform 0.3s; }
+        .child-selector.open .arrow { transform: rotate(180deg); }
         
-        .new-chat-btn {
-            padding: 0.4rem 0.7rem;
-            border: none;
-            border-radius: 8px;
-            background: var(--terracotta);
-            color: var(--white);
-            font-size: 0.75rem;
-            cursor: pointer;
+        .child-dropdown {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            z-index: 50;
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: all 0.3s;
         }
+        .child-dropdown.show { max-height: 300px; opacity: 1; }
         
-        .mode-toggle {
-            display: flex;
-            background: var(--cream);
-            border-radius: 10px;
-            padding: 0.25rem;
-            margin-bottom: 0.8rem;
-        }
-        .mode-btn {
-            flex: 1;
-            padding: 0.5rem;
-            border: none;
-            border-radius: 8px;
-            background: none;
-            font-size: 0.8rem;
-            cursor: pointer;
-        }
+        .child-dropdown-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.7rem 0.8rem; cursor: pointer; font-size: 0.85rem; }
+        .child-dropdown-item:hover { background: var(--cream); }
+        .child-dropdown-item.active { background: var(--sand); }
+        
+        .header-actions { display: flex; gap: 0.4rem; }
+        .action-btn { padding: 0.4rem 0.7rem; border: none; border-radius: 8px; font-size: 0.75rem; cursor: pointer; }
+        .action-btn.primary { background: var(--terracotta); color: white; }
+        .action-btn.secondary { background: var(--sand); color: var(--midnight); }
+        
+        .mode-toggle { display: flex; background: var(--cream); border-radius: 10px; padding: 0.25rem; margin-bottom: 0.8rem; }
+        .mode-btn { flex: 1; padding: 0.5rem; border: none; border-radius: 8px; background: none; font-size: 0.8rem; cursor: pointer; }
         .mode-btn.active { background: var(--white); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
         
-        .upload-zone {
-            border: 2px dashed var(--sand);
-            border-radius: 10px;
-            padding: 0.8rem;
-            text-align: center;
-            cursor: pointer;
-            font-size: 0.8rem;
-            color: var(--sage);
-            margin-bottom: 0.5rem;
-        }
-        .upload-preview {
-            position: relative;
-            padding: 0.5rem;
-            background: var(--cream);
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 0.5rem;
-        }
+        .upload-zone { border: 2px dashed var(--sand); border-radius: 10px; padding: 0.8rem; text-align: center; cursor: pointer; font-size: 0.8rem; color: var(--sage); margin-bottom: 0.5rem; }
+        .upload-preview { position: relative; padding: 0.5rem; background: var(--cream); border-radius: 10px; text-align: center; margin-bottom: 0.5rem; }
         .upload-preview img { max-width: 100%; max-height: 80px; border-radius: 6px; }
-        .remove-upload {
-            position: absolute;
-            top: 3px; right: 3px;
-            width: 18px; height: 18px;
-            border-radius: 50%;
-            border: none;
-            background: var(--red);
-            color: white;
-            cursor: pointer;
-            font-size: 0.6rem;
-        }
+        .remove-upload { position: absolute; top: 3px; right: 3px; width: 18px; height: 18px; border-radius: 50%; border: none; background: var(--red); color: white; cursor: pointer; font-size: 0.6rem; }
         
-        /* CHILD MODE - INTERACTIVE CARDS */
-        .quiz-container {
-            position: relative;
-            min-height: 280px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            margin-bottom: 1rem;
-        }
+        /* QUIZ - Mode Enfant */
+        .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .quiz-progress { display: flex; gap: 0.3rem; }
+        .progress-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--sand); transition: all 0.3s; }
+        .progress-dot.done { background: var(--green); }
+        .progress-dot.current { background: var(--blue); transform: scale(1.3); }
+        .progress-dot.wrong { background: var(--red); }
+        
+        .quiz-score-display { font-weight: 600; font-size: 0.9rem; color: var(--forest); }
         
         .quiz-card {
-            position: absolute;
-            width: 100%;
-            max-width: 320px;
             background: var(--white);
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
             overflow: hidden;
-            cursor: grab;
-            transition: transform 0.1s;
-            user-select: none;
+            margin-bottom: 1rem;
         }
         
         .quiz-card-header {
@@ -445,100 +337,97 @@
             text-align: center;
             background: linear-gradient(135deg, var(--blue), var(--purple));
             color: white;
+            transition: background 0.5s;
         }
         .quiz-card-header.correct { background: linear-gradient(135deg, var(--green), #2ECC71); }
         .quiz-card-header.wrong { background: linear-gradient(135deg, var(--red), #C0392B); }
         
-        .quiz-subject { font-size: 0.75rem; opacity: 0.9; margin-bottom: 0.3rem; }
-        .quiz-question { font-size: 1rem; font-weight: 600; line-height: 1.4; }
+        .quiz-number { font-size: 0.75rem; opacity: 0.9; margin-bottom: 0.3rem; }
+        .quiz-question { font-size: 1.05rem; font-weight: 600; line-height: 1.4; }
         
         .quiz-card-body { padding: 1rem; }
         
         .quiz-options { display: flex; flex-direction: column; gap: 0.5rem; }
         .quiz-option {
-            padding: 0.7rem;
+            padding: 0.8rem;
             border: 2px solid var(--sand);
-            border-radius: 10px;
+            border-radius: 12px;
             text-align: center;
             cursor: pointer;
             font-size: 0.9rem;
             transition: all 0.3s;
         }
-        .quiz-option:hover { border-color: var(--blue); background: rgba(52, 152, 219, 0.1); }
-        .quiz-option.selected { border-color: var(--blue); background: rgba(52, 152, 219, 0.2); }
-        .quiz-option.correct { border-color: var(--green); background: rgba(39, 174, 96, 0.2); }
-        .quiz-option.wrong { border-color: var(--red); background: rgba(231, 76, 60, 0.2); }
+        .quiz-option:hover { border-color: var(--blue); background: rgba(52, 152, 219, 0.05); }
+        .quiz-option.selected { border-color: var(--blue); background: rgba(52, 152, 219, 0.15); }
+        .quiz-option.correct { border-color: var(--green); background: rgba(39, 174, 96, 0.15); }
+        .quiz-option.wrong { border-color: var(--red); background: rgba(231, 76, 60, 0.15); }
+        .quiz-option.disabled { pointer-events: none; }
         
-        .quiz-input {
-            width: 100%;
-            padding: 0.7rem;
-            border: 2px solid var(--sand);
-            border-radius: 10px;
-            font-size: 0.9rem;
-            text-align: center;
-        }
-        .quiz-input:focus { outline: none; border-color: var(--blue); }
-        
-        .quiz-actions {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
+        .quiz-actions { display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; }
         .quiz-btn {
-            width: 50px;
-            height: 50px;
+            width: 55px; height: 55px;
             border-radius: 50%;
             border: none;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
         }
-        .quiz-btn.skip { background: var(--sand); }
-        .quiz-btn.check { background: linear-gradient(135deg, var(--green), #2ECC71); color: white; }
+        .quiz-btn:hover { transform: scale(1.1); }
+        .quiz-btn:active { transform: scale(0.95); }
         .quiz-btn.hint { background: linear-gradient(135deg, var(--orange), var(--yellow)); color: white; }
+        .quiz-btn.check { background: linear-gradient(135deg, var(--green), #2ECC71); color: white; }
+        .quiz-btn.next { background: linear-gradient(135deg, var(--blue), var(--purple)); color: white; }
         
-        .quiz-progress {
-            display: flex;
-            justify-content: center;
-            gap: 0.3rem;
-            margin-bottom: 1rem;
-        }
-        .progress-dot {
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            background: var(--sand);
-        }
-        .progress-dot.done { background: var(--green); }
-        .progress-dot.current { background: var(--blue); transform: scale(1.3); }
+        .quiz-hint { text-align: center; padding: 0.6rem; background: #FFF3E0; border-radius: 10px; margin-top: 0.8rem; font-size: 0.85rem; color: var(--orange); }
         
-        .quiz-score {
+        .quiz-results {
             text-align: center;
-            padding: 1.5rem;
+            padding: 2rem 1rem;
         }
-        .quiz-score-value {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--forest);
-        }
-        .quiz-score-label { color: var(--sage); margin-bottom: 1rem; }
-        .quiz-restart {
-            padding: 0.7rem 1.5rem;
+        .quiz-results-score { font-size: 3rem; font-weight: 700; color: var(--forest); }
+        .quiz-results-text { color: var(--sage); margin: 0.5rem 0 1rem; }
+        .quiz-results-btn {
+            padding: 0.8rem 1.5rem;
             border: none;
-            border-radius: 20px;
+            border-radius: 25px;
             background: linear-gradient(135deg, var(--forest), var(--sage));
             color: white;
             font-weight: 500;
             cursor: pointer;
+            margin: 0.3rem;
         }
         
-        .swipe-hint {
-            text-align: center;
-            font-size: 0.75rem;
-            color: var(--sage);
-            margin-top: 0.5rem;
+        /* Q&A Cards for Parent Mode */
+        .qa-card {
+            background: var(--white);
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
         }
+        .qa-question {
+            padding: 0.8rem;
+            background: linear-gradient(135deg, var(--forest), var(--sage));
+            color: white;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .qa-question .toggle { font-size: 0.7rem; transition: transform 0.3s; }
+        .qa-question.open .toggle { transform: rotate(180deg); }
+        .qa-answer {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s;
+            background: var(--cream);
+        }
+        .qa-answer.show { padding: 0.8rem; max-height: 500px; }
+        .qa-answer-text { font-size: 0.85rem; line-height: 1.5; }
         
         /* PROFILE */
         .profile-header {
@@ -549,110 +438,21 @@
             margin-bottom: 1rem;
             color: white;
         }
-        .profile-avatar {
-            width: 70px; height: 70px;
-            border-radius: 50%;
-            background: var(--sand);
-            margin: 0 auto 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            border: 3px solid white;
-        }
-        .profile-name { font-size: 1.2rem; font-weight: 600; }
-        .profile-email { font-size: 0.8rem; opacity: 0.8; }
+        .profile-avatar { width: 60px; height: 60px; border-radius: 50%; background: var(--sand); margin: 0 auto 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; border: 3px solid white; }
+        .profile-name { font-size: 1.1rem; font-weight: 600; }
         
         .family-section { margin-bottom: 1rem; }
-        .family-title {
-            font-size: 0.85rem;
-            color: var(--sage);
-            margin-bottom: 0.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .add-child-btn {
-            padding: 0.3rem 0.6rem;
-            border: none;
-            border-radius: 15px;
-            background: var(--terracotta);
-            color: white;
-            font-size: 0.7rem;
-            cursor: pointer;
-        }
+        .family-title { font-size: 0.85rem; color: var(--sage); margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
+        .add-child-btn { padding: 0.3rem 0.6rem; border: none; border-radius: 15px; background: var(--terracotta); color: white; font-size: 0.7rem; cursor: pointer; }
         
-        .child-card {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            padding: 0.8rem;
-            background: var(--white);
-            border-radius: 12px;
-            margin-bottom: 0.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-        .child-avatar-lg {
-            width: 45px; height: 45px;
-            border-radius: 50%;
-            background: var(--cream);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
+        .child-card { display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; background: var(--white); border-radius: 12px; margin-bottom: 0.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .child-avatar-lg { width: 45px; height: 45px; border-radius: 50%; background: var(--cream); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
         .child-info { flex: 1; }
         .child-name { font-weight: 600; font-size: 0.95rem; }
         .child-details { font-size: 0.75rem; color: var(--sage); }
-        .child-edit {
-            padding: 0.3rem 0.6rem;
-            border: 1px solid var(--sand);
-            border-radius: 8px;
-            background: none;
-            font-size: 0.7rem;
-            cursor: pointer;
-        }
+        .child-edit { padding: 0.3rem 0.6rem; border: 1px solid var(--sand); border-radius: 8px; background: none; font-size: 0.7rem; cursor: pointer; }
         
-        .settings-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.8rem;
-            background: var(--white);
-            border-radius: 10px;
-            margin-bottom: 0.4rem;
-        }
-        .settings-label { font-size: 0.85rem; }
-        .settings-toggle {
-            width: 45px; height: 24px;
-            border-radius: 12px;
-            background: var(--sand);
-            position: relative;
-            cursor: pointer;
-        }
-        .settings-toggle.on { background: var(--green); }
-        .settings-toggle::after {
-            content: '';
-            position: absolute;
-            width: 20px; height: 20px;
-            border-radius: 50%;
-            background: white;
-            top: 2px; left: 2px;
-            transition: 0.3s;
-        }
-        .settings-toggle.on::after { left: 23px; }
-        
-        .logout-btn {
-            width: 100%;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 10px;
-            background: var(--red);
-            color: white;
-            font-weight: 500;
-            cursor: pointer;
-            margin-top: 1rem;
-        }
+        .logout-btn { width: 100%; padding: 0.8rem; border: none; border-radius: 10px; background: var(--red); color: white; font-weight: 500; cursor: pointer; margin-top: 1rem; }
         
         /* MODALS */
         .modal-overlay {
@@ -682,85 +482,22 @@
         }
         .modal-overlay.active .modal { transform: scale(1); }
         
-        .modal-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
-            color: var(--forest);
-            margin-bottom: 1rem;
-            text-align: center;
-        }
+        .modal-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--forest); margin-bottom: 1rem; text-align: center; }
         
         .form-group { margin-bottom: 0.7rem; }
         .form-label { display: block; font-size: 0.75rem; color: var(--sage); margin-bottom: 0.2rem; }
-        .form-input, .form-select {
-            width: 100%;
-            padding: 0.6rem;
-            border: 2px solid var(--sand);
-            border-radius: 8px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.9rem;
-        }
+        .form-input, .form-select { width: 100%; padding: 0.6rem; border: 2px solid var(--sand); border-radius: 8px; font-family: 'Outfit', sans-serif; font-size: 0.9rem; }
         .form-input:focus, .form-select:focus { outline: none; border-color: var(--forest); }
         
-        .avatar-picker {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-        .avatar-option {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            border: 2px solid var(--sand);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            cursor: pointer;
-        }
+        .avatar-picker { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem; }
+        .avatar-option { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--sand); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; cursor: pointer; }
         .avatar-option.selected { border-color: var(--forest); background: var(--cream); }
         
-        .modal-buttons {
-            display: flex;
-            gap: 0.6rem;
-            margin-top: 1rem;
-        }
-        .modal-btn {
-            flex: 1;
-            padding: 0.7rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: 500;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
+        .modal-buttons { display: flex; gap: 0.6rem; margin-top: 1rem; }
+        .modal-btn { flex: 1; padding: 0.7rem; border: none; border-radius: 8px; font-weight: 500; cursor: pointer; font-size: 0.85rem; }
         .btn-cancel { background: var(--sand); }
         .btn-save { background: linear-gradient(135deg, var(--forest), var(--sage)); color: white; }
         .btn-delete { background: var(--red); color: white; }
-        
-        .child-dropdown {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: var(--white);
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            z-index: 50;
-            display: none;
-            margin-top: 0.3rem;
-        }
-        .child-dropdown.show { display: block; }
-        .child-dropdown-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.6rem 0.8rem;
-            cursor: pointer;
-        }
-        .child-dropdown-item:hover { background: var(--cream); }
-        .child-dropdown-item:first-child { border-radius: 10px 10px 0 0; }
-        .child-dropdown-item:last-child { border-radius: 0 0 10px 10px; }
         
         /* NOTIFICATION */
         .notification {
@@ -769,8 +506,8 @@
             transform: translateX(-50%);
             background: linear-gradient(135deg, var(--forest), var(--sage));
             color: var(--white);
-            padding: 0.6rem 1rem;
-            border-radius: 20px;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             z-index: 2000;
             animation: slideDown 0.3s ease-out;
@@ -782,30 +519,24 @@
         }
         
         .loading-dots { display: flex; gap: 0.2rem; padding: 0.5rem; }
-        .loading-dot {
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            background: var(--sage);
-            animation: bounce 1.4s infinite ease-in-out both;
-        }
+        .loading-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sage); animation: bounce 1.4s infinite ease-in-out both; }
         .loading-dot:nth-child(1) { animation-delay: -0.32s; }
         .loading-dot:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes bounce {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1); }
-        }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
         
         .empty-state { text-align: center; padding: 2rem; color: var(--sage); }
         .empty-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
         
-        .edit-btn { padding: 0.3rem 0.5rem; border: 1px solid var(--sand); border-radius: 6px; background: none; font-size: 0.7rem; cursor: pointer; margin-left: 0.5rem; }
         .reset-btn { display: block; width: 100%; padding: 0.6rem; border: 2px dashed var(--sand); border-radius: 8px; background: none; color: var(--sage); cursor: pointer; font-size: 0.8rem; margin-top: 1rem; }
     </style>
 </head>
 <body>
     <header>
-        <div class="header-title">🌊 FamilyFlow</div>
-        <div class="header-profile" id="headerProfile" onclick="switchView('profile')">👤</div>
+        <div class="header-left">
+            <button class="back-btn" id="backBtn" onclick="goBack()">←</button>
+            <div class="header-title">🌊 FamilyFlow</div>
+        </div>
+        <div class="header-profile" onclick="switchView('profile')">👤</div>
     </header>
     
     <div class="container">
@@ -817,12 +548,10 @@
                 <div class="import-text">Glissez un PDF ou cliquez</div>
                 <input type="file" id="importInput" accept=".pdf,.csv" style="display: none;">
             </div>
-            
             <div class="loading-container" id="loadingContainer" style="display: none;">
                 <div class="loading-spinner"></div>
                 <div style="color: var(--sage); font-size: 0.85rem;">🤖 Analyse en cours...</div>
             </div>
-            
             <div id="dashboardContent" style="display: none;">
                 <div class="stats-grid">
                     <div class="stat-card income"><div class="stat-icon">📥</div><div class="stat-value" id="totalIncome">0€</div><div class="stat-label">Revenus</div></div>
@@ -830,48 +559,28 @@
                     <div class="stat-card balance"><div class="stat-icon">💰</div><div class="stat-value" id="totalBalance">0€</div><div class="stat-label">Solde</div></div>
                     <div class="stat-card savings"><div class="stat-icon">🎯</div><div class="stat-value" id="savingsRate">0%</div><div class="stat-label">Épargne</div></div>
                 </div>
-                
-                <div class="card">
-                    <div class="card-title">📊 Répartition</div>
-                    <div id="categoryBreakdown"></div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-title">📋 Transactions récentes</div>
-                    <div id="recentTransactions"></div>
-                </div>
-                
+                <div class="card"><div class="card-title">📊 Répartition</div><div id="categoryBreakdown"></div></div>
+                <div class="card"><div class="card-title">📋 Transactions</div><div id="recentTransactions"></div></div>
                 <button class="reset-btn" onclick="resetData()">🔄 Nouveau relevé</button>
             </div>
         </div>
         
         <!-- OPTIMIZE VIEW -->
-        <div class="view" id="optimize-view">
-            <div id="optimizeContent">
-                <div class="empty-state"><div class="empty-icon">📊</div><div>Importez un relevé</div></div>
-            </div>
-        </div>
+        <div class="view" id="optimize-view"><div id="optimizeContent"><div class="empty-state"><div class="empty-icon">📊</div><div>Importez un relevé</div></div></div></div>
         
         <!-- PLAN VIEW -->
-        <div class="view" id="plan-view">
-            <div id="planContent">
-                <div class="empty-state"><div class="empty-icon">🎯</div><div>Importez un relevé</div></div>
-            </div>
-        </div>
+        <div class="view" id="plan-view"><div id="planContent"><div class="empty-state"><div class="empty-icon">🎯</div><div>Importez un relevé</div></div></div></div>
         
         <!-- ASSISTANT VIEW -->
         <div class="view" id="assistant-view">
             <div class="card chat-container">
-                <div class="chat-messages" id="budgetChatMessages">
-                    <div class="message assistant">👋 Bonjour ! Je suis votre assistant budget. Posez-moi vos questions !</div>
-                </div>
-                <div id="budgetSuggestions" style="display: flex; flex-wrap: wrap; padding: 0.3rem;">
+                <div class="chat-messages" id="budgetChat"><div class="message assistant">👋 Posez-moi vos questions budget !</div></div>
+                <div style="display: flex; flex-wrap: wrap; padding: 0.3rem;">
                     <button class="suggestion-btn" onclick="askBudget('Comment économiser ?')">💡 Économiser</button>
-                    <button class="suggestion-btn" onclick="askBudget('Analyse mes abonnements')">📱 Abonnements</button>
-                    <button class="suggestion-btn" onclick="askBudget('Plan budget')">🎯 Plan</button>
+                    <button class="suggestion-btn" onclick="askBudget('Mes abonnements')">📱 Abonnements</button>
                 </div>
                 <div class="chat-input-container">
-                    <input type="text" class="chat-input" id="budgetInput" placeholder="Votre question...">
+                    <input type="text" class="chat-input" id="budgetInput" placeholder="Question...">
                     <button class="chat-send" onclick="sendBudgetMsg()">→</button>
                 </div>
             </div>
@@ -880,28 +589,31 @@
         <!-- HOMEWORK VIEW -->
         <div class="view" id="homework-view">
             <div class="homework-header">
-                <div class="child-selector" id="childSelector" onclick="toggleChildDropdown()">
-                    <span class="avatar" id="currentChildAvatar">👦</span>
-                    <span class="name" id="currentChildName">Gauthier</span>
+                <div class="child-selector" id="childSelector">
+                    <span class="avatar" id="currentAvatar">👦</span>
+                    <span class="name" id="currentName">Choisir</span>
                     <span class="arrow">▼</span>
                     <div class="child-dropdown" id="childDropdown"></div>
                 </div>
-                <button class="new-chat-btn" onclick="newHomeworkChat()">🔄 Nouveau</button>
+                <div class="header-actions">
+                    <button class="action-btn secondary" onclick="newChat()">🔄</button>
+                    <button class="action-btn primary" onclick="startQuiz()" id="startQuizBtn" style="display:none;">🎮 Quiz</button>
+                </div>
             </div>
             
             <div class="mode-toggle">
-                <button class="mode-btn active" data-mode="parent" onclick="setHomeworkMode('parent')">👨‍👩‍👧 Parent</button>
-                <button class="mode-btn" data-mode="child" onclick="setHomeworkMode('child')">🎮 Enfant</button>
+                <button class="mode-btn active" data-mode="parent" onclick="setMode('parent')">👨‍👩‍👧 Parent</button>
+                <button class="mode-btn" data-mode="child" onclick="setMode('child')">🎮 Enfant</button>
             </div>
             
-            <!-- Parent Mode Chat -->
-            <div id="parentModeContent" class="card chat-container">
-                <div class="chat-messages" id="homeworkChat">
-                    <div class="message assistant">📚 Uploadez une leçon ou posez une question !</div>
+            <!-- PARENT MODE -->
+            <div id="parentMode">
+                <div class="card chat-container" style="max-height: 300px;">
+                    <div class="chat-messages" id="parentChat"><div class="message assistant">📚 Uploadez une leçon pour générer des questions !</div></div>
                 </div>
                 
                 <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
-                    📎 Photo ou PDF de leçon
+                    📎 Photo ou PDF
                     <input type="file" id="fileInput" accept="image/*,.pdf" style="display: none;">
                 </div>
                 <div class="upload-preview" id="uploadPreview" style="display: none;">
@@ -910,29 +622,26 @@
                 </div>
                 
                 <div class="chat-input-container">
-                    <input type="text" class="chat-input" id="homeworkInput" placeholder="Question...">
-                    <button class="chat-send" onclick="sendHomeworkMsg()">→</button>
+                    <input type="text" class="chat-input" id="parentInput" placeholder="Question ou sujet...">
+                    <button class="chat-send" onclick="sendParentMsg()">→</button>
                 </div>
+                
+                <!-- Q&A Cards -->
+                <div id="qaCards" style="margin-top: 1rem;"></div>
             </div>
             
-            <!-- Child Mode Interactive -->
-            <div id="childModeContent" style="display: none;">
-                <div class="quiz-progress" id="quizProgress"></div>
-                
-                <div class="quiz-container" id="quizContainer">
-                    <div class="empty-state">
-                        <div class="empty-icon">🎮</div>
-                        <div>Uploadez une leçon en mode Parent<br>puis revenez ici pour le quiz !</div>
-                    </div>
+            <!-- CHILD MODE -->
+            <div id="childMode" style="display: none;">
+                <div class="quiz-header">
+                    <div class="quiz-progress" id="quizProgress"></div>
+                    <div class="quiz-score-display" id="quizScoreDisplay">Score: 0</div>
                 </div>
                 
-                <div id="quizActions" style="display: none;">
-                    <div class="quiz-actions">
-                        <button class="quiz-btn hint" onclick="getHint()">💡</button>
-                        <button class="quiz-btn check" onclick="checkAnswer()">✓</button>
-                        <button class="quiz-btn skip" onclick="skipQuestion()">→</button>
+                <div id="quizContent">
+                    <div class="empty-state">
+                        <div class="empty-icon">🎮</div>
+                        <div>Uploadez une leçon en mode Parent<br>puis cliquez sur "🎮 Quiz" !</div>
                     </div>
-                    <div class="swipe-hint">💡 Indice • ✓ Vérifier • → Passer</div>
                 </div>
             </div>
         </div>
@@ -940,32 +649,14 @@
         <!-- PROFILE VIEW -->
         <div class="view" id="profile-view">
             <div class="profile-header">
-                <div class="profile-avatar" id="profileAvatar">👤</div>
-                <div class="profile-name" id="profileName">Famille</div>
-                <div class="profile-email" id="profileEmail">Configurez votre profil</div>
+                <div class="profile-avatar">👨‍👩‍👧‍👦</div>
+                <div class="profile-name">Ma Famille</div>
             </div>
-            
             <div class="family-section">
-                <div class="family-title">
-                    👨‍👩‍👧‍👦 Mes enfants
-                    <button class="add-child-btn" onclick="openChildModal()">+ Ajouter</button>
-                </div>
+                <div class="family-title">👨‍👩‍👧‍👦 Mes enfants <button class="add-child-btn" onclick="openChildModal()">+ Ajouter</button></div>
                 <div id="childrenList"></div>
             </div>
-            
-            <div class="card">
-                <div class="card-title">⚙️ Paramètres</div>
-                <div class="settings-item">
-                    <span class="settings-label">Notifications</span>
-                    <div class="settings-toggle on" onclick="this.classList.toggle('on')"></div>
-                </div>
-                <div class="settings-item">
-                    <span class="settings-label">Mode sombre</span>
-                    <div class="settings-toggle" onclick="this.classList.toggle('on')"></div>
-                </div>
-            </div>
-            
-            <button class="logout-btn" onclick="resetAll()">🚪 Réinitialiser l'app</button>
+            <button class="logout-btn" onclick="resetAll()">🚪 Réinitialiser</button>
         </div>
     </div>
     
@@ -982,77 +673,33 @@
     <div class="modal-overlay" id="childModal">
         <div class="modal">
             <div class="modal-title" id="childModalTitle">➕ Ajouter un enfant</div>
-            
             <div class="avatar-picker" id="avatarPicker">
                 <div class="avatar-option selected" data-avatar="👦">👦</div>
                 <div class="avatar-option" data-avatar="👧">👧</div>
                 <div class="avatar-option" data-avatar="🧒">🧒</div>
                 <div class="avatar-option" data-avatar="👶">👶</div>
-                <div class="avatar-option" data-avatar="🧒🏽">🧒🏽</div>
             </div>
-            
-            <div class="form-group">
-                <label class="form-label">Prénom</label>
-                <input type="text" class="form-input" id="childName" placeholder="Ex: Emma">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Âge</label>
-                <input type="number" class="form-input" id="childAge" placeholder="Ex: 10" min="3" max="18">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Classe</label>
-                <select class="form-select" id="childClass">
-                    <option value="CP">CP</option>
-                    <option value="CE1">CE1</option>
-                    <option value="CE2">CE2</option>
-                    <option value="CM1">CM1</option>
-                    <option value="CM2">CM2</option>
-                    <option value="6e">6ème</option>
-                    <option value="5e">5ème</option>
-                    <option value="4e" selected>4ème</option>
-                    <option value="3e">3ème</option>
-                    <option value="2nde">2nde</option>
-                    <option value="1ere">1ère</option>
-                    <option value="Term">Terminale</option>
+            <div class="form-group"><label class="form-label">Prénom</label><input type="text" class="form-input" id="childNameInput" placeholder="Emma"></div>
+            <div class="form-group"><label class="form-label">Âge</label><input type="number" class="form-input" id="childAgeInput" placeholder="10" min="3" max="18"></div>
+            <div class="form-group"><label class="form-label">Classe</label>
+                <select class="form-select" id="childClassInput">
+                    <option value="CP">CP</option><option value="CE1">CE1</option><option value="CE2">CE2</option>
+                    <option value="CM1">CM1</option><option value="CM2">CM2</option><option value="6e">6ème</option>
+                    <option value="5e">5ème</option><option value="4e" selected>4ème</option><option value="3e">3ème</option>
+                    <option value="2nde">2nde</option><option value="1ere">1ère</option><option value="Term">Terminale</option>
                 </select>
             </div>
-            
-            <div class="form-group">
-                <label class="form-label">Centres d'intérêt (optionnel)</label>
-                <input type="text" class="form-input" id="childInterests" placeholder="Ex: foot, manga, sciences">
-            </div>
-            
+            <div class="form-group"><label class="form-label">Centres d'intérêt</label><input type="text" class="form-input" id="childInterestsInput" placeholder="foot, manga..."></div>
             <div class="modal-buttons">
                 <button class="modal-btn btn-cancel" onclick="closeModal('childModal')">Annuler</button>
                 <button class="modal-btn btn-delete" id="deleteChildBtn" onclick="deleteChild()" style="display:none;">🗑️</button>
-                <button class="modal-btn btn-save" onclick="saveChild()">Enregistrer</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- EDIT TRANSACTION MODAL -->
-    <div class="modal-overlay" id="editModal">
-        <div class="modal">
-            <div class="modal-title">✏️ Modifier</div>
-            <div class="form-group">
-                <label class="form-label">Description</label>
-                <input type="text" class="form-input" id="editDesc">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Catégorie</label>
-                <div id="categoryGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.3rem;"></div>
-            </div>
-            <div class="modal-buttons">
-                <button class="modal-btn btn-cancel" onclick="closeModal('editModal')">Annuler</button>
-                <button class="modal-btn btn-save" onclick="saveEdit()">OK</button>
+                <button class="modal-btn btn-save" onclick="saveChild()">OK</button>
             </div>
         </div>
     </div>
 
     <script>
-        // ============ CATEGORIES ============
+        // ============ CONSTANTS ============
         const CATEGORIES = {
             shopping: { emoji: '🛒', name: 'Shopping', color: '#E74C3C' },
             food: { emoji: '🍕', name: 'Alimentation', color: '#E67E22' },
@@ -1068,11 +715,10 @@
             other: { emoji: '📦', name: 'Autre', color: '#7F8C8D' }
         };
 
-        // ============ DATA ============
+        // ============ STATE ============
         let data = {
             transactions: [],
             budgets: {},
-            profile: { name: '', email: '' },
             children: [
                 { id: 1, name: 'Gauthier', age: 13, class: '4e', avatar: '👦', interests: '' },
                 { id: 2, name: 'Charles', age: 11, class: '6e', avatar: '🧒', interests: '' },
@@ -1081,47 +727,81 @@
         };
         
         let currentChild = null;
-        let homeworkMode = 'parent';
-        let homeworkHistory = [];
-        let budgetHistory = [];
+        let currentView = 'budget';
+        let viewHistory = [];
+        let editingChild = null;
         let uploadedFile = null;
         let uploadedBase64 = null;
-        let editingTransaction = null;
-        let editingChild = null;
+        
+        // Quiz state
         let quizQuestions = [];
-        let currentQuizIndex = 0;
+        let quizIndex = 0;
         let quizScore = 0;
+        let quizAnswered = false;
+        let currentHint = null;
 
         // ============ INIT ============
         function init() {
-            const saved = localStorage.getItem('familyflow_v5');
+            const saved = localStorage.getItem('familyflow_v6');
             if (saved) data = { ...data, ...JSON.parse(saved) };
-            
             if (data.children.length > 0) currentChild = data.children[0];
             
             setupListeners();
-            updateAllViews();
-            updateChildDropdown();
-            updateChildrenList();
+            updateAll();
         }
 
-        function save() { localStorage.setItem('familyflow_v5', JSON.stringify(data)); }
+        function save() { localStorage.setItem('familyflow_v6', JSON.stringify(data)); }
+
+        // ============ NAVIGATION ============
+        function switchView(view) {
+            if (currentView !== view) viewHistory.push(currentView);
+            currentView = view;
+            
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(`${view}-view`).classList.add('active');
+            document.querySelector(`[data-view="${view}"]`)?.classList.add('active');
+            
+            document.getElementById('backBtn').classList.toggle('visible', viewHistory.length > 0);
+        }
+
+        function goBack() {
+            if (viewHistory.length > 0) {
+                const prev = viewHistory.pop();
+                currentView = prev;
+                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                document.getElementById(`${prev}-view`).classList.add('active');
+                document.querySelector(`[data-view="${prev}"]`)?.classList.add('active');
+            }
+            document.getElementById('backBtn').classList.toggle('visible', viewHistory.length > 0);
+        }
 
         // ============ LISTENERS ============
         function setupListeners() {
-            // Nav
             document.querySelectorAll('.nav-item').forEach(n => n.addEventListener('click', () => switchView(n.dataset.view)));
             
-            // Import
             document.getElementById('importZone').addEventListener('click', () => document.getElementById('importInput').click());
-            document.getElementById('importInput').addEventListener('change', (e) => e.target.files[0] && importFile(e.target.files[0]));
+            document.getElementById('importInput').addEventListener('change', e => e.target.files[0] && importFile(e.target.files[0]));
             
-            // File upload
-            document.getElementById('fileInput').addEventListener('change', (e) => e.target.files[0] && handleUpload(e.target.files[0]));
+            document.getElementById('fileInput').addEventListener('change', e => e.target.files[0] && handleUpload(e.target.files[0]));
             
-            // Chat inputs
-            document.getElementById('budgetInput').addEventListener('keypress', (e) => e.key === 'Enter' && sendBudgetMsg());
-            document.getElementById('homeworkInput').addEventListener('keypress', (e) => e.key === 'Enter' && sendHomeworkMsg());
+            document.getElementById('budgetInput').addEventListener('keypress', e => e.key === 'Enter' && sendBudgetMsg());
+            document.getElementById('parentInput').addEventListener('keypress', e => e.key === 'Enter' && sendParentMsg());
+            
+            // Child selector
+            document.getElementById('childSelector').addEventListener('click', e => {
+                e.stopPropagation();
+                const dd = document.getElementById('childDropdown');
+                const sel = document.getElementById('childSelector');
+                dd.classList.toggle('show');
+                sel.classList.toggle('open');
+            });
+            
+            document.addEventListener('click', () => {
+                document.getElementById('childDropdown').classList.remove('show');
+                document.getElementById('childSelector').classList.remove('open');
+            });
             
             // Avatar picker
             document.querySelectorAll('.avatar-option').forEach(a => {
@@ -1131,86 +811,16 @@
                 });
             });
             
-            // Close modals
             document.querySelectorAll('.modal-overlay').forEach(m => {
-                m.addEventListener('click', (e) => e.target === m && closeModal(m.id));
+                m.addEventListener('click', e => e.target === m && closeModal(m.id));
             });
         }
 
-        function switchView(view) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(`${view}-view`).classList.add('active');
-            document.querySelector(`[data-view="${view}"]`)?.classList.add('active');
-        }
-
-        // ============ IMPORT ============
-        async function importFile(file) {
-            document.getElementById('importZone').style.display = 'none';
-            document.getElementById('loadingContainer').style.display = 'block';
+        // ============ UPDATE ALL ============
+        function updateAll() {
+            updateChildSelector();
+            updateChildrenList();
             
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                const b64 = e.target.result.split(',')[1];
-                try {
-                    const res = await fetch('/api/claude', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            system: `Extrais les transactions du relevé. Retourne UNIQUEMENT ce JSON:
-{"period":"Mois YYYY","transactions":[{"date":"DD/MM/YYYY","description":"Court","amount":123.45,"category":"salary"}]}
-Règles: revenus=positif, dépenses=négatif. Catégories: shopping,food,transport,housing,bills,entertainment,health,subscriptions,insurance,salary,transfer,other`,
-                            messages: [{ role: 'user', content: [
-                                { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: b64 }},
-                                { type: 'text', text: 'Analyse. JSON uniquement.' }
-                            ]}]
-                        })
-                    });
-                    document.getElementById('loadingContainer').style.display = 'none';
-                    if (res.ok) {
-                        const r = await res.json();
-                        const m = r.content[0].text.match(/\{[\s\S]*\}/);
-                        if (m) {
-                            const p = JSON.parse(m[0]);
-                            if (p.transactions?.length) {
-                                data.transactions = p.transactions.map((t, i) => ({ id: Date.now() + i, ...t }));
-                                data.period = p.period || '';
-                                save();
-                                updateAllViews();
-                                notify(`✅ ${data.transactions.length} transactions`);
-                                return;
-                            }
-                        }
-                    }
-                    showImportError();
-                } catch (e) { console.error(e); showImportError(); }
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function showImportError() {
-            document.getElementById('loadingContainer').style.display = 'none';
-            document.getElementById('importZone').style.display = 'block';
-            notify('❌ Erreur import');
-        }
-
-        function resetData() {
-            if (confirm('Effacer les données financières ?')) {
-                data.transactions = [];
-                save();
-                updateAllViews();
-            }
-        }
-
-        function resetAll() {
-            if (confirm('Réinitialiser toute l\'app ?')) {
-                localStorage.removeItem('familyflow_v5');
-                location.reload();
-            }
-        }
-
-        // ============ UPDATE VIEWS ============
-        function updateAllViews() {
             const has = data.transactions.length > 0;
             document.getElementById('importZone').style.display = has ? 'none' : 'block';
             document.getElementById('dashboardContent').style.display = has ? 'block' : 'none';
@@ -1219,214 +829,58 @@ Règles: revenus=positif, dépenses=négatif. Catégories: shopping,food,transpo
                 updateDashboard();
                 updateOptimize();
                 updatePlan();
-            } else {
-                document.getElementById('optimizeContent').innerHTML = '<div class="empty-state"><div class="empty-icon">📊</div><div>Importez un relevé</div></div>';
-                document.getElementById('planContent').innerHTML = '<div class="empty-state"><div class="empty-icon">🎯</div><div>Importez un relevé</div></div>';
             }
         }
 
-        function updateDashboard() {
-            const inc = data.transactions.filter(t => t.amount > 0).reduce((s, t) => s + t.amount, 0);
-            const exp = data.transactions.filter(t => t.amount < 0).reduce((s, t) => s + Math.abs(t.amount), 0);
-            const bal = inc - exp;
-            const sav = inc > 0 ? Math.round((bal / inc) * 100) : 0;
-            
-            document.getElementById('totalIncome').textContent = '+' + Math.round(inc) + '€';
-            document.getElementById('totalExpenses').textContent = '-' + Math.round(exp) + '€';
-            document.getElementById('totalBalance').textContent = (bal >= 0 ? '+' : '') + Math.round(bal) + '€';
-            document.getElementById('totalBalance').style.color = bal >= 0 ? 'var(--green)' : 'var(--red)';
-            document.getElementById('savingsRate').textContent = sav + '%';
-            
-            // Categories
-            const byCat = {};
-            data.transactions.filter(t => t.amount < 0).forEach(t => {
-                byCat[t.category || 'other'] = (byCat[t.category || 'other'] || 0) + Math.abs(t.amount);
-            });
-            const sorted = Object.entries(byCat).sort((a, b) => b[1] - a[1]).slice(0, 5);
-            const max = sorted[0]?.[1] || 1;
-            const total = Object.values(byCat).reduce((s, v) => s + v, 0);
-            
-            document.getElementById('categoryBreakdown').innerHTML = sorted.map(([c, a]) => {
-                const cat = CATEGORIES[c] || CATEGORIES.other;
-                return `<div class="category-item">
-                    <div class="category-emoji">${cat.emoji}</div>
-                    <div class="category-info">
-                        <div class="category-name">${cat.name}</div>
-                        <div class="category-bar"><div class="category-fill" style="width:${(a/max)*100}%;background:${cat.color}"></div></div>
-                    </div>
-                    <div class="category-amount">${Math.round(a)}€</div>
-                </div>`;
-            }).join('');
-            
-            // Recent
-            const recent = [...data.transactions].sort((a, b) => b.date?.localeCompare(a.date)).slice(0, 5);
-            document.getElementById('recentTransactions').innerHTML = recent.map(t => txHTML(t)).join('');
-        }
-
-        function txHTML(t) {
-            const c = CATEGORIES[t.category] || CATEGORIES.other;
-            const inc = t.amount > 0;
-            return `<div class="transaction-item" onclick="openEdit(${t.id})">
-                <div class="transaction-emoji">${c.emoji}</div>
-                <div class="transaction-info"><div class="transaction-desc">${t.description}</div><div class="transaction-date">${t.date}</div></div>
-                <div class="transaction-amount ${inc ? 'income' : 'expense'}">${inc ? '+' : ''}${t.amount.toFixed(0)}€</div>
-            </div>`;
-        }
-
-        function updateOptimize() {
-            const exp = data.transactions.filter(t => t.amount < 0);
-            const inc = data.transactions.filter(t => t.amount > 0).reduce((s, t) => s + t.amount, 0);
-            const totalExp = exp.reduce((s, t) => s + Math.abs(t.amount), 0);
-            const byCat = {};
-            exp.forEach(t => { byCat[t.category || 'other'] = (byCat[t.category || 'other'] || 0) + Math.abs(t.amount); });
-            
-            const savRate = inc > 0 ? (inc - totalExp) / inc : 0;
-            let score = Math.max(0, Math.min(100, Math.round(50 + savRate * 40)));
-            const scoreClass = score >= 70 ? 'good' : score >= 40 ? 'warning' : 'bad';
-            
-            let alerts = [];
-            const subs = byCat.subscriptions || 0;
-            if (subs > 80) alerts.push({ type: 'warning', icon: '📱', title: `${Math.round(subs)}€ abonnements`, text: 'Vérifiez si vous les utilisez tous.' });
-            if (byCat.shopping && byCat.shopping > totalExp * 0.25) alerts.push({ type: 'warning', icon: '🛒', title: 'Shopping élevé', text: `${Math.round((byCat.shopping/totalExp)*100)}% des dépenses.` });
-            if (savRate < 0.1) alerts.push({ type: 'danger', icon: '💸', title: 'Épargne faible', text: `${Math.round(savRate*100)}% (objectif: 20%)` });
-            else if (savRate >= 0.2) alerts.push({ type: 'success', icon: '🎉', title: 'Bravo !', text: `${Math.round(savRate*100)}% d'épargne` });
-            
-            document.getElementById('optimizeContent').innerHTML = `
-                <div class="card"><div class="card-title">📈 Score</div>
-                    <div class="score-circle ${scoreClass}"><div class="score-value">${score}</div><div class="score-label">/100</div></div>
-                </div>
-                ${alerts.map(a => `<div class="alert-card ${a.type}"><div class="alert-icon">${a.icon}</div><div class="alert-content"><div class="alert-title">${a.title}</div><div class="alert-text">${a.text}</div></div></div>`).join('')}
-                <div class="alert-card tip"><div class="alert-icon">💡</div><div class="alert-content"><div class="alert-title">Astuce</div><div class="alert-text">Négociez vos assurances chaque année.</div></div></div>
-            `;
-        }
-
-        function updatePlan() {
-            const exp = data.transactions.filter(t => t.amount < 0);
-            const inc = data.transactions.filter(t => t.amount > 0).reduce((s, t) => s + t.amount, 0);
-            const byCat = {};
-            exp.forEach(t => { byCat[t.category || 'other'] = (byCat[t.category || 'other'] || 0) + Math.abs(t.amount); });
-            const sorted = Object.entries(byCat).sort((a, b) => b[1] - a[1]);
-            
-            document.getElementById('planContent').innerHTML = `
-                <div class="card"><div class="card-title">💰 Revenus</div><div style="font-size:1.3rem;font-weight:600;color:var(--green);text-align:center;">+${Math.round(inc)}€</div></div>
-                <div class="card"><div class="card-title">🎯 Budgets</div>
-                ${sorted.map(([cat, spent]) => {
-                    const c = CATEGORIES[cat] || CATEGORIES.other;
-                    const budget = data.budgets[cat] || Math.round(spent * 1.2);
-                    const pct = Math.round((spent / budget) * 100);
-                    const st = pct >= 100 ? 'danger' : pct >= 80 ? 'warning' : 'ok';
-                    return `<div class="budget-item"><div class="budget-header"><div class="budget-category">${c.emoji} ${c.name}</div><div class="budget-spent">${Math.round(spent)}€ / ${budget}€</div></div><div class="budget-bar"><div class="budget-fill ${st}" style="width:${Math.min(pct,100)}%"></div></div><div class="budget-status ${st}">${pct >= 100 ? '⚠️ Dépassé' : `✓ Reste ${budget - Math.round(spent)}€`}</div></div>`;
-                }).join('')}
-                </div>
-            `;
-        }
-
-        // ============ EDIT TRANSACTION ============
-        function openEdit(id) {
-            editingTransaction = data.transactions.find(t => t.id === id);
-            if (!editingTransaction) return;
-            document.getElementById('editDesc').value = editingTransaction.description;
-            document.getElementById('categoryGrid').innerHTML = Object.entries(CATEGORIES).map(([k, c]) => 
-                `<div class="category-option ${editingTransaction.category === k ? 'active' : ''}" data-cat="${k}" onclick="selectCat(this)"><span class="cat-emoji">${c.emoji}</span>${c.name}</div>`
-            ).join('');
-            openModal('editModal');
-        }
-
-        function selectCat(el) {
-            document.querySelectorAll('#categoryGrid .category-option').forEach(o => o.classList.remove('active'));
-            el.classList.add('active');
-        }
-
-        function saveEdit() {
-            if (!editingTransaction) return;
-            editingTransaction.description = document.getElementById('editDesc').value || editingTransaction.description;
-            editingTransaction.category = document.querySelector('#categoryGrid .active')?.dataset.cat || editingTransaction.category;
-            save();
-            updateAllViews();
-            closeModal('editModal');
-            notify('✅ Modifié');
-        }
-
-        // ============ BUDGET CHAT ============
-        async function sendBudgetMsg() {
-            const input = document.getElementById('budgetInput');
-            const msg = input.value.trim();
-            if (!msg) return;
-            addMsg('budgetChatMessages', msg, 'user');
-            input.value = '';
-            
-            const loading = addLoading('budgetChatMessages');
-            
-            const context = data.transactions.length ? `Données: Revenus ${data.transactions.filter(t=>t.amount>0).reduce((s,t)=>s+t.amount,0).toFixed(0)}€, Dépenses ${data.transactions.filter(t=>t.amount<0).reduce((s,t)=>s+Math.abs(t.amount),0).toFixed(0)}€` : 'Pas de données importées.';
-            
-            try {
-                const res = await fetch('/api/claude', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        system: `Assistant budget concis. ${context}. Réponds en français avec emojis.`,
-                        messages: [...budgetHistory.slice(-4), { role: 'user', content: msg }]
-                    })
-                });
-                loading.remove();
-                if (res.ok) {
-                    const r = await res.json();
-                    const reply = r.content[0].text;
-                    addMsg('budgetChatMessages', reply, 'assistant');
-                    budgetHistory.push({ role: 'user', content: msg }, { role: 'assistant', content: reply });
-                }
-            } catch (e) { loading.remove(); addMsg('budgetChatMessages', '❌ Erreur', 'assistant'); }
-        }
-
-        function askBudget(q) { document.getElementById('budgetInput').value = q; sendBudgetMsg(); }
-
-        // ============ HOMEWORK ============
-        function updateChildDropdown() {
+        // ============ CHILD SELECTOR ============
+        function updateChildSelector() {
             const dd = document.getElementById('childDropdown');
             dd.innerHTML = data.children.map(c => 
-                `<div class="child-dropdown-item" onclick="selectChild(${c.id})">${c.avatar} ${c.name} (${c.class})</div>`
-            ).join('');
+                `<div class="child-dropdown-item ${currentChild?.id === c.id ? 'active' : ''}" onclick="selectChild(${c.id})">${c.avatar} ${c.name} (${c.class})</div>`
+            ).join('') || '<div class="child-dropdown-item" style="color:var(--sage)">Ajoutez un enfant</div>';
+            
             if (currentChild) {
-                document.getElementById('currentChildAvatar').textContent = currentChild.avatar;
-                document.getElementById('currentChildName').textContent = currentChild.name;
+                document.getElementById('currentAvatar').textContent = currentChild.avatar;
+                document.getElementById('currentName').textContent = currentChild.name;
+            } else {
+                document.getElementById('currentAvatar').textContent = '👤';
+                document.getElementById('currentName').textContent = 'Choisir';
             }
-        }
-
-        function toggleChildDropdown() {
-            document.getElementById('childDropdown').classList.toggle('show');
         }
 
         function selectChild(id) {
             currentChild = data.children.find(c => c.id === id);
-            updateChildDropdown();
+            updateChildSelector();
             document.getElementById('childDropdown').classList.remove('show');
+            document.getElementById('childSelector').classList.remove('open');
             notify(`👋 ${currentChild.name} sélectionné`);
         }
 
-        function setHomeworkMode(mode) {
-            homeworkMode = mode;
+        // ============ HOMEWORK MODE ============
+        function setMode(mode) {
             document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
-            document.getElementById('parentModeContent').style.display = mode === 'parent' ? 'flex' : 'none';
-            document.getElementById('childModeContent').style.display = mode === 'child' ? 'block' : 'none';
+            document.getElementById('parentMode').style.display = mode === 'parent' ? 'block' : 'none';
+            document.getElementById('childMode').style.display = mode === 'child' ? 'block' : 'none';
         }
 
-        function newHomeworkChat() {
-            homeworkHistory = [];
+        function newChat() {
+            document.getElementById('parentChat').innerHTML = '<div class="message assistant">📚 Nouvelle conversation ! Uploadez une leçon.</div>';
+            document.getElementById('qaCards').innerHTML = '';
             quizQuestions = [];
-            currentQuizIndex = 0;
+            quizIndex = 0;
             quizScore = 0;
-            document.getElementById('homeworkChat').innerHTML = '<div class="message assistant">📚 Nouvelle conversation ! Uploadez une leçon.</div>';
-            document.getElementById('quizContainer').innerHTML = '<div class="empty-state"><div class="empty-icon">🎮</div><div>Uploadez une leçon en mode Parent</div></div>';
-            document.getElementById('quizActions').style.display = 'none';
+            document.getElementById('startQuizBtn').style.display = 'none';
+            document.getElementById('quizContent').innerHTML = '<div class="empty-state"><div class="empty-icon">🎮</div><div>Uploadez une leçon en mode Parent</div></div>';
             clearUpload();
             notify('🔄 Nouveau');
         }
 
+        // ============ FILE UPLOAD ============
         function handleUpload(file) {
             if (!file.type.startsWith('image/') && file.type !== 'application/pdf') return notify('⚠️ Format non supporté');
             uploadedFile = file;
             const reader = new FileReader();
-            reader.onload = (e) => {
+            reader.onload = e => {
                 uploadedBase64 = e.target.result;
                 document.getElementById('uploadZone').style.display = 'none';
                 document.getElementById('uploadPreview').style.display = 'block';
@@ -1443,46 +897,40 @@ Règles: revenus=positif, dépenses=négatif. Catégories: shopping,food,transpo
             document.getElementById('fileInput').value = '';
         }
 
-        async function sendHomeworkMsg() {
-            const input = document.getElementById('homeworkInput');
+        // ============ PARENT MODE - Generate Q&A ============
+        async function sendParentMsg() {
+            const input = document.getElementById('parentInput');
             const msg = input.value.trim();
             if (!msg && !uploadedFile) return;
             
-            let display = msg || '';
-            if (uploadedFile) display += (display ? ' ' : '') + '📎';
-            addMsg('homeworkChat', display, 'user');
+            addMsg('parentChat', (msg || '') + (uploadedFile ? ' 📎' : ''), 'user');
             input.value = '';
             
-            const loading = addLoading('homeworkChat');
+            const loading = addLoading('parentChat');
             
-            // Build system prompt based on child and mode
             const child = currentChild || { name: 'l\'enfant', age: 10, class: 'CM2', interests: '' };
-            const ageGroup = child.age <= 7 ? 'très jeune (CP-CE1)' : child.age <= 10 ? 'primaire (CE2-CM2)' : child.age <= 14 ? 'collège' : 'lycée';
             
-            let systemPrompt;
-            if (homeworkMode === 'parent') {
-                systemPrompt = `Tu aides un parent à faire réviser ${child.name} (${child.age} ans, ${child.class}).
-Adapte tes suggestions au niveau ${ageGroup}.
-- Suggère des questions pour tester la compréhension
-- Identifie les points clés de la leçon
-- Propose des méthodes pédagogiques adaptées
-${child.interests ? `Intérêts de l'enfant: ${child.interests} - utilise-les dans tes exemples !` : ''}
-Réponds en français, sois concis et pratique. Utilise des emojis.
+            const systemPrompt = `Tu aides un parent à faire réviser ${child.name} (${child.age} ans, ${child.class}).
+${child.interests ? `Intérêts: ${child.interests}` : ''}
 
-IMPORTANT: Génère aussi 3-5 questions de quiz au format JSON à la fin de ta réponse:
-[QUIZ]{"questions":[{"q":"Question?","options":["A","B","C"],"answer":0,"hint":"Indice"}]}[/QUIZ]`;
-            } else {
-                systemPrompt = `Tu es un assistant sympa qui aide ${child.name} (${child.age} ans, ${child.class}).
-Adapte ton langage au niveau ${ageGroup}:
-${child.age <= 7 ? '- Utilise des mots simples, des comparaisons avec la vie quotidienne, sois très encourageant' : ''}
-${child.age <= 10 ? '- Explique clairement, utilise des exemples concrets et amusants' : ''}
-${child.age <= 14 ? '- Sois clair et engageant, utilise des références qui parlent aux ados' : ''}
-${child.age > 14 ? '- Sois direct et précis, comme un bon tuteur' : ''}
-${child.interests ? `Ses centres d'intérêt: ${child.interests} - fais des liens avec !` : ''}
-Utilise des emojis, encourage, félicite les efforts. Réponds en français.`;
-            }
-            
-            // Build content
+IMPORTANT: Génère des questions avec leurs réponses pour que le parent puisse interroger son enfant.
+Format ta réponse EXACTEMENT ainsi:
+
+[Bref résumé des points clés de la leçon]
+
+[QA]
+Q: Question 1 ?
+R: Réponse complète 1
+
+Q: Question 2 ?
+R: Réponse complète 2
+
+Q: Question 3 ?
+R: Réponse complète 3
+[/QA]
+
+Adapte les questions au niveau ${child.class}. 5-7 questions idéalement.`;
+
             let content = [];
             if (uploadedBase64 && uploadedFile) {
                 const b64 = uploadedBase64.split(',')[1];
@@ -1490,195 +938,422 @@ Utilise des emojis, encourage, félicite les efforts. Réponds en français.`;
                     ? { type: 'image', source: { type: 'base64', media_type: uploadedFile.type, data: b64 }}
                     : { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: b64 }});
             }
-            content.push({ type: 'text', text: msg || 'Analyse cette leçon et aide-moi.' });
+            content.push({ type: 'text', text: msg || 'Analyse cette leçon et génère des questions avec réponses.' });
+
+            try {
+                const res = await fetch('/api/claude', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ system: systemPrompt, messages: [{ role: 'user', content }] })
+                });
+                loading.remove();
+                
+                if (res.ok) {
+                    const r = await res.json();
+                    let reply = r.content[0].text;
+                    
+                    // Extract Q&A
+                    const qaMatch = reply.match(/\[QA\]([\s\S]*?)\[\/QA\]/);
+                    if (qaMatch) {
+                        const qaText = qaMatch[1];
+                        const pairs = qaText.split(/Q:\s*/).filter(p => p.trim());
+                        
+                        quizQuestions = [];
+                        const qaHTML = pairs.map((pair, i) => {
+                            const parts = pair.split(/R:\s*/);
+                            if (parts.length >= 2) {
+                                const q = parts[0].trim();
+                                const a = parts[1].trim();
+                                quizQuestions.push({ q, a, options: null });
+                                return `<div class="qa-card">
+                                    <div class="qa-question" onclick="toggleAnswer(this)">
+                                        <span>${i+1}. ${q}</span>
+                                        <span class="toggle">▼</span>
+                                    </div>
+                                    <div class="qa-answer"><div class="qa-answer-text">✅ ${a}</div></div>
+                                </div>`;
+                            }
+                            return '';
+                        }).join('');
+                        
+                        document.getElementById('qaCards').innerHTML = qaHTML;
+                        
+                        if (quizQuestions.length > 0) {
+                            document.getElementById('startQuizBtn').style.display = 'inline-block';
+                        }
+                        
+                        reply = reply.replace(/\[QA\][\s\S]*?\[\/QA\]/, '').trim();
+                    }
+                    
+                    if (reply) addMsg('parentChat', reply, 'assistant');
+                    clearUpload();
+                }
+            } catch (e) { loading.remove(); addMsg('parentChat', '❌ Erreur', 'assistant'); }
+        }
+
+        function toggleAnswer(el) {
+            el.classList.toggle('open');
+            el.nextElementSibling.classList.toggle('show');
+        }
+
+        // ============ CHILD MODE - QUIZ ============
+        function startQuiz() {
+            if (quizQuestions.length === 0) return notify('⚠️ Générez d\'abord des questions');
+            
+            setMode('child');
+            quizIndex = 0;
+            quizScore = 0;
+            quizAnswered = false;
+            showQuizQuestion();
+        }
+
+        function showQuizQuestion() {
+            if (quizIndex >= quizQuestions.length) {
+                showQuizResults();
+                return;
+            }
+            
+            const q = quizQuestions[quizIndex];
+            quizAnswered = false;
+            currentHint = null;
+            
+            // Progress dots
+            document.getElementById('quizProgress').innerHTML = quizQuestions.map((_, i) => 
+                `<div class="progress-dot ${i < quizIndex ? 'done' : i === quizIndex ? 'current' : ''}"></div>`
+            ).join('');
+            
+            document.getElementById('quizScoreDisplay').textContent = `Score: ${quizScore}/${quizIndex}`;
+            
+            // Generate options if not already
+            if (!q.options) {
+                q.options = generateOptions(q.a);
+            }
+            
+            document.getElementById('quizContent').innerHTML = `
+                <div class="quiz-card">
+                    <div class="quiz-card-header" id="quizHeader">
+                        <div class="quiz-number">Question ${quizIndex + 1}/${quizQuestions.length}</div>
+                        <div class="quiz-question">${q.q}</div>
+                    </div>
+                    <div class="quiz-card-body">
+                        <div class="quiz-options" id="quizOptions">
+                            ${q.options.map((opt, i) => `<div class="quiz-option" data-index="${i}" onclick="selectQuizOption(this)">${opt}</div>`).join('')}
+                        </div>
+                        <div id="quizHint"></div>
+                    </div>
+                </div>
+                <div class="quiz-actions">
+                    <button class="quiz-btn hint" onclick="showHint()">💡</button>
+                    <button class="quiz-btn check" onclick="checkQuizAnswer()">✓</button>
+                    <button class="quiz-btn next" onclick="nextQuestion()">→</button>
+                </div>
+            `;
+        }
+
+        function generateOptions(correctAnswer) {
+            // Simplify answer for options
+            const correct = correctAnswer.split('.')[0].trim().substring(0, 100);
+            const options = [correct];
+            
+            // Generate plausible wrong answers
+            const wrongs = [
+                'Je ne suis pas sûr(e)',
+                'C\'est une autre réponse',
+                'Aucune de ces réponses'
+            ];
+            
+            while (options.length < 4) {
+                const wrong = wrongs[options.length - 1] || `Option ${options.length}`;
+                options.push(wrong);
+            }
+            
+            // Shuffle
+            return options.sort(() => Math.random() - 0.5);
+        }
+
+        function selectQuizOption(el) {
+            if (quizAnswered) return;
+            document.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        function checkQuizAnswer() {
+            if (quizAnswered) return;
+            
+            const selected = document.querySelector('.quiz-option.selected');
+            if (!selected) return notify('Choisis une réponse !');
+            
+            quizAnswered = true;
+            const q = quizQuestions[quizIndex];
+            const correctAnswer = q.a.split('.')[0].trim().substring(0, 100);
+            const selectedText = selected.textContent;
+            const isCorrect = selectedText === correctAnswer;
+            
+            // Mark all options
+            document.querySelectorAll('.quiz-option').forEach(o => {
+                o.classList.add('disabled');
+                if (o.textContent === correctAnswer) o.classList.add('correct');
+                else if (o === selected && !isCorrect) o.classList.add('wrong');
+            });
+            
+            // Update header
+            const header = document.getElementById('quizHeader');
+            if (isCorrect) {
+                quizScore++;
+                header.classList.add('correct');
+                notify('🎉 Bravo !');
+            } else {
+                header.classList.add('wrong');
+                notify('❌ Pas tout à fait...');
+            }
+            
+            document.getElementById('quizScoreDisplay').textContent = `Score: ${quizScore}/${quizIndex + 1}`;
+            
+            // Update progress dot
+            const dots = document.querySelectorAll('.progress-dot');
+            if (dots[quizIndex]) {
+                dots[quizIndex].classList.remove('current');
+                dots[quizIndex].classList.add(isCorrect ? 'done' : 'wrong');
+            }
+        }
+
+        function nextQuestion() {
+            quizIndex++;
+            showQuizQuestion();
+        }
+
+        function showHint() {
+            const q = quizQuestions[quizIndex];
+            const hint = q.a.substring(0, 50) + '...';
+            document.getElementById('quizHint').innerHTML = `<div class="quiz-hint">💡 Indice: ${hint}</div>`;
+        }
+
+        function showQuizResults() {
+            const pct = Math.round((quizScore / quizQuestions.length) * 100);
+            let emoji, text;
+            if (pct >= 80) { emoji = '🏆'; text = 'Excellent !'; }
+            else if (pct >= 60) { emoji = '👍'; text = 'Bien joué !'; }
+            else { emoji = '💪'; text = 'Continue !'; }
+            
+            document.getElementById('quizContent').innerHTML = `
+                <div class="quiz-results">
+                    <div style="font-size:3rem;">${emoji}</div>
+                    <div class="quiz-results-score">${quizScore}/${quizQuestions.length}</div>
+                    <div class="quiz-results-text">${text}</div>
+                    <button class="quiz-results-btn" onclick="startQuiz()">🔄 Recommencer</button>
+                    <button class="quiz-results-btn" onclick="setMode('parent')">👨‍👩‍👧 Retour Parent</button>
+                </div>
+            `;
+            document.getElementById('quizProgress').innerHTML = '';
+        }
+
+        // ============ BUDGET IMPORT ============
+        async function importFile(file) {
+            document.getElementById('importZone').style.display = 'none';
+            document.getElementById('loadingContainer').style.display = 'block';
+            
+            const reader = new FileReader();
+            reader.onload = async e => {
+                const b64 = e.target.result.split(',')[1];
+                try {
+                    const res = await fetch('/api/claude', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            system: `Extrais les transactions. JSON uniquement:
+{"transactions":[{"date":"DD/MM/YYYY","description":"Court","amount":123.45,"category":"salary"}]}
+Revenus=positif, dépenses=négatif. Catégories: shopping,food,transport,housing,bills,entertainment,health,subscriptions,insurance,salary,transfer,other`,
+                            messages: [{ role: 'user', content: [
+                                { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: b64 }},
+                                { type: 'text', text: 'Analyse. JSON uniquement.' }
+                            ]}]
+                        })
+                    });
+                    document.getElementById('loadingContainer').style.display = 'none';
+                    if (res.ok) {
+                        const r = await res.json();
+                        const m = r.content[0].text.match(/\{[\s\S]*\}/);
+                        if (m) {
+                            const p = JSON.parse(m[0]);
+                            if (p.transactions?.length) {
+                                data.transactions = p.transactions.map((t, i) => ({ id: Date.now() + i, ...t }));
+                                save();
+                                updateAll();
+                                notify(`✅ ${data.transactions.length} transactions`);
+                                return;
+                            }
+                        }
+                    }
+                    showImportError();
+                } catch (e) { console.error(e); showImportError(); }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function showImportError() {
+            document.getElementById('loadingContainer').style.display = 'none';
+            document.getElementById('importZone').style.display = 'block';
+            notify('❌ Erreur');
+        }
+
+        function resetData() {
+            if (confirm('Effacer ?')) { data.transactions = []; save(); updateAll(); }
+        }
+
+        function resetAll() {
+            if (confirm('Tout réinitialiser ?')) { localStorage.removeItem('familyflow_v6'); location.reload(); }
+        }
+
+        // ============ DASHBOARD ============
+        function updateDashboard() {
+            const inc = data.transactions.filter(t => t.amount > 0).reduce((s, t) => s + t.amount, 0);
+            const exp = data.transactions.filter(t => t.amount < 0).reduce((s, t) => s + Math.abs(t.amount), 0);
+            const bal = inc - exp;
+            
+            document.getElementById('totalIncome').textContent = '+' + Math.round(inc) + '€';
+            document.getElementById('totalExpenses').textContent = '-' + Math.round(exp) + '€';
+            document.getElementById('totalBalance').textContent = (bal >= 0 ? '+' : '') + Math.round(bal) + '€';
+            document.getElementById('totalBalance').style.color = bal >= 0 ? 'var(--green)' : 'var(--red)';
+            document.getElementById('savingsRate').textContent = inc > 0 ? Math.round((bal/inc)*100) + '%' : '0%';
+            
+            const byCat = {};
+            data.transactions.filter(t => t.amount < 0).forEach(t => { byCat[t.category||'other'] = (byCat[t.category||'other']||0) + Math.abs(t.amount); });
+            const sorted = Object.entries(byCat).sort((a,b) => b[1]-a[1]).slice(0,5);
+            const max = sorted[0]?.[1] || 1;
+            
+            document.getElementById('categoryBreakdown').innerHTML = sorted.map(([c,a]) => {
+                const cat = CATEGORIES[c] || CATEGORIES.other;
+                return `<div class="category-item"><div class="category-emoji">${cat.emoji}</div><div class="category-info"><div class="category-name">${cat.name}</div><div class="category-bar"><div class="category-fill" style="width:${(a/max)*100}%;background:${cat.color}"></div></div></div><div class="category-amount">${Math.round(a)}€</div></div>`;
+            }).join('');
+            
+            const recent = [...data.transactions].sort((a,b) => (b.date||'').localeCompare(a.date||'')).slice(0,5);
+            document.getElementById('recentTransactions').innerHTML = recent.map(t => {
+                const c = CATEGORIES[t.category] || CATEGORIES.other;
+                return `<div class="transaction-item"><div class="transaction-emoji">${c.emoji}</div><div class="transaction-info"><div class="transaction-desc">${t.description}</div><div class="transaction-date">${t.date}</div></div><div class="transaction-amount ${t.amount>0?'income':'expense'}">${t.amount>0?'+':''}${t.amount.toFixed(0)}€</div></div>`;
+            }).join('');
+        }
+
+        function updateOptimize() {
+            const exp = data.transactions.filter(t => t.amount < 0);
+            const inc = data.transactions.filter(t => t.amount > 0).reduce((s,t) => s + t.amount, 0);
+            const totalExp = exp.reduce((s,t) => s + Math.abs(t.amount), 0);
+            const byCat = {};
+            exp.forEach(t => { byCat[t.category||'other'] = (byCat[t.category||'other']||0) + Math.abs(t.amount); });
+            
+            const savRate = inc > 0 ? (inc - totalExp) / inc : 0;
+            const score = Math.max(0, Math.min(100, Math.round(50 + savRate * 40)));
+            const scoreClass = score >= 70 ? 'good' : score >= 40 ? 'warning' : 'bad';
+            
+            let alerts = [];
+            if ((byCat.subscriptions||0) > 80) alerts.push({ type: 'warning', icon: '📱', title: `${Math.round(byCat.subscriptions)}€ abonnements`, text: 'Vérifiez leur utilité' });
+            if (savRate < 0.1) alerts.push({ type: 'danger', icon: '💸', title: 'Épargne faible', text: `${Math.round(savRate*100)}%` });
+            else if (savRate >= 0.2) alerts.push({ type: 'success', icon: '🎉', title: 'Bravo !', text: `${Math.round(savRate*100)}% d'épargne` });
+            
+            document.getElementById('optimizeContent').innerHTML = `
+                <div class="card"><div class="card-title">📈 Score</div><div class="score-circle ${scoreClass}"><div class="score-value">${score}</div><div class="score-label">/100</div></div></div>
+                ${alerts.map(a => `<div class="alert-card ${a.type}"><div class="alert-icon">${a.icon}</div><div class="alert-content"><div class="alert-title">${a.title}</div><div class="alert-text">${a.text}</div></div></div>`).join('')}
+            `;
+        }
+
+        function updatePlan() {
+            const exp = data.transactions.filter(t => t.amount < 0);
+            const inc = data.transactions.filter(t => t.amount > 0).reduce((s,t) => s + t.amount, 0);
+            const byCat = {};
+            exp.forEach(t => { byCat[t.category||'other'] = (byCat[t.category||'other']||0) + Math.abs(t.amount); });
+            const sorted = Object.entries(byCat).sort((a,b) => b[1]-a[1]);
+            
+            document.getElementById('planContent').innerHTML = `
+                <div class="card"><div class="card-title">💰 Revenus</div><div style="font-size:1.3rem;font-weight:600;color:var(--green);text-align:center;">+${Math.round(inc)}€</div></div>
+                <div class="card"><div class="card-title">🎯 Budgets</div>
+                ${sorted.map(([cat, spent]) => {
+                    const c = CATEGORIES[cat] || CATEGORIES.other;
+                    const budget = data.budgets[cat] || Math.round(spent * 1.2);
+                    const pct = Math.round((spent / budget) * 100);
+                    const st = pct >= 100 ? 'danger' : pct >= 80 ? 'warning' : 'ok';
+                    return `<div class="budget-item"><div class="budget-header"><div class="budget-category">${c.emoji} ${c.name}</div><div class="budget-spent">${Math.round(spent)}€/${budget}€</div></div><div class="budget-bar"><div class="budget-fill ${st}" style="width:${Math.min(pct,100)}%"></div></div><div class="budget-status ${st}">${pct>=100?'⚠️ Dépassé':'✓ Reste '+(budget-Math.round(spent))+'€'}</div></div>`;
+                }).join('')}
+                </div>
+            `;
+        }
+
+        // ============ BUDGET CHAT ============
+        async function sendBudgetMsg() {
+            const input = document.getElementById('budgetInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+            addMsg('budgetChat', msg, 'user');
+            input.value = '';
+            const loading = addLoading('budgetChat');
             
             try {
                 const res = await fetch('/api/claude', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        system: systemPrompt,
-                        messages: [...homeworkHistory.slice(-6), { role: 'user', content: content.length === 1 ? content[0].text : content }]
+                        system: `Assistant budget concis. Données: ${data.transactions.length} transactions. Réponds en français avec emojis.`,
+                        messages: [{ role: 'user', content: msg }]
                     })
                 });
                 loading.remove();
                 if (res.ok) {
                     const r = await res.json();
-                    let reply = r.content[0].text;
-                    
-                    // Extract quiz if present
-                    const quizMatch = reply.match(/\[QUIZ\](.*?)\[\/QUIZ\]/s);
-                    if (quizMatch) {
-                        try {
-                            const quizData = JSON.parse(quizMatch[1]);
-                            quizQuestions = quizData.questions || [];
-                            currentQuizIndex = 0;
-                            quizScore = 0;
-                            if (quizQuestions.length > 0) {
-                                showQuiz();
-                            }
-                        } catch (e) { console.error('Quiz parse error', e); }
-                        reply = reply.replace(/\[QUIZ\].*?\[\/QUIZ\]/s, '').trim();
-                    }
-                    
-                    addMsg('homeworkChat', reply, 'assistant');
-                    homeworkHistory.push({ role: 'user', content: msg || 'Document' }, { role: 'assistant', content: reply });
-                    clearUpload();
+                    addMsg('budgetChat', r.content[0].text, 'assistant');
                 }
-            } catch (e) { loading.remove(); addMsg('homeworkChat', '❌ Erreur', 'assistant'); }
+            } catch (e) { loading.remove(); addMsg('budgetChat', '❌ Erreur', 'assistant'); }
         }
 
-        // ============ QUIZ MODE ============
-        function showQuiz() {
-            if (currentQuizIndex >= quizQuestions.length) {
-                showQuizResults();
-                return;
-            }
-            
-            const q = quizQuestions[currentQuizIndex];
-            document.getElementById('quizProgress').innerHTML = quizQuestions.map((_, i) => 
-                `<div class="progress-dot ${i < currentQuizIndex ? 'done' : i === currentQuizIndex ? 'current' : ''}"></div>`
-            ).join('');
-            
-            const isOpenQuestion = !q.options || q.options.length === 0;
-            
-            document.getElementById('quizContainer').innerHTML = `
-                <div class="quiz-card">
-                    <div class="quiz-card-header">
-                        <div class="quiz-subject">Question ${currentQuizIndex + 1}/${quizQuestions.length}</div>
-                        <div class="quiz-question">${q.q}</div>
-                    </div>
-                    <div class="quiz-card-body">
-                        ${isOpenQuestion 
-                            ? `<input type="text" class="quiz-input" id="quizAnswer" placeholder="Ta réponse...">`
-                            : `<div class="quiz-options">${q.options.map((o, i) => `<div class="quiz-option" data-index="${i}" onclick="selectOption(this)">${o}</div>`).join('')}</div>`
-                        }
-                    </div>
-                </div>
-            `;
-            document.getElementById('quizActions').style.display = 'block';
-        }
+        function askBudget(q) { document.getElementById('budgetInput').value = q; sendBudgetMsg(); }
 
-        function selectOption(el) {
-            document.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
-            el.classList.add('selected');
-        }
-
-        function checkAnswer() {
-            const q = quizQuestions[currentQuizIndex];
-            const isOpen = !q.options || q.options.length === 0;
-            
-            let correct = false;
-            if (isOpen) {
-                const ans = document.getElementById('quizAnswer')?.value.trim().toLowerCase();
-                correct = ans && (q.answer?.toLowerCase().includes(ans) || ans.includes(q.answer?.toLowerCase()));
-            } else {
-                const selected = document.querySelector('.quiz-option.selected');
-                if (!selected) return notify('Choisis une réponse !');
-                const idx = parseInt(selected.dataset.index);
-                correct = idx === q.answer;
-                
-                document.querySelectorAll('.quiz-option').forEach((o, i) => {
-                    if (i === q.answer) o.classList.add('correct');
-                    else if (i === idx) o.classList.add('wrong');
-                });
-            }
-            
-            if (correct) {
-                quizScore++;
-                document.querySelector('.quiz-card-header').classList.add('correct');
-                notify('🎉 Bravo !');
-            } else {
-                document.querySelector('.quiz-card-header').classList.add('wrong');
-                notify('❌ Pas tout à fait...');
-            }
-            
-            setTimeout(() => {
-                currentQuizIndex++;
-                showQuiz();
-            }, 1500);
-        }
-
-        function skipQuestion() {
-            currentQuizIndex++;
-            showQuiz();
-        }
-
-        function getHint() {
-            const q = quizQuestions[currentQuizIndex];
-            if (q.hint) notify('💡 ' + q.hint);
-            else notify('💡 Réfléchis bien !');
-        }
-
-        function showQuizResults() {
-            const pct = Math.round((quizScore / quizQuestions.length) * 100);
-            document.getElementById('quizContainer').innerHTML = `
-                <div class="quiz-score">
-                    <div class="quiz-score-value">${quizScore}/${quizQuestions.length}</div>
-                    <div class="quiz-score-label">${pct >= 80 ? '🌟 Excellent !' : pct >= 50 ? '👍 Pas mal !' : '💪 Continue !'}</div>
-                    <button class="quiz-restart" onclick="restartQuiz()">🔄 Recommencer</button>
-                </div>
-            `;
-            document.getElementById('quizActions').style.display = 'none';
-        }
-
-        function restartQuiz() {
-            currentQuizIndex = 0;
-            quizScore = 0;
-            showQuiz();
-        }
-
-        // ============ CHILDREN ============
+        // ============ CHILDREN MANAGEMENT ============
         function updateChildrenList() {
             document.getElementById('childrenList').innerHTML = data.children.map(c => `
                 <div class="child-card">
                     <div class="child-avatar-lg">${c.avatar}</div>
-                    <div class="child-info">
-                        <div class="child-name">${c.name}</div>
-                        <div class="child-details">${c.age} ans • ${c.class}${c.interests ? ' • ' + c.interests : ''}</div>
-                    </div>
+                    <div class="child-info"><div class="child-name">${c.name}</div><div class="child-details">${c.age} ans • ${c.class}</div></div>
                     <button class="child-edit" onclick="editChild(${c.id})">✏️</button>
                 </div>
-            `).join('') || '<div style="color:var(--sage);font-size:0.85rem;padding:0.5rem;">Aucun enfant ajouté</div>';
+            `).join('') || '<div style="color:var(--sage);padding:0.5rem;">Aucun enfant</div>';
         }
 
-        function openChildModal(childId = null) {
-            editingChild = childId ? data.children.find(c => c.id === childId) : null;
+        function openChildModal(id = null) {
+            editingChild = id ? data.children.find(c => c.id === id) : null;
             document.getElementById('childModalTitle').textContent = editingChild ? '✏️ Modifier' : '➕ Ajouter';
             document.getElementById('deleteChildBtn').style.display = editingChild ? 'block' : 'none';
-            
-            document.getElementById('childName').value = editingChild?.name || '';
-            document.getElementById('childAge').value = editingChild?.age || '';
-            document.getElementById('childClass').value = editingChild?.class || '4e';
-            document.getElementById('childInterests').value = editingChild?.interests || '';
-            
-            document.querySelectorAll('.avatar-option').forEach(a => {
-                a.classList.toggle('selected', a.dataset.avatar === (editingChild?.avatar || '👦'));
-            });
-            
+            document.getElementById('childNameInput').value = editingChild?.name || '';
+            document.getElementById('childAgeInput').value = editingChild?.age || '';
+            document.getElementById('childClassInput').value = editingChild?.class || '4e';
+            document.getElementById('childInterestsInput').value = editingChild?.interests || '';
+            document.querySelectorAll('.avatar-option').forEach(a => a.classList.toggle('selected', a.dataset.avatar === (editingChild?.avatar || '👦')));
             openModal('childModal');
         }
 
         function editChild(id) { openChildModal(id); }
 
         function saveChild() {
-            const name = document.getElementById('childName').value.trim();
-            const age = parseInt(document.getElementById('childAge').value);
-            const cls = document.getElementById('childClass').value;
-            const interests = document.getElementById('childInterests').value.trim();
-            const avatar = document.querySelector('.avatar-option.selected')?.dataset.avatar || '👦';
-            
+            const name = document.getElementById('childNameInput').value.trim();
+            const age = parseInt(document.getElementById('childAgeInput').value);
             if (!name || !age) return notify('⚠️ Prénom et âge requis');
             
+            const child = {
+                id: editingChild?.id || Date.now(),
+                name,
+                age,
+                class: document.getElementById('childClassInput').value,
+                interests: document.getElementById('childInterestsInput').value.trim(),
+                avatar: document.querySelector('.avatar-option.selected')?.dataset.avatar || '👦'
+            };
+            
             if (editingChild) {
-                Object.assign(editingChild, { name, age, class: cls, interests, avatar });
+                const idx = data.children.findIndex(c => c.id === editingChild.id);
+                if (idx >= 0) data.children[idx] = child;
             } else {
-                data.children.push({ id: Date.now(), name, age, class: cls, interests, avatar });
+                data.children.push(child);
             }
             
+            if (!currentChild) currentChild = child;
             save();
             updateChildrenList();
-            updateChildDropdown();
+            updateChildSelector();
             closeModal('childModal');
             notify('✅ Enregistré');
         }
@@ -1689,26 +1364,26 @@ Utilise des emojis, encourage, félicite les efforts. Réponds en français.`;
             if (currentChild?.id === editingChild.id) currentChild = data.children[0] || null;
             save();
             updateChildrenList();
-            updateChildDropdown();
+            updateChildSelector();
             closeModal('childModal');
             notify('🗑️ Supprimé');
         }
 
         // ============ UTILS ============
-        function addMsg(containerId, text, role) {
+        function addMsg(id, text, role) {
             const el = document.createElement('div');
             el.className = `message ${role}`;
             el.innerHTML = text.replace(/\n/g, '<br>');
-            const container = document.getElementById(containerId);
+            const container = document.getElementById(id);
             container.appendChild(el);
             container.scrollTop = 99999;
         }
 
-        function addLoading(containerId) {
+        function addLoading(id) {
             const el = document.createElement('div');
             el.className = 'loading-dots';
             el.innerHTML = '<div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div>';
-            document.getElementById(containerId).appendChild(el);
+            document.getElementById(id).appendChild(el);
             return el;
         }
 
