@@ -126,6 +126,60 @@
         .upload-preview{position:relative;padding:.5rem;background:var(--cream);border-radius:10px;text-align:center;margin-bottom:.5rem}
         .upload-preview img{max-width:100%;max-height:80px;border-radius:6px}
         .remove-upload{position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;border:none;background:var(--red);color:#fff;cursor:pointer;font-size:.6rem}
+        
+        /* LESSON CONTENT STYLING */
+        .lesson-container{margin-top:1rem}
+        .lesson-section{background:#fff;border-radius:15px;margin-bottom:1rem;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,.08)}
+        .lesson-section-header{padding:.8rem 1rem;font-weight:600;font-size:.9rem;display:flex;align-items:center;gap:.5rem;cursor:pointer}
+        .lesson-section-header.summary{background:linear-gradient(135deg,var(--blue),#5DADE2);color:#fff}
+        .lesson-section-header.mindmap{background:linear-gradient(135deg,var(--purple),#A569BD);color:#fff}
+        .lesson-section-header.qa{background:linear-gradient(135deg,var(--forest),var(--sage));color:#fff}
+        .lesson-section-header .toggle-icon{margin-left:auto;transition:transform .3s}
+        .lesson-section-header.collapsed .toggle-icon{transform:rotate(-90deg)}
+        .lesson-section-content{padding:1rem;display:block}
+        .lesson-section-content.hidden{display:none}
+        
+        /* Summary styling */
+        .summary-content{font-size:.9rem;line-height:1.6}
+        .summary-content p{margin-bottom:.8rem}
+        .summary-content .key-point{background:linear-gradient(135deg,rgba(52,152,219,.1),rgba(52,152,219,.05));border-left:3px solid var(--blue);padding:.5rem .8rem;margin:.5rem 0;border-radius:0 8px 8px 0}
+        .summary-content .definition{background:var(--cream);padding:.6rem;border-radius:8px;margin:.5rem 0}
+        .summary-content .definition-term{font-weight:600;color:var(--forest)}
+        
+        /* Mind Map styling */
+        .mindmap-container{padding:.5rem}
+        .mindmap-center{background:linear-gradient(135deg,var(--purple),#A569BD);color:#fff;padding:.8rem 1.2rem;border-radius:25px;text-align:center;font-weight:600;font-size:.95rem;margin:0 auto 1rem;max-width:200px}
+        .mindmap-branches{display:flex;flex-direction:column;gap:.8rem}
+        .mindmap-branch{display:flex;align-items:flex-start;gap:.5rem}
+        .mindmap-branch-icon{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+        .mindmap-branch:nth-child(1) .mindmap-branch-icon{background:#E8F5E9}
+        .mindmap-branch:nth-child(2) .mindmap-branch-icon{background:#FFF3E0}
+        .mindmap-branch:nth-child(3) .mindmap-branch-icon{background:#E3F2FD}
+        .mindmap-branch:nth-child(4) .mindmap-branch-icon{background:#FCE4EC}
+        .mindmap-branch:nth-child(5) .mindmap-branch-icon{background:#F3E5F5}
+        .mindmap-branch-content{flex:1;background:var(--cream);padding:.6rem .8rem;border-radius:10px}
+        .mindmap-branch-title{font-weight:600;font-size:.85rem;color:var(--forest);margin-bottom:.3rem}
+        .mindmap-branch-items{font-size:.8rem;color:var(--midnight)}
+        .mindmap-branch-items li{margin-left:1rem;margin-bottom:.2rem}
+        
+        /* Q&A Cards */
+        .qa-cards-container{display:flex;flex-direction:column;gap:.6rem}
+        .qa-card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.06);border:1px solid var(--sand)}
+        .qa-question{padding:.8rem;background:linear-gradient(135deg,var(--forest),var(--sage));color:#fff;font-weight:500;font-size:.85rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+        .qa-question .toggle{font-size:.7rem;transition:transform .3s}
+        .qa-question.open .toggle{transform:rotate(180deg)}
+        .qa-answer{max-height:0;overflow:hidden;transition:all .3s;background:var(--cream)}
+        .qa-answer.show{max-height:500px}
+        .qa-answer-content{padding:.8rem}
+        .qa-answer-text{font-size:.85rem;line-height:1.5;color:var(--midnight)}
+        
+        /* Action buttons */
+        .lesson-actions{display:flex;gap:.5rem;margin-top:1rem;flex-wrap:wrap}
+        .lesson-action-btn{flex:1;min-width:120px;padding:.7rem;border:none;border-radius:10px;font-size:.85rem;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.4rem}
+        .lesson-action-btn.quiz{background:linear-gradient(135deg,var(--terracotta),#D98B70);color:#fff}
+        .lesson-action-btn.continue{background:linear-gradient(135deg,var(--forest),var(--sage));color:#fff}
+        
+        /* Quiz styles */
         .quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
         .quiz-progress{display:flex;gap:.3rem}
         .progress-dot{width:10px;height:10px;border-radius:50%;background:var(--sand)}
@@ -158,13 +212,7 @@
         .quiz-results-score{font-size:3rem;font-weight:700;color:var(--forest)}
         .quiz-results-text{color:var(--sage);margin:.5rem 0 1rem}
         .quiz-results-btn{padding:.8rem 1.5rem;border:none;border-radius:25px;background:linear-gradient(135deg,var(--forest),var(--sage));color:#fff;font-weight:500;cursor:pointer;margin:.3rem}
-        .qa-card{background:#fff;border-radius:12px;margin-bottom:.8rem;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.06)}
-        .qa-question{padding:.8rem;background:linear-gradient(135deg,var(--forest),var(--sage));color:#fff;font-weight:500;font-size:.9rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
-        .qa-question .toggle{font-size:.7rem;transition:transform .3s}
-        .qa-question.open .toggle{transform:rotate(180deg)}
-        .qa-answer{padding:0;max-height:0;overflow:hidden;transition:all .3s;background:var(--cream)}
-        .qa-answer.show{padding:.8rem;max-height:500px}
-        .qa-answer-text{font-size:.85rem;line-height:1.5}
+        
         .profile-header{text-align:center;padding:1.5rem;background:linear-gradient(135deg,var(--forest),var(--sage));border-radius:15px;margin-bottom:1rem;color:#fff}
         .profile-avatar{width:60px;height:60px;border-radius:50%;background:var(--sand);margin:0 auto .5rem;display:flex;align-items:center;justify-content:center;font-size:1.8rem;border:3px solid #fff}
         .profile-name{font-size:1.1rem;font-weight:600}
@@ -247,19 +295,21 @@
         <div class="view" id="homework-view">
             <div class="homework-header">
                 <div class="child-selector" id="childSelector"><span class="avatar" id="currentAvatar">👦</span><span class="name" id="currentName">Choisir</span><span class="arrow">▼</span><div class="child-dropdown" id="childDropdown"></div></div>
-                <div class="header-actions"><button class="action-btn secondary" onclick="newChat()">🔄</button><button class="action-btn primary" onclick="startQuiz()" id="startQuizBtn" style="display:none">🎮 Quiz</button></div>
+                <div class="header-actions"><button class="action-btn secondary" onclick="newChat()">🔄</button></div>
             </div>
+            
             <div class="mode-toggle"><button class="mode-btn active" data-mode="parent" onclick="setMode('parent')">👨‍👩‍👧 Parent</button><button class="mode-btn" data-mode="child" onclick="setMode('child')">🎮 Enfant</button></div>
+            
             <div id="parentMode">
-                <div class="card chat-container" style="max-height:250px"><div class="chat-messages" id="parentChat"><div class="message assistant">📚 Uploadez une leçon!</div></div></div>
-                <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">📎 Photo/PDF<input type="file" id="fileInput" accept="image/*,.pdf" style="display:none"></div>
+                <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">📎 Photo ou PDF de la leçon<input type="file" id="fileInput" accept="image/*,.pdf" style="display:none"></div>
                 <div class="upload-preview" id="uploadPreview" style="display:none"><img id="previewImg" src=""><button class="remove-upload" onclick="clearUpload()">✕</button></div>
-                <div class="chat-input-container"><input type="text" class="chat-input" id="parentInput" placeholder="Sujet..."><button class="chat-send" onclick="sendParentMsg()">→</button></div>
-                <div id="qaCards" style="margin-top:1rem"></div>
+                <div class="chat-input-container"><input type="text" class="chat-input" id="parentInput" placeholder="Sujet de la leçon ou question..."><button class="chat-send" onclick="sendParentMsg()">→</button></div>
+                <div id="lessonContent"></div>
             </div>
+            
             <div id="childMode" style="display:none">
                 <div class="quiz-header"><div class="quiz-progress" id="quizProgress"></div><div class="quiz-score-display" id="quizScoreDisplay">Score: 0</div></div>
-                <div id="quizContent"><div class="empty-state"><div class="empty-icon">🎮</div><div>Générez des questions</div></div></div>
+                <div id="quizContent"><div class="empty-state"><div class="empty-icon">🎮</div><div>Générez des questions en mode Parent</div></div></div>
             </div>
         </div>
         <div class="view" id="profile-view">
@@ -302,8 +352,12 @@ const DAYS=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
 let data={transactions:[],budgets:{},children:[{id:1,name:'Gauthier',age:13,class:'4e',avatar:'👦',interests:'jeux vidéo, histoire'},{id:2,name:'Charles',age:11,class:'6e',avatar:'🧒',interests:'foot, sciences'},{id:3,name:'Victoire',age:7,class:'CE1',avatar:'👧',interests:'dessin, animaux'}],activities:[],dismissedNotifs:[]};
 let currentChild=null,currentView='budget',viewHistory=[],editingChild=null,editingActivity=null,selectedDate=new Date(),uploadedFile=null,uploadedBase64=null;
 let quizQuestions=[],quizIndex=0,quizScore=0,quizAnswered=false;
-function init(){const s=localStorage.getItem('familyflow_v7');if(s)data={...data,...JSON.parse(s)};if(data.children.length>0)currentChild=data.children[0];setupListeners();updateAll();generateNotifs()}
-function save(){localStorage.setItem('familyflow_v7',JSON.stringify(data))}
+let conversationHistory=[];  // HISTORIQUE DE CONVERSATION
+let currentLesson={summary:'',mindmap:null,qaCards:[]};
+
+function init(){const s=localStorage.getItem('familyflow_v8');if(s)data={...data,...JSON.parse(s)};if(data.children.length>0)currentChild=data.children[0];setupListeners();updateAll();generateNotifs()}
+function save(){localStorage.setItem('familyflow_v8',JSON.stringify(data))}
+
 function generateNotifs(){const n=[],t=new Date(),ta=data.activities.filter(a=>{const d=new Date(a.date);return d.toDateString()===t.toDateString()});if(ta.length>0){const a=ta[0],c=data.children.find(x=>x.id===a.childId);n.push({id:'act',icon:'📅',title:a.title+' aujourd\'hui',text:c?c.name+' à '+a.time:'À '+a.time,action:()=>switchView('planning')})}if(data.transactions.length>0){const e=data.transactions.filter(t=>t.amount<0),bc={};e.forEach(t=>{bc[t.category||'other']=(bc[t.category||'other']||0)+Math.abs(t.amount)});if((bc.subscriptions||0)>100&&!data.dismissedNotifs.includes('subs'))n.push({id:'subs',icon:'📱',title:Math.round(bc.subscriptions)+'€ abonnements',text:'Vérifiez leur utilité',action:()=>switchView('optimize')});const i=data.transactions.filter(t=>t.amount>0).reduce((s,t)=>s+t.amount,0),te=e.reduce((s,t)=>s+Math.abs(t.amount),0),sr=i>0?(i-te)/i:0;if(sr<.15&&data.children.length>0&&!data.dismissedNotifs.includes('sav'))n.push({id:'sav',icon:'💡',title:'Astuce épargne',text:'Mettez 50€/mois de côté pour '+data.children.map(c=>c.name).join(', '),action:()=>switchView('assistant')})}const h=t.getHours();if(h>=17&&h<=20&&data.children.length>0&&!data.dismissedNotifs.includes('hw'+t.toDateString())){const sc=data.children.filter(c=>c.age>=6);if(sc.length>0)n.push({id:'hw'+t.toDateString(),icon:'📚',title:'Heure des devoirs!',text:'Accompagnez '+sc[0].name,action:()=>switchView('homework')})}renderNotifs(n.slice(0,2))}
 function renderNotifs(n){const c=document.getElementById('smartNotifications');c.innerHTML=n.map(x=>'<div class="smart-notif" onclick="handleNotif(\''+x.id+'\')"><div class="smart-notif-icon">'+x.icon+'</div><div class="smart-notif-content"><div class="smart-notif-title">'+x.title+'</div><div class="smart-notif-text">'+x.text+'</div></div><button class="smart-notif-close" onclick="dismissNotif(event,\''+x.id+'\')">✕</button></div>').join('');window.notifAct={};n.forEach(x=>{window.notifAct[x.id]=x.action})}
 function handleNotif(id){if(window.notifAct[id])window.notifAct[id]()}
@@ -320,47 +374,367 @@ function openActivityModal(id=null){editingActivity=id?data.activities.find(a=>a
 function editActivity(id){openActivityModal(id)}
 function saveActivity(){const t=document.getElementById('activityTitle').value.trim();if(!t)return notify('⚠️ Titre requis');const a={id:editingActivity?.id||Date.now(),title:t,time:document.getElementById('activityTime').value,childId:parseInt(document.getElementById('activityChild').value)||null,date:selectedDate.toISOString(),recurrence:document.getElementById('activityRecur').value};if(editingActivity){const i=data.activities.findIndex(x=>x.id===editingActivity.id);if(i>=0)data.activities[i]=a}else data.activities.push(a);save();updatePlanning();closeModal('activityModal');notify('✅ Enregistré')}
 function deleteActivity(){if(!editingActivity)return;data.activities=data.activities.filter(a=>a.id!==editingActivity.id);save();updatePlanning();closeModal('activityModal');notify('🗑️ Supprimé')}
+
+// ==================== HOMEWORK SYSTEM ====================
 function setMode(m){document.querySelectorAll('.mode-btn').forEach(b=>b.classList.toggle('active',b.dataset.mode===m));document.getElementById('parentMode').style.display=m==='parent'?'block':'none';document.getElementById('childMode').style.display=m==='child'?'block':'none'}
-function newChat(){document.getElementById('parentChat').innerHTML='<div class="message assistant">📚 Nouvelle conversation!</div>';document.getElementById('qaCards').innerHTML='';quizQuestions=[];document.getElementById('startQuizBtn').style.display='none';document.getElementById('quizContent').innerHTML='<div class="empty-state"><div class="empty-icon">🎮</div><div>Générez des questions</div></div>';clearUpload();notify('🔄 Nouveau')}
-function handleUpload(f){if(!f.type.startsWith('image/')&&f.type!=='application/pdf')return notify('⚠️ Format non supporté');uploadedFile=f;const r=new FileReader();r.onload=e=>{uploadedBase64=e.target.result;document.getElementById('uploadZone').style.display='none';document.getElementById('uploadPreview').style.display='block';document.getElementById('previewImg').src=f.type.startsWith('image/')?e.target.result:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"><rect fill="%23e74c3c" width="50" height="50" rx="5"/><text x="25" y="30" text-anchor="middle" fill="white" font-size="12">PDF</text></svg>'};r.readAsDataURL(f)}
-function clearUpload(){uploadedFile=null;uploadedBase64=null;document.getElementById('uploadZone').style.display='block';document.getElementById('uploadPreview').style.display='none';document.getElementById('fileInput').value=''}
-async function sendParentMsg(){const i=document.getElementById('parentInput'),m=i.value.trim();if(!m&&!uploadedFile)return;addMsg('parentChat',(m||'')+(uploadedFile?' 📎':''),'user');i.value='';const l=addLoading('parentChat'),c=currentChild||{name:'enfant',age:10,class:'CM2',interests:''};const sys=`Tu aides un parent à faire réviser ${c.name} (${c.age} ans, ${c.class}). ${c.interests?'Intérêts: '+c.interests:''}
 
-GÉNÈRE des questions avec réponses ET QCM pertinents.
+function newChat(){
+    conversationHistory=[];
+    currentLesson={summary:'',mindmap:null,qaCards:[]};
+    quizQuestions=[];
+    document.getElementById('lessonContent').innerHTML='';
+    document.getElementById('quizContent').innerHTML='<div class="empty-state"><div class="empty-icon">🎮</div><div>Générez des questions en mode Parent</div></div>';
+    clearUpload();
+    notify('🔄 Nouvelle leçon');
+}
 
-Format:
-[Résumé 2-3 lignes]
+function handleUpload(f){
+    if(!f.type.startsWith('image/')&&f.type!=='application/pdf')return notify('⚠️ Format non supporté');
+    uploadedFile=f;
+    const r=new FileReader();
+    r.onload=e=>{
+        uploadedBase64=e.target.result;
+        document.getElementById('uploadZone').style.display='none';
+        document.getElementById('uploadPreview').style.display='block';
+        document.getElementById('previewImg').src=f.type.startsWith('image/')?e.target.result:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"><rect fill="%23e74c3c" width="50" height="50" rx="5"/><text x="25" y="30" text-anchor="middle" fill="white" font-size="12">PDF</text></svg>';
+    };
+    r.readAsDataURL(f);
+}
 
-[QA]
-Q: Question précise ?
-R: Réponse complète
-OPTIONS: Bonne réponse | Mauvaise plausible 1 | Mauvaise plausible 2 | Mauvaise plausible 3
+function clearUpload(){
+    uploadedFile=null;
+    uploadedBase64=null;
+    document.getElementById('uploadZone').style.display='block';
+    document.getElementById('uploadPreview').style.display='none';
+    document.getElementById('fileInput').value='';
+}
 
-Q: Question 2 ?
-R: Réponse 2
-OPTIONS: Bonne | Fausse1 | Fausse2 | Fausse3
-[/QA]
+async function sendParentMsg(){
+    const input=document.getElementById('parentInput');
+    const msg=input.value.trim();
+    if(!msg&&!uploadedFile)return;
+    input.value='';
+    
+    const c=currentChild||{name:'enfant',age:10,class:'CM2',interests:''};
+    
+    // Build user message content
+    let userContent=[];
+    if(uploadedBase64&&uploadedFile){
+        const b=uploadedBase64.split(',')[1];
+        userContent.push(uploadedFile.type.startsWith('image/')?
+            {type:'image',source:{type:'base64',media_type:uploadedFile.type,data:b}}:
+            {type:'document',source:{type:'base64',media_type:'application/pdf',data:b}});
+    }
+    userContent.push({type:'text',text:msg||'Analyse cette leçon.'});
+    
+    // Add to conversation history
+    conversationHistory.push({role:'user',content:userContent});
+    
+    // Show loading
+    document.getElementById('lessonContent').innerHTML='<div class="loading-container"><div class="loading-spinner"></div><div style="color:var(--sage)">🤖 Analyse de la leçon...</div></div>';
+    
+    const systemPrompt=`Tu es un assistant pédagogique pour aider ${c.name} (${c.age} ans, ${c.class}) à réviser.
+${c.interests?'Ses centres d\'intérêt: '+c.interests+'. Utilise-les dans tes exemples!':''}
 
-IMPORTANT: Les OPTIONS doivent être PERTINENTES et en rapport avec le sujet, pas génériques.
-Génère 5-6 questions niveau ${c.class}.`;
-let ct=[];if(uploadedBase64&&uploadedFile){const b=uploadedBase64.split(',')[1];ct.push(uploadedFile.type.startsWith('image/')?{type:'image',source:{type:'base64',media_type:uploadedFile.type,data:b}}:{type:'document',source:{type:'base64',media_type:'application/pdf',data:b}})}ct.push({type:'text',text:m||'Analyse et génère QCM.'});
-try{const r=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:sys,messages:[{role:'user',content:ct}]})});l.remove();if(r.ok){const j=await r.json();let rp=j.content[0].text;const qm=rp.match(/\[QA\]([\s\S]*?)\[\/QA\]/);if(qm){const qt=qm[1],qb=qt.split(/Q:\s*/).filter(p=>p.trim());quizQuestions=[];const qh=qb.map((b,i)=>{const ln=b.trim().split('\n');let q='',a='',op=[];for(const x of ln){if(x.startsWith('R:'))a=x.replace('R:','').trim();else if(x.startsWith('OPTIONS:'))op=x.replace('OPTIONS:','').split('|').map(o=>o.trim()).filter(o=>o);else if(!a)q+=x.replace('?','').trim()+' '}q=q.trim()+'?';if(q&&a){const ca=op[0]||a.split('.')[0].substring(0,60),so=op.length>=4?[...op].sort(()=>Math.random()-.5):null;quizQuestions.push({q,a,correctAnswer:ca,options:so,hint:a.substring(0,40)+'...'});return'<div class="qa-card"><div class="qa-question" onclick="toggleAnswer(this)"><span>'+(i+1)+'. '+q+'</span><span class="toggle">▼</span></div><div class="qa-answer"><div class="qa-answer-text">✅ '+a+'</div></div></div>'}return''}).join('');document.getElementById('qaCards').innerHTML=qh;if(quizQuestions.length>0)document.getElementById('startQuizBtn').style.display='inline-block';rp=rp.replace(/\[QA\][\s\S]*?\[\/QA\]/,'').trim()}if(rp)addMsg('parentChat',rp,'assistant');clearUpload()}}catch(e){l.remove();addMsg('parentChat','❌ Erreur','assistant')}}
-function toggleAnswer(el){el.classList.toggle('open');el.nextElementSibling.classList.toggle('show')}
-function startQuiz(){if(quizQuestions.length===0)return notify('⚠️ Générez des questions');setMode('child');quizIndex=0;quizScore=0;quizAnswered=false;showQuizQ()}
-function showQuizQ(){if(quizIndex>=quizQuestions.length){showQuizResults();return}const q=quizQuestions[quizIndex];quizAnswered=false;document.getElementById('quizProgress').innerHTML=quizQuestions.map((_,i)=>'<div class="progress-dot '+(i<quizIndex?'done':i===quizIndex?'current':'')+'"></div>').join('');document.getElementById('quizScoreDisplay').textContent='Score: '+quizScore+'/'+quizIndex;let op=q.options;if(!op||op.length<4){op=[q.correctAnswer||q.a.split('.')[0].substring(0,60)];const wa=genWrongAnswers(q.q,q.a);op=[...op,...wa].slice(0,4);op=op.sort(()=>Math.random()-.5)}document.getElementById('quizContent').innerHTML='<div class="quiz-card"><div class="quiz-card-header" id="quizHeader"><div class="quiz-number">Question '+(quizIndex+1)+'/'+quizQuestions.length+'</div><div class="quiz-question">'+q.q+'</div></div><div class="quiz-card-body"><div class="quiz-options" id="quizOptions">'+op.map(o=>'<div class="quiz-option" data-value="'+o+'" onclick="selectQuizOpt(this)">'+o+'</div>').join('')+'</div><div id="quizHint"></div><div id="quizExpl"></div></div></div><div class="quiz-actions"><button class="quiz-btn hint" onclick="showHint()">💡</button><button class="quiz-btn check" onclick="checkQuizAns()">✓</button><button class="quiz-btn next" onclick="nextQ()">→</button></div>'}
-function genWrongAnswers(q,a){const ql=q.toLowerCase();if(ql.includes('date')||ql.includes('année')){const m=a.match(/\d+/);if(m){const n=parseInt(m[0]);return[(n-10)+'',(n+5)+'',(n-20)+'']}}if(ql.includes('combien')||ql.includes('nombre')){const m=a.match(/\d+/);if(m){const n=parseInt(m[0]);return[(n+2)+'',(n-1)+'',(n*2)+'']}}return['Alternative possible','Autre réponse','Proche mais inexact']}
-function selectQuizOpt(el){if(quizAnswered)return;document.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('selected'));el.classList.add('selected')}
-function checkQuizAns(){if(quizAnswered)return;const s=document.querySelector('.quiz-option.selected');if(!s)return notify('Choisis!');quizAnswered=true;const q=quizQuestions[quizIndex],sv=s.dataset.value,cv=q.correctAnswer||q.a.split('.')[0].substring(0,60),ic=sv===cv;document.querySelectorAll('.quiz-option').forEach(o=>{o.classList.add('disabled');if(o.dataset.value===cv)o.classList.add('correct');else if(o===s&&!ic)o.classList.add('wrong')});const h=document.getElementById('quizHeader');if(ic){quizScore++;h.classList.add('correct');notify('🎉 Bravo!')}else{h.classList.add('wrong');document.getElementById('quizExpl').innerHTML='<div class="quiz-explanation">📖 '+q.a+'</div>'}document.getElementById('quizScoreDisplay').textContent='Score: '+quizScore+'/'+(quizIndex+1)}
+IMPORTANT: Ne JAMAIS utiliser de ** ou d'astérisques pour mettre en gras. Utilise un langage clair et simple.
+
+Tu dois TOUJOURS répondre avec ce format JSON exact:
+{
+  "summary": {
+    "title": "Titre de la leçon",
+    "keyPoints": ["Point clé 1", "Point clé 2", "Point clé 3"],
+    "definitions": [{"term": "Mot", "definition": "Explication simple"}]
+  },
+  "mindmap": {
+    "center": "Thème central",
+    "branches": [
+      {"icon": "🔵", "title": "Branche 1", "items": ["élément 1", "élément 2"]},
+      {"icon": "🟢", "title": "Branche 2", "items": ["élément 1", "élément 2"]},
+      {"icon": "🟠", "title": "Branche 3", "items": ["élément 1", "élément 2"]}
+    ]
+  },
+  "quiz": [
+    {
+      "question": "Question 1 ?",
+      "answer": "Réponse correcte complète",
+      "options": ["Réponse correcte", "Mauvaise réponse 1", "Mauvaise réponse 2", "Mauvaise réponse 3"],
+      "hint": "Un indice"
+    }
+  ]
+}
+
+Règles:
+- 3-5 points clés maximum
+- 3-4 branches dans la carte mentale
+- 5-6 questions de quiz
+- Les options du quiz doivent être PERTINENTES au sujet (pas de "Je ne sais pas")
+- Adapte le vocabulaire au niveau ${c.class}
+- Réponds UNIQUEMENT avec le JSON, rien d'autre`;
+
+    try{
+        const res=await fetch('/api/claude',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({
+                system:systemPrompt,
+                messages:conversationHistory
+            })
+        });
+        
+        if(res.ok){
+            const r=await res.json();
+            const reply=r.content[0].text;
+            
+            // Add assistant response to history
+            conversationHistory.push({role:'assistant',content:reply});
+            
+            // Parse JSON response
+            try{
+                const jsonMatch=reply.match(/\{[\s\S]*\}/);
+                if(jsonMatch){
+                    const lesson=JSON.parse(jsonMatch[0]);
+                    currentLesson=lesson;
+                    renderLessonContent(lesson);
+                }else{
+                    // Fallback: display as text
+                    renderFallbackContent(reply);
+                }
+            }catch(e){
+                renderFallbackContent(reply);
+            }
+        }
+        clearUpload();
+    }catch(e){
+        document.getElementById('lessonContent').innerHTML='<div class="alert-card danger"><div class="alert-icon">❌</div><div class="alert-content"><div class="alert-title">Erreur</div><div class="alert-text">Impossible d\'analyser la leçon</div></div></div>';
+    }
+}
+
+function renderLessonContent(lesson){
+    let html='';
+    
+    // Summary section
+    if(lesson.summary){
+        html+=`<div class="lesson-section">
+            <div class="lesson-section-header summary" onclick="toggleSection(this)">
+                📝 Résumé
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="lesson-section-content">
+                <div class="summary-content">
+                    ${lesson.summary.title?'<h3 style="color:var(--forest);margin-bottom:.8rem;font-size:1rem;">'+lesson.summary.title+'</h3>':''}
+                    ${lesson.summary.keyPoints?lesson.summary.keyPoints.map(p=>'<div class="key-point">'+p+'</div>').join(''):''}
+                    ${lesson.summary.definitions?lesson.summary.definitions.map(d=>'<div class="definition"><span class="definition-term">'+d.term+'</span>: '+d.definition+'</div>').join(''):''}
+                </div>
+            </div>
+        </div>`;
+    }
+    
+    // Mind map section
+    if(lesson.mindmap){
+        html+=`<div class="lesson-section">
+            <div class="lesson-section-header mindmap" onclick="toggleSection(this)">
+                🧠 Carte mentale
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="lesson-section-content">
+                <div class="mindmap-container">
+                    <div class="mindmap-center">${lesson.mindmap.center}</div>
+                    <div class="mindmap-branches">
+                        ${lesson.mindmap.branches.map(b=>`
+                            <div class="mindmap-branch">
+                                <div class="mindmap-branch-icon">${b.icon}</div>
+                                <div class="mindmap-branch-content">
+                                    <div class="mindmap-branch-title">${b.title}</div>
+                                    <ul class="mindmap-branch-items">
+                                        ${b.items.map(i=>'<li>'+i+'</li>').join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    }
+    
+    // Q&A section
+    if(lesson.quiz&&lesson.quiz.length>0){
+        quizQuestions=lesson.quiz.map(q=>({
+            q:q.question,
+            a:q.answer,
+            correctAnswer:q.options[0],
+            options:[...q.options].sort(()=>Math.random()-.5),
+            hint:q.hint
+        }));
+        
+        html+=`<div class="lesson-section">
+            <div class="lesson-section-header qa" onclick="toggleSection(this)">
+                ❓ Questions/Réponses (${lesson.quiz.length})
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="lesson-section-content">
+                <div class="qa-cards-container">
+                    ${lesson.quiz.map((q,i)=>`
+                        <div class="qa-card">
+                            <div class="qa-question" onclick="toggleQA(this)">
+                                <span>${i+1}. ${q.question}</span>
+                                <span class="toggle">▼</span>
+                            </div>
+                            <div class="qa-answer">
+                                <div class="qa-answer-content">
+                                    <div class="qa-answer-text">✅ ${q.answer}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        </div>`;
+    }
+    
+    // Action buttons
+    html+=`<div class="lesson-actions">
+        <button class="lesson-action-btn quiz" onclick="startQuiz()">🎮 Lancer le Quiz</button>
+        <button class="lesson-action-btn continue" onclick="continueConversation()">💬 Poser une question</button>
+    </div>`;
+    
+    document.getElementById('lessonContent').innerHTML=html;
+}
+
+function renderFallbackContent(text){
+    // Clean asterisks and format nicely
+    const cleaned=text.replace(/\*\*/g,'').replace(/\*/g,'');
+    document.getElementById('lessonContent').innerHTML=`
+        <div class="card">
+            <div class="card-title">📚 Résumé</div>
+            <div style="font-size:.9rem;line-height:1.6">${cleaned.replace(/\n/g,'<br>')}</div>
+        </div>
+    `;
+}
+
+function toggleSection(el){
+    el.classList.toggle('collapsed');
+    el.nextElementSibling.classList.toggle('hidden');
+}
+
+function toggleQA(el){
+    el.classList.toggle('open');
+    el.nextElementSibling.classList.toggle('show');
+}
+
+function continueConversation(){
+    document.getElementById('parentInput').focus();
+    notify('💬 Posez votre question !');
+}
+
+// ==================== QUIZ ====================
+function startQuiz(){
+    if(quizQuestions.length===0)return notify('⚠️ Générez d\'abord une leçon');
+    setMode('child');
+    quizIndex=0;
+    quizScore=0;
+    quizAnswered=false;
+    showQuizQ();
+}
+
+function showQuizQ(){
+    if(quizIndex>=quizQuestions.length){showQuizResults();return}
+    const q=quizQuestions[quizIndex];
+    quizAnswered=false;
+    document.getElementById('quizProgress').innerHTML=quizQuestions.map((_,i)=>'<div class="progress-dot '+(i<quizIndex?'done':i===quizIndex?'current':'')+'"></div>').join('');
+    document.getElementById('quizScoreDisplay').textContent='Score: '+quizScore+'/'+quizIndex;
+    
+    document.getElementById('quizContent').innerHTML=`
+        <div class="quiz-card">
+            <div class="quiz-card-header" id="quizHeader">
+                <div class="quiz-number">Question ${quizIndex+1}/${quizQuestions.length}</div>
+                <div class="quiz-question">${q.q}</div>
+            </div>
+            <div class="quiz-card-body">
+                <div class="quiz-options" id="quizOptions">
+                    ${q.options.map(o=>'<div class="quiz-option" data-value="'+o+'" onclick="selectQuizOpt(this)">'+o+'</div>').join('')}
+                </div>
+                <div id="quizHint"></div>
+                <div id="quizExpl"></div>
+            </div>
+        </div>
+        <div class="quiz-actions">
+            <button class="quiz-btn hint" onclick="showHint()">💡</button>
+            <button class="quiz-btn check" onclick="checkQuizAns()">✓</button>
+            <button class="quiz-btn next" onclick="nextQ()">→</button>
+        </div>
+    `;
+}
+
+function selectQuizOpt(el){
+    if(quizAnswered)return;
+    document.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('selected'));
+    el.classList.add('selected');
+}
+
+function checkQuizAns(){
+    if(quizAnswered)return;
+    const s=document.querySelector('.quiz-option.selected');
+    if(!s)return notify('Choisis une réponse !');
+    quizAnswered=true;
+    const q=quizQuestions[quizIndex];
+    const sv=s.dataset.value;
+    const cv=q.correctAnswer;
+    const ic=sv===cv;
+    
+    document.querySelectorAll('.quiz-option').forEach(o=>{
+        o.classList.add('disabled');
+        if(o.dataset.value===cv)o.classList.add('correct');
+        else if(o===s&&!ic)o.classList.add('wrong');
+    });
+    
+    const h=document.getElementById('quizHeader');
+    if(ic){
+        quizScore++;
+        h.classList.add('correct');
+        notify('🎉 Bravo !');
+    }else{
+        h.classList.add('wrong');
+        document.getElementById('quizExpl').innerHTML='<div class="quiz-explanation">📖 '+q.a+'</div>';
+    }
+    document.getElementById('quizScoreDisplay').textContent='Score: '+quizScore+'/'+(quizIndex+1);
+}
+
 function nextQ(){quizIndex++;showQuizQ()}
-function showHint(){const q=quizQuestions[quizIndex];document.getElementById('quizHint').innerHTML='<div class="quiz-hint">💡 '+q.hint+'</div>'}
-function showQuizResults(){const p=Math.round((quizScore/quizQuestions.length)*100),e=p>=80?'🏆':p>=60?'👍':'💪',t=p>=80?'Excellent!':p>=60?'Bien joué!':'Continue!',c=currentChild;let txt=t;if(c&&p>=80)txt='Bravo '+c.name+'!';else if(c&&p<60)txt='Courage '+c.name+'!';document.getElementById('quizContent').innerHTML='<div class="quiz-results"><div style="font-size:3rem">'+e+'</div><div class="quiz-results-score">'+quizScore+'/'+quizQuestions.length+'</div><div class="quiz-results-text">'+txt+'</div><button class="quiz-results-btn" onclick="startQuiz()">🔄 Recommencer</button><button class="quiz-results-btn" onclick="setMode(\'parent\')">👨‍👩‍👧 Retour</button></div>';document.getElementById('quizProgress').innerHTML=''}
+
+function showHint(){
+    const q=quizQuestions[quizIndex];
+    document.getElementById('quizHint').innerHTML='<div class="quiz-hint">💡 '+q.hint+'</div>';
+}
+
+function showQuizResults(){
+    const p=Math.round((quizScore/quizQuestions.length)*100);
+    const e=p>=80?'🏆':p>=60?'👍':'💪';
+    let txt=p>=80?'Excellent !':p>=60?'Bien joué !':'Continue !';
+    if(currentChild){
+        if(p>=80)txt='Bravo '+currentChild.name+' !';
+        else if(p<60)txt='Courage '+currentChild.name+' !';
+    }
+    document.getElementById('quizContent').innerHTML=`
+        <div class="quiz-results">
+            <div style="font-size:3rem">${e}</div>
+            <div class="quiz-results-score">${quizScore}/${quizQuestions.length}</div>
+            <div class="quiz-results-text">${txt}</div>
+            <button class="quiz-results-btn" onclick="startQuiz()">🔄 Recommencer</button>
+            <button class="quiz-results-btn" onclick="setMode('parent')">👨‍👩‍👧 Retour</button>
+        </div>
+    `;
+    document.getElementById('quizProgress').innerHTML='';
+}
+
+// ==================== BUDGET ====================
 async function importFile(f){document.getElementById('importZone').style.display='none';document.getElementById('loadingContainer').style.display='block';const r=new FileReader();r.onload=async e=>{const b=e.target.result.split(',')[1];try{const rs=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:'Extrais transactions. JSON: {"transactions":[{"date":"DD/MM/YYYY","description":"Court","amount":123.45,"category":"salary"}]}',messages:[{role:'user',content:[{type:'document',source:{type:'base64',media_type:'application/pdf',data:b}},{type:'text',text:'JSON uniquement.'}]}]})});document.getElementById('loadingContainer').style.display='none';if(rs.ok){const j=await rs.json(),m=j.content[0].text.match(/\{[\s\S]*\}/);if(m){const p=JSON.parse(m[0]);if(p.transactions?.length){data.transactions=p.transactions.map((t,i)=>({id:Date.now()+i,...t}));save();updateAll();generateNotifs();notify('✅ '+data.transactions.length+' transactions');return}}}showImportErr()}catch(e){showImportErr()}};r.readAsDataURL(f)}
 function showImportErr(){document.getElementById('loadingContainer').style.display='none';document.getElementById('importZone').style.display='block';notify('❌ Erreur')}
 function resetData(){if(confirm('Effacer?')){data.transactions=[];save();updateAll()}}
-function resetAll(){if(confirm('Tout réinitialiser?')){localStorage.removeItem('familyflow_v7');location.reload()}}
+function resetAll(){if(confirm('Tout réinitialiser?')){localStorage.removeItem('familyflow_v8');location.reload()}}
 function updateDashboard(){const i=data.transactions.filter(t=>t.amount>0).reduce((s,t)=>s+t.amount,0),e=data.transactions.filter(t=>t.amount<0).reduce((s,t)=>s+Math.abs(t.amount),0),b=i-e;document.getElementById('totalIncome').textContent='+'+Math.round(i)+'€';document.getElementById('totalExpenses').textContent='-'+Math.round(e)+'€';document.getElementById('totalBalance').textContent=(b>=0?'+':'')+Math.round(b)+'€';document.getElementById('totalBalance').style.color=b>=0?'var(--green)':'var(--red)';document.getElementById('savingsRate').textContent=i>0?Math.round((b/i)*100)+'%':'0%';const bc={};data.transactions.filter(t=>t.amount<0).forEach(t=>{bc[t.category||'other']=(bc[t.category||'other']||0)+Math.abs(t.amount)});const sr=Object.entries(bc).sort((a,b)=>b[1]-a[1]).slice(0,5),mx=sr[0]?.[1]||1;document.getElementById('categoryBreakdown').innerHTML=sr.map(([c,a])=>{const ct=CATEGORIES[c]||CATEGORIES.other;return'<div class="category-item"><div class="category-emoji">'+ct.emoji+'</div><div class="category-info"><div class="category-name">'+ct.name+'</div><div class="category-bar"><div class="category-fill" style="width:'+(a/mx)*100+'%;background:'+ct.color+'"></div></div></div><div class="category-amount">'+Math.round(a)+'€</div></div>'}).join('');const rc=[...data.transactions].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,5);document.getElementById('recentTransactions').innerHTML=rc.map(t=>{const c=CATEGORIES[t.category]||CATEGORIES.other;return'<div class="transaction-item"><div class="transaction-emoji">'+c.emoji+'</div><div class="transaction-info"><div class="transaction-desc">'+t.description+'</div><div class="transaction-date">'+t.date+'</div></div><div class="transaction-amount '+(t.amount>0?'income':'expense')+'">'+(t.amount>0?'+':'')+t.amount.toFixed(0)+'€</div></div>'}).join('')}
 function updateOptimize(){const e=data.transactions.filter(t=>t.amount<0),i=data.transactions.filter(t=>t.amount>0).reduce((s,t)=>s+t.amount,0),te=e.reduce((s,t)=>s+Math.abs(t.amount),0),bc={};e.forEach(t=>{bc[t.category||'other']=(bc[t.category||'other']||0)+Math.abs(t.amount)});const sr=i>0?(i-te)/i:0,sc=Math.max(0,Math.min(100,Math.round(50+sr*40))),scl=sc>=70?'good':sc>=40?'warning':'bad';let al=[];if((bc.subscriptions||0)>80)al.push({type:'warning',icon:'📱',title:Math.round(bc.subscriptions)+'€ abonnements',text:'Vérifiez leur utilité'});if(sr<.1)al.push({type:'danger',icon:'💸',title:'Épargne faible',text:Math.round(sr*100)+'%'});else if(sr>=.2)al.push({type:'success',icon:'🎉',title:'Bravo!',text:Math.round(sr*100)+'% épargne'});if(data.children.length>0)al.push({type:'tip',icon:'💡',title:'Astuce famille',text:'Ouvrez un livret jeune pour '+data.children.slice(0,2).map(c=>c.name).join(' et ')});document.getElementById('optimizeContent').innerHTML='<div class="card"><div class="card-title">📈 Score</div><div class="score-circle '+scl+'"><div class="score-value">'+sc+'</div><div class="score-label">/100</div></div></div>'+al.map(a=>'<div class="alert-card '+a.type+'"><div class="alert-icon">'+a.icon+'</div><div class="alert-content"><div class="alert-title">'+a.title+'</div><div class="alert-text">'+a.text+'</div></div></div>').join('')}
-async function sendBudgetMsg(){const i=document.getElementById('budgetInput'),m=i.value.trim();if(!m)return;addMsg('budgetChat',m,'user');i.value='';const l=addLoading('budgetChat'),fc=data.children.length>0?'Famille: '+data.children.map(c=>c.name+' ('+c.age+' ans)').join(', ')+'.':'';try{const r=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:'Assistant budget familial. '+fc+' '+data.transactions.length+' transactions. Conseils personnalisés. Français avec emojis.',messages:[{role:'user',content:m}]})});l.remove();if(r.ok){const j=await r.json();addMsg('budgetChat',j.content[0].text,'assistant')}}catch(e){l.remove();addMsg('budgetChat','❌ Erreur','assistant')}}
+async function sendBudgetMsg(){const i=document.getElementById('budgetInput'),m=i.value.trim();if(!m)return;addMsg('budgetChat',m,'user');i.value='';const l=addLoading('budgetChat'),fc=data.children.length>0?'Famille: '+data.children.map(c=>c.name+' ('+c.age+' ans)').join(', ')+'.':'';try{const r=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:'Assistant budget familial. '+fc+' '+data.transactions.length+' transactions. Conseils personnalisés. Français avec emojis. Ne jamais utiliser ** ou astérisques.',messages:[{role:'user',content:m}]})});l.remove();if(r.ok){const j=await r.json();const reply=j.content[0].text.replace(/\*\*/g,'').replace(/\*/g,'');addMsg('budgetChat',reply,'assistant')}}catch(e){l.remove();addMsg('budgetChat','❌ Erreur','assistant')}}
 function askBudget(q){document.getElementById('budgetInput').value=q;sendBudgetMsg()}
 function updateChildrenList(){document.getElementById('childrenList').innerHTML=data.children.map(c=>'<div class="child-card"><div class="child-avatar-lg">'+c.avatar+'</div><div class="child-info"><div class="child-name">'+c.name+'</div><div class="child-details">'+c.age+' ans • '+c.class+(c.interests?' • '+c.interests:'')+'</div></div><button class="child-edit" onclick="editChildProfile('+c.id+')">✏️</button></div>').join('')||'<div style="color:var(--sage);padding:.5rem">Aucun enfant</div>'}
 function openChildModal(id=null){editingChild=id?data.children.find(c=>c.id===id):null;document.getElementById('childModalTitle').textContent=editingChild?'✏️ Modifier':'➕ Ajouter';document.getElementById('deleteChildBtn').style.display=editingChild?'block':'none';document.getElementById('childNameInput').value=editingChild?.name||'';document.getElementById('childAgeInput').value=editingChild?.age||'';document.getElementById('childClassInput').value=editingChild?.class||'4e';document.getElementById('childInterestsInput').value=editingChild?.interests||'';document.querySelectorAll('.avatar-option').forEach(a=>a.classList.toggle('selected',a.dataset.avatar===(editingChild?.avatar||'👦')));openModal('childModal')}
