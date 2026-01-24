@@ -263,7 +263,8 @@
         <!-- PLANNING -->
         <div class="view" id="planning-view">
             <div class="card"><div class="card-title">📅 Semaine</div><div class="planning-week" id="planningWeek"></div></div>
-            <div class="card"><div class="card-title" id="dayTitle">📋 Activités</div><div id="activitiesList"></div><button class="add-btn" onclick="openActivityModal()">+ Ajouter</button></div>
+            <div class="card"><div class="planning-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem"><div class="card-title" style="margin:0">📅 Planning</div><button onclick="exportICS()" style="padding:.4rem .8rem;border:none;border-radius:20px;background:linear-gradient(135deg,var(--purple),#A569BD);color:#fff;font-size:.75rem;cursor:pointer">📤 Export ICS</button></div>
+<div class="card"><div class="card-title" id="dayTitle">📋 Activités</div><div id="activitiesList"></div><button class="add-btn" onclick="openActivityModal()">+ Ajouter</button></div>
         </div>
         <!-- HOMEWORK -->
         <div class="view" id="homework-view">
@@ -417,6 +418,7 @@ function deleteChild(){if(!editingChild||!confirm('Supprimer '+editingChild.name
 function openModal(id){document.getElementById(id).classList.add('active')}
 function closeModal(id){document.getElementById(id).classList.remove('active')}
 function notify(m){const n=document.createElement('div');n.className='notification';n.textContent=m;document.body.appendChild(n);setTimeout(()=>n.remove(),2500)}
+function exportICS(){if(data.activities.length===0)return notify("Aucune activité");let ics="BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//FamilyFlow//FR\n";const fmt=d=>{const p=n=>String(n).padStart(2,"0");return d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+"T"+p(d.getHours())+p(d.getMinutes())+"00"};data.activities.forEach(a=>{const ad=new Date(a.date);const[hh,mm]=a.time.split(":").map(Number);ad.setHours(hh,mm);const end=new Date(ad);end.setHours(end.getHours()+1);const child=data.children.find(c=>c.id===a.childId);ics+="BEGIN:VEVENT\nUID:ff-"+a.id+"@familyflow\nDTSTAMP:"+fmt(new Date())+"\nDTSTART:"+fmt(ad)+"\nDTEND:"+fmt(end)+"\nSUMMARY:"+a.title+(child?" ("+child.name+")":"")+"\n";if(a.recurrence==="weekly")ics+="RRULE:FREQ=WEEKLY\n";ics+="END:VEVENT\n"});ics+="END:VCALENDAR";const blob=new Blob([ics.replace(/\\n/g,"\n")],{type:"text/calendar"});const url=URL.createObjectURL(blob);const link=document.createElement("a");link.href=url;link.download="familyflow.ics";link.click();notify("📤 Fichier téléchargé!")}
 function resetAll(){if(confirm('Tout réinitialiser?')){localStorage.removeItem('familyflow_v10');location.reload()}}
 init();
 </script>
