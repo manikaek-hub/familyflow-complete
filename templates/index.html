@@ -1,294 +1,423 @@
-const q = quizQuestions[quizIndex];
-    document.getElementById('quizHint').innerHTML = `
-        <div class="quiz-hint">💡 ${q.hint || 'Réfléchis bien...'}</div>
-    `;
-}
-
-function showQuizResults() {
-    const percent = Math.round((quizScore / quizQuestions.length) * 100);
-    const emoji = percent >= 80 ? '🏆' : percent >= 60 ? '👍' : '💪';
-    let text = percent >= 80 ? 'Excellent !' : percent >= 60 ? 'Bien joué !' : 'Continue !';
-    
-    if (currentChild) {
-        if (percent >= 80) text = `Bravo ${currentChild.name} !`;
-        else if (percent < 60) text = `Courage ${currentChild.name} !`;
-    }
-    
-    // Update lesson score if exists
-    if (currentLesson) {
-        const idx = data.lessons.findIndex(l => l.id === currentLesson.id);
-        if (idx >= 0) {
-            data.lessons[idx].lastQuizScore = percent;
-            data.lessons[idx].lastQuizDate = new Date().toISOString();
-            save();
-        }
-    }
-    
-    document.getElementById('quizContent').innerHTML = `
-        <div class="quiz-results">
-            <div style="font-size:3rem">${emoji}</div>
-            <div class="quiz-results-score">${quizScore}/${quizQuestions.length}</div>
-            <div class="quiz-results-text">${text}</div>
-            <button class="quiz-results-btn" onclick="restartQuiz()">🔄 Recommencer</button>
-            <button class="quiz-results-btn" onclick="switchView('revision')">📁 Mes leçons</button>
-            <button class="quiz-results-btn" onclick="switchView('dashboard')">🏠 Accueil</button>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FamilyFlow v10</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root{--cream:#FAF7F2;--sand:#E8DCC4;--terracotta:#C9856B;--forest:#5F7161;--sage:#8B9D83;--midnight:#2C3333;--white:#FFF;--red:#E74C3C;--green:#27AE60;--blue:#3498DB;--purple:#9B59B6;--orange:#E67E22;--yellow:#F1C40F}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--midnight);min-height:100vh;padding-bottom:80px}
+        header{background:linear-gradient(135deg,var(--forest),var(--sage));padding:.8rem 1rem;display:flex;justify-content:space-between;align-items:center}
+        .header-title{font-family:'Playfair Display',serif;font-size:1.4rem;color:#fff;font-weight:600}
+        .header-icon{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer}
+        .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:.5rem 0;box-shadow:0 -2px 15px rgba(0,0,0,.1);z-index:100}
+        .nav-item{display:flex;flex-direction:column;align-items:center;padding:.2rem .5rem;border:none;background:none;cursor:pointer;color:var(--sage);font-size:.55rem}
+        .nav-item.active{color:var(--forest)}
+        .nav-item .nav-icon{font-size:1.2rem}
+        .container{max-width:600px;margin:0 auto;padding:1rem}
+        .view{display:none}.view.active{display:block}
+        .card{background:#fff;border-radius:16px;padding:1rem;margin-bottom:1rem;box-shadow:0 4px 15px rgba(0,0,0,.08)}
+        .card-title{font-family:'Playfair Display',serif;font-size:1rem;color:var(--forest);margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
+        .meteo-header{background:linear-gradient(135deg,var(--forest),var(--sage));border-radius:16px;padding:1.2rem;color:#fff;margin-bottom:1rem;text-align:center}
+        .meteo-date{font-size:.8rem;opacity:.9}
+        .meteo-greeting{font-family:'Playfair Display',serif;font-size:1.3rem;margin:.3rem 0}
+        .meteo-summary{font-size:.85rem;opacity:.9}
+        .meteo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-bottom:1rem}
+        .meteo-card{background:#fff;border-radius:12px;padding:.8rem;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,.06)}
+        .meteo-card.good{border-top:3px solid var(--green)}
+        .meteo-card.warning{border-top:3px solid var(--orange)}
+        .meteo-card.alert{border-top:3px solid var(--red)}
+        .meteo-icon{font-size:1.5rem;margin-bottom:.3rem}
+        .meteo-label{font-size:.65rem;color:var(--sage)}
+        .meteo-value{font-weight:600;font-size:.9rem}
+        .daily-tips{background:linear-gradient(135deg,var(--terracotta),#D4967A);border-radius:12px;padding:1rem;color:#fff}
+        .daily-tips-title{font-weight:600;margin-bottom:.5rem}
+        .daily-tip{font-size:.85rem;padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.2)}
+        .daily-tip:last-child{border-bottom:none}
+        .import-zone{border:3px dashed var(--sand);border-radius:16px;padding:2rem;text-align:center;cursor:pointer;background:#fff}
+        .import-icon{font-size:2.5rem;margin-bottom:.5rem}
+        .import-title{font-family:'Playfair Display',serif;color:var(--forest)}
+        .import-text{color:var(--sage);font-size:.8rem}
+        .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;margin-bottom:1rem}
+        .stat-card{background:#fff;border-radius:12px;padding:.8rem;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,.06)}
+        .stat-card.income{border-left:3px solid var(--green)}
+        .stat-card.expense{border-left:3px solid var(--terracotta)}
+        .stat-card.balance{border-left:3px solid var(--blue)}
+        .stat-card.savings{border-left:3px solid var(--purple)}
+        .stat-value{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600}
+        .stat-label{font-size:.65rem;color:var(--sage)}
+        .category-item{display:flex;align-items:center;gap:.5rem;padding:.5rem 0;border-bottom:1px solid var(--cream)}
+        .category-emoji{font-size:1.1rem}
+        .category-info{flex:1}
+        .category-name{font-size:.8rem;font-weight:500}
+        .category-bar{height:5px;background:var(--cream);border-radius:3px;margin-top:.2rem}
+        .category-fill{height:100%;border-radius:3px}
+        .category-amount{font-weight:600;font-size:.85rem}
+        .transaction-item{display:flex;align-items:center;gap:.5rem;padding:.5rem;background:var(--cream);border-radius:10px;margin-bottom:.4rem}
+        .transaction-info{flex:1}
+        .transaction-desc{font-size:.8rem;font-weight:500}
+        .transaction-date{font-size:.65rem;color:var(--sage)}
+        .transaction-amount{font-weight:600;font-size:.85rem}
+        .transaction-amount.income{color:var(--green)}
+        .transaction-amount.expense{color:var(--terracotta)}
+        .alert-card{border-radius:12px;padding:.8rem;margin-bottom:.6rem;display:flex;gap:.6rem}
+        .alert-card.warning{background:#FFF3E0;border-left:3px solid var(--orange)}
+        .alert-card.danger{background:#FFEBEE;border-left:3px solid var(--red)}
+        .alert-card.success{background:#E8F5E9;border-left:3px solid var(--green)}
+        .alert-card.tip{background:linear-gradient(135deg,var(--forest),var(--sage));color:#fff}
+        .alert-icon{font-size:1.2rem}
+        .alert-content{flex:1}
+        .alert-title{font-weight:600;font-size:.85rem}
+        .alert-text{font-size:.75rem;opacity:.9}
+        .score-circle{width:80px;height:80px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 1rem}
+        .score-circle.good{background:linear-gradient(135deg,var(--green),#2ECC71)}
+        .score-circle.warning{background:linear-gradient(135deg,var(--orange),#F39C12)}
+        .score-circle.bad{background:linear-gradient(135deg,var(--red),#C0392B)}
+        .score-value{font-size:1.5rem;font-weight:700;color:#fff}
+        .score-label{font-size:.5rem;color:rgba(255,255,255,.8)}
+        .planning-week{display:flex;gap:.3rem;margin-bottom:1rem;overflow-x:auto}
+        .planning-day{flex:1;min-width:50px;text-align:center;padding:.5rem .3rem;background:#fff;border-radius:10px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+        .planning-day.active{background:var(--forest);color:#fff}
+        .planning-day.today{border:2px solid var(--terracotta)}
+        .planning-day.has-event::after{content:'';display:block;width:6px;height:6px;background:var(--purple);border-radius:50%;margin:.3rem auto 0}
+        .planning-day-name{font-size:.6rem}
+        .planning-day-num{font-size:1rem;font-weight:600}
+        .activity-item{display:flex;align-items:center;gap:.6rem;padding:.7rem;background:#fff;border-radius:10px;margin-bottom:.5rem;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:pointer}
+        .activity-item.revision{border-left:3px solid var(--purple)}
+        .activity-time{font-size:.75rem;font-weight:600;color:var(--forest);min-width:45px}
+        .activity-info{flex:1}
+        .activity-title{font-size:.85rem;font-weight:500}
+        .activity-child{font-size:.7rem;color:var(--sage)}
+        .add-btn{width:100%;padding:.7rem;border:2px dashed var(--sand);border-radius:10px;background:none;color:var(--sage);cursor:pointer;font-size:.85rem}
+        .homework-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem}
+        .child-selector{position:relative;display:flex;align-items:center;gap:.4rem;padding:.5rem .8rem;background:#fff;border-radius:25px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+        .child-selector .avatar{font-size:1.2rem}
+        .child-selector .name{font-weight:500;font-size:.85rem}
+        .child-selector .arrow{font-size:.6rem;color:var(--sage)}
+        .child-dropdown{position:absolute;top:calc(100% + 5px);left:0;right:0;background:#fff;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.15);z-index:50;max-height:0;overflow:hidden;transition:max-height .3s}
+        .child-dropdown.show{max-height:200px}
+        .child-dropdown-item{padding:.6rem .8rem;cursor:pointer;font-size:.85rem}
+        .child-dropdown-item:hover{background:var(--cream)}
+        .child-dropdown-item.active{background:var(--sand)}
+        .subject-chips{display:flex;gap:.4rem;margin-bottom:.8rem;flex-wrap:wrap}
+        .subject-chip{padding:.4rem .7rem;border-radius:20px;border:2px solid var(--sand);background:#fff;font-size:.75rem;cursor:pointer}
+        .subject-chip.active{border-color:var(--forest);background:var(--cream)}
+        .upload-zone{border:2px dashed var(--sand);border-radius:12px;padding:.8rem;text-align:center;cursor:pointer;font-size:.8rem;color:var(--sage);margin-bottom:.5rem}
+        .upload-preview{position:relative;padding:.5rem;background:var(--cream);border-radius:10px;text-align:center;margin-bottom:.5rem}
+        .upload-preview img{max-width:100%;max-height:80px;border-radius:6px}
+        .remove-upload{position:absolute;top:5px;right:5px;width:20px;height:20px;border-radius:50%;border:none;background:var(--red);color:#fff;cursor:pointer;font-size:.7rem}
+        .chat-input-container{display:flex;gap:.4rem;padding:.5rem;background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+        .chat-input{flex:1;padding:.5rem;border:none;font-family:'Outfit',sans-serif;font-size:.85rem}
+        .chat-input:focus{outline:none}
+        .chat-send{padding:.5rem .8rem;border:none;border-radius:8px;background:var(--forest);color:#fff;cursor:pointer}
+        .lesson-section{background:#fff;border-radius:14px;margin-bottom:.8rem;overflow:hidden;box-shadow:0 3px 12px rgba(0,0,0,.08)}
+        .lesson-section-header{padding:.7rem 1rem;font-weight:600;font-size:.9rem;display:flex;align-items:center;gap:.5rem;cursor:pointer}
+        .lesson-section-header.summary{background:linear-gradient(135deg,var(--blue),#5DADE2);color:#fff}
+        .lesson-section-header.mindmap{background:linear-gradient(135deg,var(--purple),#A569BD);color:#fff}
+        .lesson-section-header.qa{background:linear-gradient(135deg,var(--forest),var(--sage));color:#fff}
+        .lesson-section-header .toggle-icon{margin-left:auto}
+        .lesson-section-content{padding:1rem}
+        .lesson-section-content.hidden{display:none}
+        .key-point{background:rgba(52,152,219,.1);border-left:3px solid var(--blue);padding:.5rem .8rem;margin:.4rem 0;border-radius:0 8px 8px 0;font-size:.85rem}
+        .definition{background:var(--cream);padding:.5rem;border-radius:8px;margin:.4rem 0;font-size:.85rem}
+        .definition-term{font-weight:600;color:var(--forest)}
+        .mindmap-center{background:linear-gradient(135deg,var(--purple),#A569BD);color:#fff;padding:.6rem 1rem;border-radius:25px;text-align:center;font-weight:600;font-size:.9rem;margin:0 auto .8rem;max-width:200px}
+        .mindmap-branch{display:flex;align-items:flex-start;gap:.5rem;margin-bottom:.6rem}
+        .mindmap-branch-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;background:var(--cream)}
+        .mindmap-branch-content{flex:1;background:var(--cream);padding:.5rem .7rem;border-radius:10px}
+        .mindmap-branch-title{font-weight:600;font-size:.85rem;color:var(--forest)}
+        .mindmap-branch-items{font-size:.8rem;list-style:none}
+        .mindmap-branch-items li{margin:.2rem 0;padding-left:.5rem}
+        .qa-card{background:#fff;border-radius:10px;margin-bottom:.5rem;overflow:hidden;border:1px solid var(--sand)}
+        .qa-question{padding:.7rem;background:linear-gradient(135deg,var(--forest),var(--sage));color:#fff;font-size:.85rem;cursor:pointer;display:flex;justify-content:space-between}
+        .qa-answer{max-height:0;overflow:hidden;transition:max-height .3s;background:var(--cream)}
+        .qa-answer.show{max-height:300px}
+        .qa-answer-content{padding:.7rem;font-size:.85rem}
+        .lesson-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+        .lesson-action-btn{flex:1;min-width:100px;padding:.6rem;border:none;border-radius:10px;font-size:.8rem;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.3rem}
+        .lesson-action-btn.save{background:linear-gradient(135deg,var(--purple),#A569BD);color:#fff}
+        .lesson-action-btn.quiz{background:linear-gradient(135deg,var(--terracotta),#D98B70);color:#fff}
+        .lesson-action-btn.plan{background:linear-gradient(135deg,var(--green),var(--sage));color:#fff}
+        .quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+        .quiz-progress{display:flex;gap:.3rem}
+        .progress-dot{width:10px;height:10px;border-radius:50%;background:var(--sand)}
+        .progress-dot.done{background:var(--green)}
+        .progress-dot.current{background:var(--blue);transform:scale(1.2)}
+        .quiz-score{font-weight:600;color:var(--forest)}
+        .quiz-card{background:#fff;border-radius:16px;box-shadow:0 8px 25px rgba(0,0,0,.1);overflow:hidden}
+        .quiz-card-header{padding:1.2rem;text-align:center;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff}
+        .quiz-card-header.correct{background:linear-gradient(135deg,var(--green),#2ECC71)}
+        .quiz-card-header.wrong{background:linear-gradient(135deg,var(--red),#C0392B)}
+        .quiz-number{font-size:.75rem;opacity:.9}
+        .quiz-question-text{font-size:1rem;font-weight:600;margin-top:.3rem}
+        .quiz-card-body{padding:1rem}
+        .quiz-option{padding:.7rem;border:2px solid var(--sand);border-radius:10px;margin-bottom:.5rem;cursor:pointer;font-size:.9rem}
+        .quiz-option:hover{border-color:var(--blue)}
+        .quiz-option.selected{border-color:var(--blue);background:rgba(52,152,219,.1)}
+        .quiz-option.correct{border-color:var(--green);background:rgba(39,174,96,.15)}
+        .quiz-option.wrong{border-color:var(--red);background:rgba(231,76,60,.15)}
+        .quiz-option.disabled{pointer-events:none;opacity:.7}
+        .quiz-actions{display:flex;justify-content:center;gap:1rem;margin-top:1rem}
+        .quiz-btn{width:50px;height:50px;border-radius:50%;border:none;font-size:1.2rem;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+        .quiz-btn.hint{background:linear-gradient(135deg,var(--orange),var(--yellow));color:#fff}
+        .quiz-btn.check{background:linear-gradient(135deg,var(--green),#2ECC71);color:#fff}
+        .quiz-btn.next{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff}
+        .quiz-hint{text-align:center;padding:.5rem;background:#FFF3E0;border-radius:8px;margin-top:.6rem;font-size:.85rem;color:var(--orange)}
+        .quiz-explanation{padding:.6rem;background:var(--cream);border-radius:8px;margin-top:.6rem;font-size:.85rem}
+        .quiz-results{text-align:center;padding:2rem 1rem}
+        .quiz-results-score{font-size:3rem;font-weight:700;color:var(--forest)}
+        .quiz-results-text{color:var(--sage);margin:.5rem 0 1rem}
+        .quiz-results-btn{padding:.7rem 1.2rem;border:none;border-radius:25px;background:var(--forest);color:#fff;cursor:pointer;margin:.3rem}
+        .child-folders{display:flex;gap:.5rem;overflow-x:auto;padding-bottom:.5rem;margin-bottom:1rem}
+        .child-folder{display:flex;flex-direction:column;align-items:center;padding:.6rem .8rem;background:#fff;border-radius:12px;cursor:pointer;min-width:70px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:2px solid transparent}
+        .child-folder.active{border-color:var(--forest);background:var(--cream)}
+        .child-folder-avatar{font-size:1.4rem}
+        .child-folder-name{font-size:.7rem;font-weight:500}
+        .child-folder-count{font-size:.6rem;color:var(--sage)}
+        .lesson-folder-card{background:#fff;border-radius:12px;padding:.8rem;margin-bottom:.6rem;box-shadow:0 2px 10px rgba(0,0,0,.06);cursor:pointer;border-left:4px solid var(--blue)}
+        .lesson-folder-card.math{border-left-color:var(--purple)}
+        .lesson-folder-card.french{border-left-color:var(--terracotta)}
+        .lesson-folder-card.history{border-left-color:var(--orange)}
+        .lesson-folder-card.science{border-left-color:var(--green)}
+        .lesson-folder-header{display:flex;justify-content:space-between}
+        .lesson-folder-title{font-weight:600;font-size:.85rem}
+        .lesson-folder-date{font-size:.65rem;color:var(--sage)}
+        .lesson-folder-subject{display:inline-block;padding:.15rem .4rem;border-radius:10px;font-size:.6rem;background:var(--cream);margin-bottom:.2rem}
+        .lesson-folder-stats{display:flex;gap:.8rem;font-size:.7rem;color:var(--sage)}
+        .profile-header{text-align:center;padding:1.5rem;background:linear-gradient(135deg,var(--forest),var(--sage));border-radius:16px;margin-bottom:1rem;color:#fff}
+        .profile-avatar{width:60px;height:60px;border-radius:50%;background:var(--sand);margin:0 auto .5rem;display:flex;align-items:center;justify-content:center;font-size:1.8rem;border:3px solid #fff}
+        .profile-name{font-size:1.1rem;font-weight:600}
+        .family-title{font-size:.85rem;color:var(--sage);margin-bottom:.5rem;display:flex;justify-content:space-between}
+        .add-child-btn{padding:.3rem .6rem;border:none;border-radius:15px;background:var(--terracotta);color:#fff;font-size:.7rem;cursor:pointer}
+        .child-card{display:flex;align-items:center;gap:.8rem;padding:.8rem;background:#fff;border-radius:12px;margin-bottom:.5rem;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+        .child-avatar-lg{width:45px;height:45px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:1.5rem}
+        .child-info{flex:1}
+        .child-name{font-weight:600;font-size:.95rem}
+        .child-details{font-size:.75rem;color:var(--sage)}
+        .child-edit{padding:.3rem .6rem;border:1px solid var(--sand);border-radius:8px;background:none;font-size:.7rem;cursor:pointer}
+        .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);display:flex;justify-content:center;align-items:center;z-index:1000;opacity:0;visibility:hidden;transition:all .3s}
+        .modal-overlay.active{opacity:1;visibility:visible}
+        .modal{background:#fff;border-radius:16px;padding:1.2rem;max-width:350px;width:90%;max-height:80vh;overflow-y:auto}
+        .modal-title{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--forest);margin-bottom:1rem;text-align:center}
+        .form-group{margin-bottom:.7rem}
+        .form-label{display:block;font-size:.75rem;color:var(--sage);margin-bottom:.2rem}
+        .form-input,.form-select{width:100%;padding:.6rem;border:2px solid var(--sand);border-radius:8px;font-family:'Outfit',sans-serif;font-size:.9rem}
+        .avatar-picker{display:flex;justify-content:center;gap:.5rem;margin-bottom:1rem}
+        .avatar-option{width:40px;height:40px;border-radius:50%;border:2px solid var(--sand);display:flex;align-items:center;justify-content:center;font-size:1.3rem;cursor:pointer}
+        .avatar-option.selected{border-color:var(--forest);background:var(--cream)}
+        .modal-buttons{display:flex;gap:.6rem;margin-top:1rem}
+        .modal-btn{flex:1;padding:.7rem;border:none;border-radius:8px;font-weight:500;cursor:pointer;font-size:.85rem}
+        .btn-cancel{background:var(--sand)}
+        .btn-save{background:var(--forest);color:#fff}
+        .btn-delete{background:var(--red);color:#fff}
+        .notification{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:var(--forest);color:#fff;padding:.6rem 1.2rem;border-radius:25px;box-shadow:0 4px 15px rgba(0,0,0,.2);z-index:2000;font-size:.85rem}
+        .loading-container{text-align:center;padding:2rem}
+        .loading-spinner{width:40px;height:40px;border:3px solid var(--sand);border-top-color:var(--forest);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto .5rem}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .empty-state{text-align:center;padding:2rem;color:var(--sage)}
+        .empty-icon{font-size:2.5rem;margin-bottom:.5rem}
+        .reset-btn{display:block;width:100%;padding:.6rem;border:2px dashed var(--sand);border-radius:8px;background:none;color:var(--sage);cursor:pointer;margin-top:1rem}
+        .logout-btn{width:100%;padding:.8rem;border:none;border-radius:10px;background:var(--red);color:#fff;cursor:pointer;margin-top:1rem}
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-title">🌊 FamilyFlow</div>
+        <div class="header-icon" onclick="switchView('profile')">👤</div>
+    </header>
+    <div class="container">
+        <!-- DASHBOARD -->
+        <div class="view active" id="dashboard-view">
+            <div class="meteo-header">
+                <div class="meteo-date" id="meteoDate"></div>
+                <div class="meteo-greeting" id="meteoGreeting">Bonjour ! 👋</div>
+                <div class="meteo-summary" id="meteoSummary">Votre journée en un coup d'œil</div>
+            </div>
+            <div class="meteo-grid">
+                <div class="meteo-card" id="meteoHw"><div class="meteo-icon">📚</div><div class="meteo-label">Devoirs</div><div class="meteo-value" id="meteoHwVal">0</div></div>
+                <div class="meteo-card" id="meteoAct"><div class="meteo-icon">📅</div><div class="meteo-label">Activités</div><div class="meteo-value" id="meteoActVal">0</div></div>
+                <div class="meteo-card" id="meteoBudget"><div class="meteo-icon">💰</div><div class="meteo-label">Budget</div><div class="meteo-value" id="meteoBudgetVal">--</div></div>
+            </div>
+            <div class="daily-tips"><div class="daily-tips-title">💡 Conseils du jour</div><div id="tipsContent"></div></div>
         </div>
-    `;
-    document.getElementById('quizProgress').innerHTML = '';
-}
-
-function restartQuiz() {
-    quizIndex = 0;
-    quizScore = 0;
-    quizAnswered = false;
-    quizQuestions.forEach(q => {
-        q.options = shuffleArray([...q.options]);
-    });
-    showQuizQuestion();
-}
-
-// ============== REVISION ==============
-function updateRevision() {
-    // Child folders
-    document.getElementById('childFolders').innerHTML = data.children.map(c => {
-        const count = data.lessons.filter(l => l.childId === c.id).length;
-        return `
-            <div class="child-folder ${selectedFolder?.id === c.id ? 'active' : ''}" onclick="selectFolder(${c.id})">
-                <div class="child-folder-avatar">${c.avatar}</div>
-                <div class="child-folder-name">${c.name}</div>
-                <div class="child-folder-count">${count} leçon${count > 1 ? 's' : ''}</div>
-            </div>
-        `;
-    }).join('');
-    
-    updateSavedLessons();
-}
-
-function selectFolder(id) {
-    selectedFolder = data.children.find(c => c.id === id);
-    updateRevision();
-}
-
-function updateSavedLessons() {
-    const container = document.getElementById('savedLessonsList');
-    
-    if (!selectedFolder) {
-        container.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-icon">📁</div>
-                <div>Sélectionnez un enfant</div>
-            </div>
-        `;
-        return;
-    }
-    
-    const lessons = data.lessons
-        .filter(l => l.childId === selectedFolder.id)
-        .sort((a, b) => new Date(b.date) - new Date(a.date));
-    
-    if (lessons.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-icon">📚</div>
-                <div>Aucune leçon pour ${selectedFolder.name}</div>
-                <button class="lesson-action-btn quiz" style="margin-top:.8rem;max-width:180px" onclick="switchView('homework')">
-                    ✏️ Ajouter une leçon
-                </button>
-            </div>
-        `;
-        return;
-    }
-    
-    container.innerHTML = lessons.map(l => {
-        const subj = SUBJECTS[l.subject] || SUBJECTS.general;
-        const date = new Date(l.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
-        return `
-            <div class="lesson-folder-card ${l.subject}" onclick="openSavedLesson(${l.id})">
-                <div class="lesson-folder-header">
-                    <div>
-                        <span class="lesson-folder-subject">${subj.emoji} ${subj.name}</span>
-                        <div class="lesson-folder-title">${l.title}</div>
-                    </div>
-                    <div class="lesson-folder-date">${date}</div>
+        <!-- BUDGET -->
+        <div class="view" id="budget-view">
+            <div id="importSection"><div class="import-zone" onclick="document.getElementById('importInput').click()"><div class="import-icon">📄</div><div class="import-title">Importer un relevé</div><div class="import-text">PDF ou CSV</div><input type="file" id="importInput" accept=".pdf,.csv" style="display:none"></div></div>
+            <div class="loading-container" id="loadingBudget" style="display:none"><div class="loading-spinner"></div><div style="color:var(--sage)">Analyse...</div></div>
+            <div id="budgetDashboard" style="display:none">
+                <div class="stats-grid">
+                    <div class="stat-card income"><div class="stat-value" id="totalIncome">0€</div><div class="stat-label">Revenus</div></div>
+                    <div class="stat-card expense"><div class="stat-value" id="totalExpenses">0€</div><div class="stat-label">Dépenses</div></div>
+                    <div class="stat-card balance"><div class="stat-value" id="totalBalance">0€</div><div class="stat-label">Solde</div></div>
+                    <div class="stat-card savings"><div class="stat-value" id="savingsRate">0%</div><div class="stat-label">Épargne</div></div>
                 </div>
-                <div class="lesson-folder-stats">
-                    <span>🧠 ${l.mindmap?.branches?.length || 0} branches</span>
-                    <span>❓ ${l.quiz?.length || 0} questions</span>
-                    ${l.lastQuizScore !== undefined ? `<span>📊 ${l.lastQuizScore}%</span>` : ''}
-                </div>
+                <div class="card"><div class="card-title">📊 Par catégorie</div><div id="categoryBreakdown"></div></div>
+                <div class="card"><div class="card-title">📋 Transactions</div><div id="recentTransactions"></div></div>
+                <button class="reset-btn" onclick="resetBudget()">🔄 Nouveau relevé</button>
             </div>
-        `;
-    }).join('');
-}
-
-function openSavedLesson(id) {
-    viewingLesson = data.lessons.find(l => l.id === id);
-    if (!viewingLesson) return;
-    
-    const subj = SUBJECTS[viewingLesson.subject] || SUBJECTS.general;
-    document.getElementById('lessonModalTitle').textContent = `${subj.emoji} ${viewingLesson.title}`;
-    
-    let html = '';
-    
-    // Summary
-    if (viewingLesson.summary) {
-        html += '<div style="margin-bottom:1rem">';
-        html += '<div style="font-weight:600;color:var(--forest);margin-bottom:.5rem">📝 Points clés</div>';
-        html += viewingLesson.summary.keyPoints?.map(p => `<div class="key-point">${p}</div>`).join('') || '';
-        html += '</div>';
-    }
-    
-    // Mindmap
-    if (viewingLesson.mindmap) {
-        html += '<div style="margin-bottom:1rem">';
-        html += '<div style="font-weight:600;color:var(--purple);margin-bottom:.5rem">🧠 Carte mentale</div>';
-        html += `<div class="mindmap-center" style="font-size:.8rem;padding:.5rem">${viewingLesson.mindmap.center}</div>`;
-        html += viewingLesson.mindmap.branches?.map(b => `
-            <div style="display:flex;gap:.4rem;font-size:.8rem;margin:.3rem 0">
-                <span>${b.icon}</span>
-                <strong>${b.title}:</strong>
-                <span style="color:var(--sage)">${b.items.join(', ')}</span>
+        </div>
+        <!-- OPTIMIZE -->
+        <div class="view" id="optimize-view"><div id="optimizeContent"><div class="empty-state"><div class="empty-icon">📊</div><div>Importez un relevé</div></div></div></div>
+        <!-- PLANNING -->
+        <div class="view" id="planning-view">
+            <div class="card"><div class="card-title">📅 Semaine</div><div class="planning-week" id="planningWeek"></div></div>
+            <div class="card"><div class="card-title" id="dayTitle">📋 Activités</div><div id="activitiesList"></div><button class="add-btn" onclick="openActivityModal()">+ Ajouter</button></div>
+        </div>
+        <!-- HOMEWORK -->
+        <div class="view" id="homework-view">
+            <div class="homework-header">
+                <div class="child-selector" id="childSelector" onclick="toggleDropdown(event)"><span class="avatar" id="curAvatar">👦</span><span class="name" id="curName">Choisir</span><span class="arrow">▼</span><div class="child-dropdown" id="childDropdown"></div></div>
             </div>
-        `).join('') || '';
-        html += '</div>';
-    }
-    
-    // Stats
-    if (viewingLesson.lastQuizScore !== undefined) {
-        html += `<div style="text-align:center;padding:.5rem;background:var(--cream);border-radius:8px">
-            <div style="font-size:.8rem;color:var(--sage)">Dernier score</div>
-            <div style="font-size:1.5rem;font-weight:600;color:var(--forest)">${viewingLesson.lastQuizScore}%</div>
-        </div>`;
-    }
-    
-    document.getElementById('lessonModalContent').innerHTML = html;
-    openModal('lessonModal');
-}
+            <div class="subject-chips"><div class="subject-chip active" data-subject="" onclick="selectSubject(this)">📚 Tous</div><div class="subject-chip" data-subject="math" onclick="selectSubject(this)">🔢 Maths</div><div class="subject-chip" data-subject="french" onclick="selectSubject(this)">📖 Français</div><div class="subject-chip" data-subject="history" onclick="selectSubject(this)">🏛️ Histoire</div><div class="subject-chip" data-subject="science" onclick="selectSubject(this)">🔬 Sciences</div></div>
+            <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">📎 Photo ou PDF<input type="file" id="fileInput" accept="image/*,.pdf" style="display:none"></div>
+            <div class="upload-preview" id="uploadPreview" style="display:none"><img id="previewImg"><button class="remove-upload" onclick="clearUpload()">✕</button></div>
+            <div class="chat-input-container"><input type="text" class="chat-input" id="lessonInput" placeholder="Sujet de la leçon..."><button class="chat-send" onclick="sendLesson()">→</button></div>
+            <div id="lessonContent"></div>
+        </div>
+        <!-- QUIZ -->
+        <div class="view" id="quiz-view">
+            <div class="quiz-header"><div class="quiz-progress" id="quizProgress"></div><div class="quiz-score" id="quizScoreDisplay">Score: 0</div></div>
+            <div id="quizContent"><div class="empty-state"><div class="empty-icon">🎮</div><div>Générez une leçon</div></div></div>
+        </div>
+        <!-- REVISION -->
+        <div class="view" id="revision-view">
+            <div class="card"><div class="card-title">📁 Leçons sauvegardées</div><div class="child-folders" id="childFolders"></div><div id="savedLessons"></div></div>
+        </div>
+        <!-- PROFILE -->
+        <div class="view" id="profile-view">
+            <div class="profile-header"><div class="profile-avatar">👨‍👩‍👧‍👦</div><div class="profile-name">Ma Famille</div></div>
+            <div class="family-title">👨‍👩‍👧‍👦 Enfants <button class="add-child-btn" onclick="openChildModal()">+ Ajouter</button></div>
+            <div id="childrenList"></div>
+            <button class="logout-btn" onclick="resetAll()">🚪 Réinitialiser</button>
+        </div>
+    </div>
+    <nav class="bottom-nav">
+        <button class="nav-item active" data-view="dashboard"><span class="nav-icon">🏠</span>Accueil</button>
+        <button class="nav-item" data-view="budget"><span class="nav-icon">💰</span>Budget</button>
+        <button class="nav-item" data-view="planning"><span class="nav-icon">📅</span>Planning</button>
+        <button class="nav-item" data-view="homework"><span class="nav-icon">📚</span>Devoirs</button>
+        <button class="nav-item" data-view="revision"><span class="nav-icon">🎯</span>Révisions</button>
+    </nav>
+    <!-- MODALS -->
+    <div class="modal-overlay" id="childModal"><div class="modal">
+        <div class="modal-title" id="childModalTitle">➕ Enfant</div>
+        <div class="avatar-picker"><div class="avatar-option selected" data-avatar="👦">👦</div><div class="avatar-option" data-avatar="👧">👧</div><div class="avatar-option" data-avatar="🧒">🧒</div></div>
+        <div class="form-group"><label class="form-label">Prénom</label><input type="text" class="form-input" id="childNameInput"></div>
+        <div class="form-group"><label class="form-label">Âge</label><input type="number" class="form-input" id="childAgeInput" min="3" max="18"></div>
+        <div class="form-group"><label class="form-label">Classe</label><select class="form-select" id="childClassInput"><option>CP</option><option>CE1</option><option>CE2</option><option>CM1</option><option>CM2</option><option>6e</option><option>5e</option><option selected>4e</option><option>3e</option><option>2nde</option><option>1ere</option><option>Term</option></select></div>
+        <div class="form-group"><label class="form-label">Intérêts</label><input type="text" class="form-input" id="childInterestsInput" placeholder="foot, manga..."></div>
+        <div class="modal-buttons"><button class="modal-btn btn-cancel" onclick="closeModal('childModal')">Annuler</button><button class="modal-btn btn-delete" id="deleteChildBtn" onclick="deleteChild()" style="display:none">🗑️</button><button class="modal-btn btn-save" onclick="saveChild()">OK</button></div>
+    </div></div>
+    <div class="modal-overlay" id="activityModal"><div class="modal">
+        <div class="modal-title" id="activityModalTitle">➕ Activité</div>
+        <div class="form-group"><label class="form-label">Titre</label><input type="text" class="form-input" id="activityTitleInput"></div>
+        <div class="form-group"><label class="form-label">Heure</label><input type="time" class="form-input" id="activityTimeInput" value="14:00"></div>
+        <div class="form-group"><label class="form-label">Enfant</label><select class="form-select" id="activityChildInput"></select></div>
+        <div class="form-group"><label class="form-label">Type</label><select class="form-select" id="activityTypeInput"><option value="activity">📌 Activité</option><option value="revision">📚 Révision</option></select></div>
+        <div class="modal-buttons"><button class="modal-btn btn-cancel" onclick="closeModal('activityModal')">Annuler</button><button class="modal-btn btn-delete" id="deleteActivityBtn" onclick="deleteActivity()" style="display:none">🗑️</button><button class="modal-btn btn-save" onclick="saveActivity()">OK</button></div>
+    </div></div>
+    <div class="modal-overlay" id="lessonModal"><div class="modal" style="max-width:400px">
+        <div class="modal-title" id="lessonModalTitle">📚 Leçon</div>
+        <div id="lessonModalContent"></div>
+        <div class="modal-buttons"><button class="modal-btn btn-cancel" onclick="closeModal('lessonModal')">Fermer</button><button class="modal-btn btn-save" onclick="startSavedQuiz()">🎮 Quiz</button></div>
+    </div></div>
+<script>
+const CATEGORIES={shopping:{emoji:'🛒',name:'Shopping',color:'#E74C3C'},food:{emoji:'🍕',name:'Alimentation',color:'#E67E22'},transport:{emoji:'🚗',name:'Transport',color:'#3498DB'},housing:{emoji:'🏠',name:'Logement',color:'#9B59B6'},bills:{emoji:'📄',name:'Factures',color:'#8E44AD'},entertainment:{emoji:'🎬',name:'Loisirs',color:'#1ABC9C'},health:{emoji:'💊',name:'Santé',color:'#E91E63'},subscriptions:{emoji:'📱',name:'Abos',color:'#00BCD4'},salary:{emoji:'💼',name:'Salaire',color:'#27AE60'},other:{emoji:'📦',name:'Autre',color:'#7F8C8D'}};
+const SUBJECTS={math:{emoji:'🔢',name:'Maths',color:'#9B59B6'},french:{emoji:'📖',name:'Français',color:'#C9856B'},history:{emoji:'🏛️',name:'Histoire',color:'#E67E22'},science:{emoji:'🔬',name:'Sciences',color:'#27AE60'},general:{emoji:'📚',name:'Général',color:'#7F8C8D'}};
+const DAYS=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+let data={children:[{id:1,name:'Gauthier',age:13,class:'4e',avatar:'👦',interests:'jeux vidéo, histoire'},{id:2,name:'Charles',age:11,class:'6e',avatar:'🧒',interests:'foot, sciences'},{id:3,name:'Victoire',age:7,class:'CE1',avatar:'👧',interests:'dessin, animaux'}],transactions:[],activities:[],lessons:[]};
+let currentView='dashboard',currentChild=null,selectedDate=new Date(),selectedSubject='',selectedFolder=null;
+let uploadedFile=null,uploadedBase64=null,conversationHistory=[],currentLesson=null;
+let quizQuestions=[],quizIndex=0,quizScore=0,quizAnswered=false;
+let editingChild=null,editingActivity=null,viewingLesson=null;
 
-function startSavedLessonQuiz() {
-    if (!viewingLesson || !viewingLesson.quiz) return notify('⚠️ Pas de quiz disponible');
-    closeModal('lessonModal');
-    
-    currentLesson = viewingLesson;
-    quizQuestions = viewingLesson.quiz.map(q => ({
-        q: q.question,
-        a: q.answer,
-        correctAnswer: q.options[0],
-        options: shuffleArray([...q.options]),
-        hint: q.hint
-    }));
-    
-    quizIndex = 0;
-    quizScore = 0;
-    quizAnswered = false;
-    
-    switchView('quiz');
-    showQuizQuestion();
-}
+function init(){const s=localStorage.getItem('familyflow_v10');if(s)data={...data,...JSON.parse(s)};if(data.children.length>0){currentChild=data.children[0];selectedFolder=data.children[0]}setupListeners();updateAll()}
+function save(){localStorage.setItem('familyflow_v10',JSON.stringify(data))}
+function switchView(v){currentView=v;document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));document.getElementById(v+'-view').classList.add('active');document.querySelector(`[data-view="${v}"]`)?.classList.add('active');if(v==='dashboard')updateDashboard();if(v==='budget')updateBudget();if(v==='optimize')updateOptimize();if(v==='planning')updatePlanning();if(v==='revision')updateRevision()}
+function setupListeners(){document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>switchView(n.dataset.view)));document.getElementById('importInput').addEventListener('change',e=>e.target.files[0]&&importBudget(e.target.files[0]));document.getElementById('fileInput').addEventListener('change',e=>e.target.files[0]&&handleUpload(e.target.files[0]));document.getElementById('lessonInput').addEventListener('keypress',e=>e.key==='Enter'&&sendLesson());document.addEventListener('click',e=>{if(!e.target.closest('#childSelector'))document.getElementById('childDropdown').classList.remove('show')});document.querySelectorAll('.avatar-option').forEach(a=>a.addEventListener('click',()=>{document.querySelectorAll('.avatar-option').forEach(x=>x.classList.remove('selected'));a.classList.add('selected')}));document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>e.target===m&&closeModal(m.id)))}
+function toggleDropdown(e){e.stopPropagation();document.getElementById('childDropdown').classList.toggle('show')}
+function selectSubject(el){document.querySelectorAll('.subject-chip').forEach(x=>x.classList.remove('active'));el.classList.add('active');selectedSubject=el.dataset.subject}
+function updateAll(){updateDashboard();updateChildSelector();updateChildrenList();updateBudget();updatePlanning();updateRevision()}
 
-// ============== CHILDREN ==============
-function updateChildrenList() {
-    document.getElementById('childrenList').innerHTML = data.children.map(c => {
-        const lessonCount = data.lessons.filter(l => l.childId === c.id).length;
-        return `
-            <div class="child-card">
-                <div class="child-avatar-lg">${c.avatar}</div>
-                <div class="child-info">
-                    <div class="child-name">${c.name}</div>
-                    <div class="child-details">
-                        ${c.age} ans • ${c.class} • ${lessonCount} leçon${lessonCount > 1 ? 's' : ''}
-                        ${c.interests ? ' • ' + c.interests : ''}
-                    </div>
-                </div>
-                <button class="child-edit" onclick="editChild(${c.id})">✏️</button>
-            </div>
-        `;
-    }).join('') || '<div style="color:var(--sage);padding:.5rem">Aucun enfant</div>';
-}
+// DASHBOARD
+function updateDashboard(){const now=new Date(),h=now.getHours(),days=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],months=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];document.getElementById('meteoDate').textContent=days[now.getDay()]+' '+now.getDate()+' '+months[now.getMonth()];document.getElementById('meteoGreeting').textContent=(h<12?'Bonjour':h<18?'Bon après-midi':'Bonsoir')+' ! 👋';
+const lr=data.lessons.filter(l=>{const d=Math.floor((now-new Date(l.date))/(1000*60*60*24));return d>=1&&d<=7}).length;document.getElementById('meteoHwVal').textContent=lr;document.getElementById('meteoHw').className='meteo-card '+(lr===0?'good':lr<=2?'warning':'alert');
+const ta=data.activities.filter(a=>new Date(a.date).toDateString()===now.toDateString()).length;document.getElementById('meteoActVal').textContent=ta;document.getElementById('meteoAct').className='meteo-card '+(ta<=2?'good':ta<=4?'warning':'alert');
+if(data.transactions.length>0){const inc=data.transactions.filter(t=>t.amount>0).reduce((s,t)=>s+t.amount,0),exp=data.transactions.filter(t=>t.amount<0).reduce((s,t)=>s+Math.abs(t.amount),0),rate=inc>0?Math.round(((inc-exp)/inc)*100):0;document.getElementById('meteoBudgetVal').textContent=rate+'%';document.getElementById('meteoBudget').className='meteo-card '+(rate>=20?'good':rate>=10?'warning':'alert')}
+generateTips()}
+function generateTips(){const tips=[],now=new Date(),h=now.getHours();const lr=data.lessons.filter(l=>{const d=Math.floor((now-new Date(l.date))/(1000*60*60*24));return d>=1&&d<=7});if(lr.length>0){const c=data.children.find(x=>x.id===lr[0].childId);tips.push('📚 '+(c?.name||'Votre enfant')+' devrait réviser "'+lr[0].title+'"')}const ta=data.activities.filter(a=>new Date(a.date).toDateString()===now.toDateString()).sort((a,b)=>a.time.localeCompare(b.time));if(ta.length>0){const nxt=ta.find(a=>a.time>`${h}:00`);if(nxt){const c=data.children.find(x=>x.id===nxt.childId);tips.push('📅 Prochain: '+nxt.title+' à '+nxt.time+(c?' ('+c.name+')':''))}}if(data.transactions.length>0){const bc={};data.transactions.filter(t=>t.amount<0).forEach(t=>{bc[t.category||'other']=(bc[t.category||'other']||0)+Math.abs(t.amount)});if((bc.subscriptions||0)>100)tips.push('💰 '+Math.round(bc.subscriptions)+'€ d\'abos - vérifiez leur utilité')}if(h>=17&&h<=20&&data.children.filter(c=>c.age>=6).length>0)tips.push('⏰ C\'est l\'heure des devoirs !');if(tips.length===0)tips.push('✨ Tout va bien ! Profitez de votre journée');document.getElementById('tipsContent').innerHTML=tips.slice(0,4).map(t=>'<div class="daily-tip">'+t+'</div>').join('')}
 
-function openChildModal(id = null) {
-    editingChild = id ? data.children.find(c => c.id === id) : null;
-    document.getElementById('childModalTitle').textContent = editingChild ? '✏️ Modifier' : '➕ Ajouter un enfant';
-    document.getElementById('deleteChildBtn').style.display = editingChild ? 'block' : 'none';
-    document.getElementById('childNameInput').value = editingChild?.name || '';
-    document.getElementById('childAgeInput').value = editingChild?.age || '';
-    document.getElementById('childClassInput').value = editingChild?.class || '4e';
-    document.getElementById('childInterestsInput').value = editingChild?.interests || '';
-    document.querySelectorAll('.avatar-option').forEach(a => 
-        a.classList.toggle('selected', a.dataset.avatar === (editingChild?.avatar || '👦'))
-    );
-    openModal('childModal');
-}
+// BUDGET
+function updateBudget(){const has=data.transactions.length>0;document.getElementById('importSection').style.display=has?'none':'block';document.getElementById('budgetDashboard').style.display=has?'block':'none';if(has){const inc=data.transactions.filter(t=>t.amount>0).reduce((s,t)=>s+t.amount,0),exp=data.transactions.filter(t=>t.amount<0).reduce((s,t)=>s+Math.abs(t.amount),0),bal=inc-exp;document.getElementById('totalIncome').textContent='+'+Math.round(inc)+'€';document.getElementById('totalExpenses').textContent='-'+Math.round(exp)+'€';document.getElementById('totalBalance').textContent=(bal>=0?'+':'')+Math.round(bal)+'€';document.getElementById('totalBalance').style.color=bal>=0?'var(--green)':'var(--red)';document.getElementById('savingsRate').textContent=inc>0?Math.round((bal/inc)*100)+'%':'0%';const bc={};data.transactions.filter(t=>t.amount<0).forEach(t=>{bc[t.category||'other']=(bc[t.category||'other']||0)+Math.abs(t.amount)});const sr=Object.entries(bc).sort((a,b)=>b[1]-a[1]).slice(0,5),mx=sr[0]?.[1]||1;document.getElementById('categoryBreakdown').innerHTML=sr.map(([c,a])=>{const ct=CATEGORIES[c]||CATEGORIES.other;return'<div class="category-item"><div class="category-emoji">'+ct.emoji+'</div><div class="category-info"><div class="category-name">'+ct.name+'</div><div class="category-bar"><div class="category-fill" style="width:'+(a/mx)*100+'%;background:'+ct.color+'"></div></div></div><div class="category-amount">'+Math.round(a)+'€</div></div>'}).join('');const rc=[...data.transactions].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,5);document.getElementById('recentTransactions').innerHTML=rc.map(t=>{const c=CATEGORIES[t.category]||CATEGORIES.other;return'<div class="transaction-item"><div class="category-emoji">'+c.emoji+'</div><div class="transaction-info"><div class="transaction-desc">'+t.description+'</div><div class="transaction-date">'+t.date+'</div></div><div class="transaction-amount '+(t.amount>0?'income':'expense')+'">'+(t.amount>0?'+':'')+t.amount.toFixed(0)+'€</div></div>'}).join('')}}
+async function importBudget(f){document.getElementById('importSection').style.display='none';document.getElementById('loadingBudget').style.display='block';const r=new FileReader();r.onload=async e=>{const b=e.target.result.split(',')[1];try{const res=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:'Extrais transactions. JSON: {"transactions":[{"date":"DD/MM/YYYY","description":"Court","amount":123.45,"category":"salary|food|shopping|transport|housing|bills|entertainment|health|subscriptions|other"}]}',messages:[{role:'user',content:[{type:'document',source:{type:'base64',media_type:'application/pdf',data:b}},{type:'text',text:'JSON uniquement'}]}]})});document.getElementById('loadingBudget').style.display='none';if(res.ok){const j=await res.json(),m=j.content[0].text.match(/\{[\s\S]*\}/);if(m){const p=JSON.parse(m[0]);if(p.transactions?.length){data.transactions=p.transactions.map((t,i)=>({id:Date.now()+i,...t}));save();updateBudget();updateDashboard();notify('✅ '+data.transactions.length+' transactions');return}}}showImportErr()}catch(e){showImportErr()}};r.readAsDataURL(f)}
+function showImportErr(){document.getElementById('loadingBudget').style.display='none';document.getElementById('importSection').style.display='block';notify('❌ Erreur')}
+function resetBudget(){if(confirm('Effacer?')){data.transactions=[];save();updateBudget();updateDashboard()}}
 
-function editChild(id) { openChildModal(id); }
+// OPTIMIZE
+function updateOptimize(){if(data.transactions.length===0){document.getElementById('optimizeContent').innerHTML='<div class="empty-state"><div class="empty-icon">📊</div><div>Importez un relevé</div></div>';return}const inc=data.transactions.filter(t=>t.amount>0).reduce((s,t)=>s+t.amount,0),exp=data.transactions.filter(t=>t.amount<0).reduce((s,t)=>s+Math.abs(t.amount),0),rate=inc>0?(inc-exp)/inc:0,bc={};data.transactions.filter(t=>t.amount<0).forEach(t=>{bc[t.category||'other']=(bc[t.category||'other']||0)+Math.abs(t.amount)});const score=Math.max(0,Math.min(100,Math.round(50+rate*40))),scl=score>=70?'good':score>=40?'warning':'bad';let al=[];if((bc.subscriptions||0)>80)al.push({type:'warning',icon:'📱',title:Math.round(bc.subscriptions)+'€ abos',text:'Vérifiez leur utilité'});if(rate<.1)al.push({type:'danger',icon:'💸',title:'Épargne faible',text:Math.round(rate*100)+'%'});else if(rate>=.2)al.push({type:'success',icon:'🎉',title:'Bravo!',text:Math.round(rate*100)+'% épargne'});if(data.children.length>0)al.push({type:'tip',icon:'💡',title:'Astuce',text:'Livret jeune pour '+data.children.slice(0,2).map(c=>c.name).join(', ')});document.getElementById('optimizeContent').innerHTML='<div class="card"><div class="card-title">📈 Score</div><div class="score-circle '+scl+'"><div class="score-value">'+score+'</div><div class="score-label">/100</div></div></div>'+al.map(a=>'<div class="alert-card '+a.type+'"><div class="alert-icon">'+a.icon+'</div><div class="alert-content"><div class="alert-title">'+a.title+'</div><div class="alert-text">'+a.text+'</div></div></div>').join('')}
 
-function saveChild() {
-    const name = document.getElementById('childNameInput').value.trim();
-    const age = parseInt(document.getElementById('childAgeInput').value);
-    if (!name || !age) return notify('⚠️ Prénom et âge requis');
-    
-    const child = {
-        id: editingChild?.id || Date.now(),
-        name,
-        age,
-        class: document.getElementById('childClassInput').value,
-        interests: document.getElementById('childInterestsInput').value.trim(),
-        avatar: document.querySelector('.avatar-option.selected')?.dataset.avatar || '👦'
-    };
-    
-    if (editingChild) {
-        const idx = data.children.findIndex(c => c.id === editingChild.id);
-        if (idx >= 0) data.children[idx] = child;
-    } else {
-        data.children.push(child);
-    }
-    
-    if (!currentChild) currentChild = child;
-    if (!selectedFolder) selectedFolder = child;
-    
-    save();
-    updateAll();
-    closeModal('childModal');
-    notify('✅ Enregistré');
-}
+// PLANNING
+function updatePlanning(){const t=new Date(),ws=new Date(t);ws.setDate(t.getDate()-t.getDay()+1);let wh='';for(let i=0;i<7;i++){const d=new Date(ws);d.setDate(ws.getDate()+i);const it=d.toDateString()===t.toDateString(),is=d.toDateString()===selectedDate.toDateString(),he=data.activities.some(a=>new Date(a.date).toDateString()===d.toDateString());wh+='<div class="planning-day '+(is?'active':'')+' '+(it?'today':'')+' '+(he?'has-event':'')+'" onclick="selectDate(\''+d.toISOString()+'\')"><div class="planning-day-name">'+DAYS[d.getDay()]+'</div><div class="planning-day-num">'+d.getDate()+'</div></div>'}document.getElementById('planningWeek').innerHTML=wh;document.getElementById('dayTitle').textContent='📋 '+selectedDate.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});const da=data.activities.filter(a=>new Date(a.date).toDateString()===selectedDate.toDateString()).sort((a,b)=>a.time.localeCompare(b.time));document.getElementById('activitiesList').innerHTML=da.length?da.map(a=>{const c=data.children.find(x=>x.id===a.childId);return'<div class="activity-item '+(a.type==='revision'?'revision':'')+'" onclick="editActivity('+a.id+')"><div class="activity-time">'+a.time+'</div><div class="activity-info"><div class="activity-title">'+a.title+'</div><div class="activity-child">'+(c?c.avatar+' '+c.name:'')+'</div></div></div>'}).join(''):'<div class="empty-state" style="padding:1rem">Aucune activité</div>'}
+function selectDate(iso){selectedDate=new Date(iso);updatePlanning()}
+function openActivityModal(id=null){editingActivity=id?data.activities.find(a=>a.id===id):null;document.getElementById('activityModalTitle').textContent=editingActivity?'✏️ Modifier':'➕ Activité';document.getElementById('deleteActivityBtn').style.display=editingActivity?'block':'none';document.getElementById('activityTitleInput').value=editingActivity?.title||'';document.getElementById('activityTimeInput').value=editingActivity?.time||'14:00';document.getElementById('activityTypeInput').value=editingActivity?.type||'activity';document.getElementById('activityChildInput').innerHTML='<option value="">Famille</option>'+data.children.map(c=>'<option value="'+c.id+'" '+(editingActivity?.childId===c.id?'selected':'')+'>'+c.avatar+' '+c.name+'</option>').join('');openModal('activityModal')}
+function editActivity(id){openActivityModal(id)}
+function saveActivity(){const t=document.getElementById('activityTitleInput').value.trim();if(!t)return notify('⚠️ Titre requis');const a={id:editingActivity?.id||Date.now(),title:t,time:document.getElementById('activityTimeInput').value,childId:parseInt(document.getElementById('activityChildInput').value)||null,date:selectedDate.toISOString(),type:document.getElementById('activityTypeInput').value};if(editingActivity){const i=data.activities.findIndex(x=>x.id===editingActivity.id);if(i>=0)data.activities[i]=a}else data.activities.push(a);save();updatePlanning();updateDashboard();closeModal('activityModal');notify('✅ OK')}
+function deleteActivity(){if(!editingActivity)return;data.activities=data.activities.filter(a=>a.id!==editingActivity.id);save();updatePlanning();updateDashboard();closeModal('activityModal');notify('🗑️ Supprimé')}
 
-function deleteChild() {
-    if (!editingChild) return;
-    if (!confirm(`Supprimer ${editingChild.name} et toutes ses leçons ?`)) return;
-    
-    data.children = data.children.filter(c => c.id !== editingChild.id);
-    data.lessons = data.lessons.filter(l => l.childId !== editingChild.id);
-    data.activities = data.activities.filter(a => a.childId !== editingChild.id);
-    
-    if (currentChild?.id === editingChild.id) currentChild = data.children[0] || null;
-    if (selectedFolder?.id === editingChild.id) selectedFolder = data.children[0] || null;
-    
-    save();
-    updateAll();
-    closeModal('childModal');
-    notify('🗑️ Supprimé');
-}
+// HOMEWORK
+function updateChildSelector(){document.getElementById('childDropdown').innerHTML=data.children.map(c=>'<div class="child-dropdown-item '+(currentChild?.id===c.id?'active':'')+'" onclick="selectChild('+c.id+')">'+c.avatar+' '+c.name+'</div>').join('');if(currentChild){document.getElementById('curAvatar').textContent=currentChild.avatar;document.getElementById('curName').textContent=currentChild.name}}
+function selectChild(id){currentChild=data.children.find(c=>c.id===id);updateChildSelector();document.getElementById('childDropdown').classList.remove('show');conversationHistory=[];notify('👋 '+currentChild.name)}
+function handleUpload(f){if(!f.type.startsWith('image/')&&f.type!=='application/pdf')return notify('⚠️ Format non supporté');uploadedFile=f;const r=new FileReader();r.onload=e=>{uploadedBase64=e.target.result;document.getElementById('uploadZone').style.display='none';document.getElementById('uploadPreview').style.display='block';document.getElementById('previewImg').src=f.type.startsWith('image/')?e.target.result:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"><rect fill="%23C9856B" width="50" height="50" rx="8"/><text x="25" y="32" text-anchor="middle" fill="white" font-size="14">PDF</text></svg>'};r.readAsDataURL(f)}
+function clearUpload(){uploadedFile=null;uploadedBase64=null;document.getElementById('uploadZone').style.display='block';document.getElementById('uploadPreview').style.display='none';document.getElementById('fileInput').value=''}
+async function sendLesson(){const inp=document.getElementById('lessonInput'),msg=inp.value.trim();if(!msg&&!uploadedFile)return;inp.value='';const child=currentChild||data.children[0]||{name:'Élève',age:12,class:'5e',interests:''};let uc=[];if(uploadedBase64&&uploadedFile){const b=uploadedBase64.split(',')[1];uc.push(uploadedFile.type.startsWith('image/')?{type:'image',source:{type:'base64',media_type:uploadedFile.type,data:b}}:{type:'document',source:{type:'base64',media_type:'application/pdf',data:b}})}uc.push({type:'text',text:msg||'Analyse cette leçon.'});conversationHistory.push({role:'user',content:uc});document.getElementById('lessonContent').innerHTML='<div class="loading-container"><div class="loading-spinner"></div><div style="color:var(--sage)">🤖 Analyse pour '+child.name+'...</div></div>';
+const sys=`Tu es un prof expert pour ${child.name} (${child.age} ans, ${child.class}). ${child.interests?'Intérêts: '+child.interests+'. Utilise-les!':''}
+JAMAIS d'astérisques **. JSON uniquement:
+{"title":"Titre","subject":"${selectedSubject||'general'}","summary":{"keyPoints":["Point 1","Point 2","Point 3"],"definitions":[{"term":"Mot","definition":"Def simple"}]},"mindmap":{"center":"Thème","branches":[{"icon":"🔵","title":"Aspect 1","items":["détail 1","détail 2"]},{"icon":"🟢","title":"Aspect 2","items":["détail 1","détail 2"]},{"icon":"🟠","title":"Aspect 3","items":["détail 1","détail 2"]}]},"quiz":[{"question":"Question précise?","answer":"Réponse complète","options":["Bonne réponse","Mauvaise plausible 1","Mauvaise plausible 2","Mauvaise plausible 3"],"hint":"Indice utile"}]}
+IMPORTANT pour le quiz: les 4 options doivent être CRÉDIBLES et liées au sujet!
+Ex: "Capitale France?" → ["Paris","Lyon","Marseille","Bordeaux"] ✓
+Ex: "7x8?" → ["56","54","48","63"] ✓
+JAMAIS: ["Réponse","Je ne sais pas","Aucune","Autre"] ✗
+Génère 5-6 questions variées.`;
+try{const res=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:sys,messages:conversationHistory})});if(res.ok){const r=await res.json(),reply=r.content[0].text;conversationHistory.push({role:'assistant',content:reply});try{const jm=reply.match(/\{[\s\S]*\}/);if(jm){const lesson=JSON.parse(jm[0]);currentLesson={...lesson,id:Date.now(),childId:child.id,date:new Date().toISOString(),subject:selectedSubject||lesson.subject||'general'};renderLesson(currentLesson)}else renderFallback(reply)}catch(e){renderFallback(reply)}}clearUpload()}catch(e){document.getElementById('lessonContent').innerHTML='<div class="empty-state"><div class="empty-icon">❌</div><div>Erreur</div></div>'}}
+function renderLesson(l){let h='';if(l.summary){h+='<div class="lesson-section"><div class="lesson-section-header summary" onclick="toggleSection(this)">📝 Résumé <span class="toggle-icon">▼</span></div><div class="lesson-section-content">'+(l.title?'<h3 style="color:var(--forest);margin-bottom:.5rem">'+l.title+'</h3>':'')+(l.summary.keyPoints?.map(p=>'<div class="key-point">'+p+'</div>').join('')||'')+(l.summary.definitions?.map(d=>'<div class="definition"><span class="definition-term">'+d.term+'</span>: '+d.definition+'</div>').join('')||'')+'</div></div>'}if(l.mindmap){h+='<div class="lesson-section"><div class="lesson-section-header mindmap" onclick="toggleSection(this)">🧠 Carte mentale <span class="toggle-icon">▼</span></div><div class="lesson-section-content"><div class="mindmap-center">'+l.mindmap.center+'</div>'+(l.mindmap.branches?.map(b=>'<div class="mindmap-branch"><div class="mindmap-branch-icon">'+b.icon+'</div><div class="mindmap-branch-content"><div class="mindmap-branch-title">'+b.title+'</div><ul class="mindmap-branch-items">'+b.items.map(i=>'<li>'+i+'</li>').join('')+'</ul></div></div>').join('')||'')+'</div></div>'}if(l.quiz?.length>0){quizQuestions=l.quiz.map(q=>({q:q.question,a:q.answer,correctAnswer:q.options[0],options:shuffle([...q.options]),hint:q.hint}));h+='<div class="lesson-section"><div class="lesson-section-header qa" onclick="toggleSection(this)">❓ Questions ('+l.quiz.length+') <span class="toggle-icon">▼</span></div><div class="lesson-section-content">'+l.quiz.map((q,i)=>'<div class="qa-card"><div class="qa-question" onclick="toggleQA(this)"><span>'+(i+1)+'. '+q.question+'</span><span>▼</span></div><div class="qa-answer"><div class="qa-answer-content">✅ '+q.answer+'</div></div></div>').join('')+'</div></div>'}h+='<div class="lesson-actions"><button class="lesson-action-btn save" onclick="saveLesson()">💾 Sauver</button><button class="lesson-action-btn quiz" onclick="startQuiz()">🎮 Quiz</button><button class="lesson-action-btn plan" onclick="planRevision()">📅 Planifier</button></div>';document.getElementById('lessonContent').innerHTML=h}
+function renderFallback(t){document.getElementById('lessonContent').innerHTML='<div class="card"><div class="card-title">📚 Réponse</div><div style="font-size:.9rem">'+t.replace(/\*\*/g,'').replace(/\n/g,'<br>')+'</div></div>'}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function toggleSection(el){el.nextElementSibling.classList.toggle('hidden')}
+function toggleQA(el){el.nextElementSibling.classList.toggle('show')}
+function saveLesson(){if(!currentLesson)return notify('⚠️ Rien à sauver');const ex=data.lessons.findIndex(l=>l.id===currentLesson.id);if(ex>=0)data.lessons[ex]=currentLesson;else data.lessons.push(currentLesson);save();updateRevision();updateDashboard();notify('✅ Sauvegardé')}
+function planRevision(){if(!currentLesson)return;if(!data.lessons.find(l=>l.id===currentLesson.id))saveLesson();const tom=new Date();tom.setDate(tom.getDate()+1);data.activities.push({id:Date.now(),title:'📚 '+currentLesson.title,date:tom.toISOString(),time:'18:00',childId:currentLesson.childId,type:'revision'});save();switchView('planning');notify('📅 Planifié demain')}
 
-// ============== UTILS ==============
-function openModal(id) { document.getElementById(id).classList.add('active'); }
-function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+// QUIZ
+function startQuiz(){if(quizQuestions.length===0)return notify('⚠️ Pas de questions');quizIndex=0;quizScore=0;quizAnswered=false;switchView('quiz');showQuizQ()}
+function showQuizQ(){if(quizIndex>=quizQuestions.length){showQuizResults();return}const q=quizQuestions[quizIndex];quizAnswered=false;document.getElementById('quizProgress').innerHTML=quizQuestions.map((_,i)=>'<div class="progress-dot '+(i<quizIndex?'done':i===quizIndex?'current':'')+'"></div>').join('');document.getElementById('quizScoreDisplay').textContent='Score: '+quizScore+'/'+quizIndex;document.getElementById('quizContent').innerHTML='<div class="quiz-card"><div class="quiz-card-header" id="quizHeader"><div class="quiz-number">Question '+(quizIndex+1)+'/'+quizQuestions.length+'</div><div class="quiz-question-text">'+q.q+'</div></div><div class="quiz-card-body"><div class="quiz-options">'+q.options.map(o=>'<div class="quiz-option" data-value="'+o+'" onclick="selectOpt(this)">'+o+'</div>').join('')+'</div><div id="quizHint"></div><div id="quizExpl"></div></div></div><div class="quiz-actions"><button class="quiz-btn hint" onclick="showHint()">💡</button><button class="quiz-btn check" onclick="checkAns()">✓</button><button class="quiz-btn next" onclick="nextQ()">→</button></div>'}
+function selectOpt(el){if(quizAnswered)return;document.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('selected'));el.classList.add('selected')}
+function checkAns(){if(quizAnswered)return;const sel=document.querySelector('.quiz-option.selected');if(!sel)return notify('Choisis!');quizAnswered=true;const q=quizQuestions[quizIndex],sv=sel.dataset.value,ic=sv===q.correctAnswer;document.querySelectorAll('.quiz-option').forEach(o=>{o.classList.add('disabled');if(o.dataset.value===q.correctAnswer)o.classList.add('correct');else if(o===sel&&!ic)o.classList.add('wrong')});const h=document.getElementById('quizHeader');if(ic){quizScore++;h.classList.add('correct');notify('🎉 Bravo!')}else{h.classList.add('wrong');document.getElementById('quizExpl').innerHTML='<div class="quiz-explanation">📖 '+q.a+'</div>'}document.getElementById('quizScoreDisplay').textContent='Score: '+quizScore+'/'+(quizIndex+1)}
+function nextQ(){quizIndex++;showQuizQ()}
+function showHint(){document.getElementById('quizHint').innerHTML='<div class="quiz-hint">💡 '+(quizQuestions[quizIndex].hint||'Réfléchis...')+'</div>'}
+function showQuizResults(){const pct=Math.round((quizScore/quizQuestions.length)*100),emoji=pct>=80?'🏆':pct>=60?'👍':'💪';let txt=pct>=80?'Excellent!':pct>=60?'Bien joué!':'Continue!';if(currentChild)txt=pct>=80?'Bravo '+currentChild.name+'!':pct<60?'Courage '+currentChild.name+'!':txt;if(currentLesson){const idx=data.lessons.findIndex(l=>l.id===currentLesson.id);if(idx>=0){data.lessons[idx].lastQuizScore=pct;save()}}document.getElementById('quizContent').innerHTML='<div class="quiz-results"><div style="font-size:3rem">'+emoji+'</div><div class="quiz-results-score">'+quizScore+'/'+quizQuestions.length+'</div><div class="quiz-results-text">'+txt+'</div><button class="quiz-results-btn" onclick="restartQuiz()">🔄 Recommencer</button><button class="quiz-results-btn" onclick="switchView(\'revision\')">📁 Leçons</button><button class="quiz-results-btn" onclick="switchView(\'dashboard\')">🏠 Accueil</button></div>';document.getElementById('quizProgress').innerHTML=''}
+function restartQuiz(){quizIndex=0;quizScore=0;quizAnswered=false;quizQuestions.forEach(q=>{q.options=shuffle([...q.options])});showQuizQ()}
 
-function notify(msg) {
-    const n = document.createElement('div');
-    n.className = 'notification';
-    n.textContent = msg;
-    document.body.appendChild(n);
-    setTimeout(() => n.remove(), 2500);
-}
+// REVISION
+function updateRevision(){document.getElementById('childFolders').innerHTML=data.children.map(c=>{const ct=data.lessons.filter(l=>l.childId===c.id).length;return'<div class="child-folder '+(selectedFolder?.id===c.id?'active':'')+'" onclick="selectFolder('+c.id+')"><div class="child-folder-avatar">'+c.avatar+'</div><div class="child-folder-name">'+c.name+'</div><div class="child-folder-count">'+ct+' leçon'+(ct>1?'s':'')+'</div></div>'}).join('');updateSavedLessons()}
+function selectFolder(id){selectedFolder=data.children.find(c=>c.id===id);updateRevision()}
+function updateSavedLessons(){const c=document.getElementById('savedLessons');if(!selectedFolder){c.innerHTML='<div class="empty-state"><div class="empty-icon">📁</div><div>Sélectionnez un enfant</div></div>';return}const ls=data.lessons.filter(l=>l.childId===selectedFolder.id).sort((a,b)=>new Date(b.date)-new Date(a.date));if(ls.length===0){c.innerHTML='<div class="empty-state"><div class="empty-icon">📚</div><div>Aucune leçon</div><button class="lesson-action-btn quiz" style="margin-top:.5rem;max-width:150px" onclick="switchView(\'homework\')">✏️ Ajouter</button></div>';return}c.innerHTML=ls.map(l=>{const s=SUBJECTS[l.subject]||SUBJECTS.general,d=new Date(l.date).toLocaleDateString('fr-FR',{day:'numeric',month:'short'});return'<div class="lesson-folder-card '+l.subject+'" onclick="openSavedLesson('+l.id+')"><div class="lesson-folder-header"><div><span class="lesson-folder-subject">'+s.emoji+' '+s.name+'</span><div class="lesson-folder-title">'+l.title+'</div></div><div class="lesson-folder-date">'+d+'</div></div><div class="lesson-folder-stats"><span>🧠 '+(l.mindmap?.branches?.length||0)+'</span><span>❓ '+(l.quiz?.length||0)+'</span>'+(l.lastQuizScore!==undefined?'<span>📊 '+l.lastQuizScore+'%</span>':'')+'</div></div>'}).join('')}
+function openSavedLesson(id){viewingLesson=data.lessons.find(l=>l.id===id);if(!viewingLesson)return;const s=SUBJECTS[viewingLesson.subject]||SUBJECTS.general;document.getElementById('lessonModalTitle').textContent=s.emoji+' '+viewingLesson.title;let h='';if(viewingLesson.summary){h+='<div style="margin-bottom:.8rem"><div style="font-weight:600;color:var(--forest);margin-bottom:.3rem">📝 Points clés</div>'+(viewingLesson.summary.keyPoints?.map(p=>'<div class="key-point">'+p+'</div>').join('')||'')+'</div>'}if(viewingLesson.mindmap){h+='<div style="margin-bottom:.8rem"><div style="font-weight:600;color:var(--purple);margin-bottom:.3rem">🧠 Carte mentale</div><div class="mindmap-center" style="font-size:.8rem;padding:.4rem">'+viewingLesson.mindmap.center+'</div>'+(viewingLesson.mindmap.branches?.map(b=>'<div style="display:flex;gap:.3rem;font-size:.8rem;margin:.2rem 0"><span>'+b.icon+'</span><strong>'+b.title+':</strong><span style="color:var(--sage)">'+b.items.join(', ')+'</span></div>').join('')||'')+'</div>'}if(viewingLesson.lastQuizScore!==undefined)h+='<div style="text-align:center;padding:.5rem;background:var(--cream);border-radius:8px"><div style="font-size:.7rem;color:var(--sage)">Dernier score</div><div style="font-size:1.3rem;font-weight:600;color:var(--forest)">'+viewingLesson.lastQuizScore+'%</div></div>';document.getElementById('lessonModalContent').innerHTML=h;openModal('lessonModal')}
+function startSavedQuiz(){if(!viewingLesson||!viewingLesson.quiz)return notify('⚠️ Pas de quiz');closeModal('lessonModal');currentLesson=viewingLesson;quizQuestions=viewingLesson.quiz.map(q=>({q:q.question,a:q.answer,correctAnswer:q.options[0],options:shuffle([...q.options]),hint:q.hint}));quizIndex=0;quizScore=0;quizAnswered=false;switchView('quiz');showQuizQ()}
 
-function resetAll() {
-    if (confirm('Tout réinitialiser ? Cette action est irréversible.')) {
-        localStorage.removeItem('familyflow_v10');
-        location.reload();
-    }
-}
+// CHILDREN
+function updateChildrenList(){document.getElementById('childrenList').innerHTML=data.children.map(c=>{const lc=data.lessons.filter(l=>l.childId===c.id).length;return'<div class="child-card"><div class="child-avatar-lg">'+c.avatar+'</div><div class="child-info"><div class="child-name">'+c.name+'</div><div class="child-details">'+c.age+' ans • '+c.class+' • '+lc+' leçons'+(c.interests?' • '+c.interests:'')+'</div></div><button class="child-edit" onclick="editChild('+c.id+')">✏️</button></div>'}).join('')||'<div style="color:var(--sage)">Aucun enfant</div>'}
+function openChildModal(id=null){editingChild=id?data.children.find(c=>c.id===id):null;document.getElementById('childModalTitle').textContent=editingChild?'✏️ Modifier':'➕ Enfant';document.getElementById('deleteChildBtn').style.display=editingChild?'block':'none';document.getElementById('childNameInput').value=editingChild?.name||'';document.getElementById('childAgeInput').value=editingChild?.age||'';document.getElementById('childClassInput').value=editingChild?.class||'4e';document.getElementById('childInterestsInput').value=editingChild?.interests||'';document.querySelectorAll('.avatar-option').forEach(a=>a.classList.toggle('selected',a.dataset.avatar===(editingChild?.avatar||'👦')));openModal('childModal')}
+function editChild(id){openChildModal(id)}
+function saveChild(){const n=document.getElementById('childNameInput').value.trim(),a=parseInt(document.getElementById('childAgeInput').value);if(!n||!a)return notify('⚠️ Requis');const c={id:editingChild?.id||Date.now(),name:n,age:a,class:document.getElementById('childClassInput').value,interests:document.getElementById('childInterestsInput').value.trim(),avatar:document.querySelector('.avatar-option.selected')?.dataset.avatar||'👦'};if(editingChild){const i=data.children.findIndex(x=>x.id===editingChild.id);if(i>=0)data.children[i]=c}else data.children.push(c);if(!currentChild)currentChild=c;if(!selectedFolder)selectedFolder=c;save();updateAll();closeModal('childModal');notify('✅ OK')}
+function deleteChild(){if(!editingChild||!confirm('Supprimer '+editingChild.name+'?'))return;data.children=data.children.filter(c=>c.id!==editingChild.id);data.lessons=data.lessons.filter(l=>l.childId!==editingChild.id);data.activities=data.activities.filter(a=>a.childId!==editingChild.id);if(currentChild?.id===editingChild.id)currentChild=data.children[0]||null;if(selectedFolder?.id===editingChild.id)selectedFolder=data.children[0]||null;save();updateAll();closeModal('childModal');notify('🗑️ Supprimé')}
 
-// ============== START ==============
+// UTILS
+function openModal(id){document.getElementById(id).classList.add('active')}
+function closeModal(id){document.getElementById(id).classList.remove('active')}
+function notify(m){const n=document.createElement('div');n.className='notification';n.textContent=m;document.body.appendChild(n);setTimeout(()=>n.remove(),2500)}
+function resetAll(){if(confirm('Tout réinitialiser?')){localStorage.removeItem('familyflow_v10');location.reload()}}
 init();
 </script>
 </body>
